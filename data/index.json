@@ -1,0 +1,781 @@
+{
+ "niveles": {
+  "2b": "2º básico",
+  "5b": "5º básico"
+ },
+ "materias": {
+  "lenguaje": "Lenguaje",
+  "ingles": "Inglés",
+  "matematica": "Matemática",
+  "ciencias": "Ciencias",
+  "historia": "Historia",
+  "religion": "Religión"
+ },
+ "sesiones": [
+  "S1",
+  "S2",
+  "S3",
+  "S4",
+  "S5",
+  "EX"
+ ],
+ "pruebas": {
+  "2b-lenguaje-S1": {
+   "archivo": "data/2b/lenguaje/S1.json",
+   "titulo": "Prueba semanal 1 — Leo sílabas y palabras, entiendo lo que leo",
+   "puntajeTotal": 19,
+   "items": 11,
+   "modos": {
+    "oral": 1,
+    "escrito": 4,
+    "alternativas": 6
+   }
+  },
+  "2b-lenguaje-S2": {
+   "archivo": "data/2b/lenguaje/S2.json",
+   "titulo": "Prueba semanal 2 — Entiendo un cuento corto y escribo oraciones",
+   "puntajeTotal": 20,
+   "items": 10,
+   "modos": {
+    "oral": 1,
+    "escrito": 4,
+    "alternativas": 5
+   }
+  },
+  "2b-lenguaje-S3": {
+   "archivo": "data/2b/lenguaje/S3.json",
+   "titulo": "Prueba semanal 3 — Leo una receta y conozco las palabras",
+   "puntajeTotal": 20,
+   "items": 12,
+   "modos": {
+    "oral": 1,
+    "escrito": 4,
+    "alternativas": 7
+   }
+  },
+  "2b-lenguaje-S4": {
+   "archivo": "data/2b/lenguaje/S4.json",
+   "titulo": "Prueba semanal 4 — Un poema, un cuento y lo que no está escrito",
+   "puntajeTotal": 20,
+   "items": 11,
+   "modos": {
+    "oral": 1,
+    "escrito": 3,
+    "alternativas": 7
+   }
+  },
+  "2b-lenguaje-S5": {
+   "archivo": "data/2b/lenguaje/S5.json",
+   "titulo": "Prueba semanal 5 — Leo para aprender y escribo un texto completo",
+   "puntajeTotal": 20,
+   "items": 10,
+   "modos": {
+    "oral": 1,
+    "escrito": 4,
+    "alternativas": 5
+   }
+  },
+  "2b-lenguaje-EX": {
+   "archivo": "data/2b/lenguaje/EX.json",
+   "titulo": "Examen final — Lectura, palabras y escritura de 2º básico",
+   "puntajeTotal": 35,
+   "items": 21,
+   "modos": {
+    "oral": 1,
+    "escrito": 7,
+    "alternativas": 13
+   }
+  },
+  "2b-ingles-S1": {
+   "archivo": "data/2b/ingles/S1.json",
+   "titulo": "Weekly Test 1 — Letters and sounds",
+   "puntajeTotal": 17,
+   "items": 10,
+   "modos": {
+    "escrito": 6,
+    "alternativas": 3,
+    "oral": 1
+   }
+  },
+  "2b-ingles-S2": {
+   "archivo": "data/2b/ingles/S2.json",
+   "titulo": "Weekly Test 2 — Word families and short sentences",
+   "puntajeTotal": 18,
+   "items": 10,
+   "modos": {
+    "escrito": 6,
+    "alternativas": 3,
+    "oral": 1
+   }
+  },
+  "2b-ingles-S3": {
+   "archivo": "data/2b/ingles/S3.json",
+   "titulo": "Weekly Test 3 — sh, ch, th and a short text",
+   "puntajeTotal": 20,
+   "items": 12,
+   "modos": {
+    "escrito": 5,
+    "alternativas": 6,
+    "oral": 1
+   }
+  },
+  "2b-ingles-S4": {
+   "archivo": "data/2b/ingles/S4.json",
+   "titulo": "Weekly Test 4 — A short story, jobs and \"I can",
+   "puntajeTotal": 19,
+   "items": 11,
+   "modos": {
+    "manual": 1,
+    "escrito": 6,
+    "alternativas": 3,
+    "oral": 1
+   }
+  },
+  "2b-ingles-S5": {
+   "archivo": "data/2b/ingles/S5.json",
+   "titulo": "Weekly Test 5 — Starters Reading & Writing: Delicious food",
+   "puntajeTotal": 20,
+   "items": 10,
+   "modos": {
+    "escrito": 9,
+    "oral": 1
+   }
+  },
+  "2b-ingles-EX": {
+   "archivo": "data/2b/ingles/EX.json",
+   "titulo": "Final Exam — English, all the year",
+   "puntajeTotal": 39,
+   "items": 21,
+   "modos": {
+    "escrito": 11,
+    "manual": 1,
+    "alternativas": 8,
+    "oral": 1
+   }
+  },
+  "2b-matematica-S1": {
+   "archivo": "data/2b/matematica/S1.json",
+   "titulo": "Prueba semanal 1 — Números hasta 50, sumas y restas hasta 10",
+   "puntajeTotal": 17,
+   "items": 11,
+   "modos": {
+    "escrito": 5,
+    "alternativas": 6
+   }
+  },
+  "2b-matematica-S2": {
+   "archivo": "data/2b/matematica/S2.json",
+   "titulo": "Prueba semanal 2 — Números hasta 100: decenas y unidades",
+   "puntajeTotal": 18,
+   "items": 11,
+   "modos": {
+    "escrito": 6,
+    "alternativas": 5
+   }
+  },
+  "2b-matematica-S3": {
+   "archivo": "data/2b/matematica/S3.json",
+   "titulo": "Prueba semanal 3 — Sumar y restar hasta 100 sin reserva",
+   "puntajeTotal": 19,
+   "items": 12,
+   "modos": {
+    "escrito": 8,
+    "alternativas": 4
+   }
+  },
+  "2b-matematica-S4": {
+   "archivo": "data/2b/matematica/S4.json",
+   "titulo": "Prueba semanal 4 — Multiplicar (tablas del 2, 5 y 10), la hora y el calendario",
+   "puntajeTotal": 19,
+   "items": 12,
+   "modos": {
+    "escrito": 5,
+    "alternativas": 7
+   }
+  },
+  "2b-matematica-S5": {
+   "archivo": "data/2b/matematica/S5.json",
+   "titulo": "Prueba semanal 5 — Figuras, medir, gráficos y sumar con reserva",
+   "puntajeTotal": 19,
+   "items": 11,
+   "modos": {
+    "escrito": 5,
+    "alternativas": 6
+   }
+  },
+  "2b-matematica-EX": {
+   "archivo": "data/2b/matematica/EX.json",
+   "titulo": "Examen final — Matemática de todo el año",
+   "puntajeTotal": 34,
+   "items": 22,
+   "modos": {
+    "escrito": 13,
+    "alternativas": 9
+   }
+  },
+  "2b-ciencias-S1": {
+   "archivo": "data/2b/ciencias/S1.json",
+   "titulo": "Prueba semanal 1 — Seres vivos y animales vertebrados",
+   "puntajeTotal": 16,
+   "items": 11,
+   "modos": {
+    "alternativas": 8,
+    "escrito": 3
+   }
+  },
+  "2b-ciencias-S2": {
+   "archivo": "data/2b/ciencias/S2.json",
+   "titulo": "Prueba semanal 2 — Invertebrados, ciclos de vida y hábitats",
+   "puntajeTotal": 16,
+   "items": 12,
+   "modos": {
+    "escrito": 3,
+    "alternativas": 9
+   }
+  },
+  "2b-ciencias-S3": {
+   "archivo": "data/2b/ciencias/S3.json",
+   "titulo": "Prueba semanal 3 — Mi cuerpo por dentro y la actividad física",
+   "puntajeTotal": 14,
+   "items": 10,
+   "modos": {
+    "alternativas": 8,
+    "escrito": 2
+   }
+  },
+  "2b-ciencias-S4": {
+   "archivo": "data/2b/ciencias/S4.json",
+   "titulo": "Prueba semanal 4 — El agua: cómo es, sus estados y su ciclo",
+   "puntajeTotal": 16,
+   "items": 12,
+   "modos": {
+    "escrito": 3,
+    "alternativas": 9
+   }
+  },
+  "2b-ciencias-S5": {
+   "archivo": "data/2b/ciencias/S5.json",
+   "titulo": "Prueba semanal 5 — El tiempo, las estaciones, animales de Chile y los materiales",
+   "puntajeTotal": 17,
+   "items": 12,
+   "modos": {
+    "escrito": 4,
+    "alternativas": 8
+   }
+  },
+  "2b-ciencias-EX": {
+   "archivo": "data/2b/ciencias/EX.json",
+   "titulo": "Examen final — Ciencias Naturales 2º básico",
+   "puntajeTotal": 35,
+   "items": 22,
+   "modos": {
+    "alternativas": 16,
+    "escrito": 6
+   }
+  },
+  "2b-historia-S1": {
+   "archivo": "data/2b/historia/S1.json",
+   "titulo": "Prueba semanal 1 — ¿Dónde vivo? Chile en el mapa",
+   "puntajeTotal": 14,
+   "items": 12,
+   "modos": {
+    "escrito": 3,
+    "alternativas": 9
+   }
+  },
+  "2b-historia-S2": {
+   "archivo": "data/2b/historia/S2.json",
+   "titulo": "Prueba semanal 2 — Los paisajes de Chile",
+   "puntajeTotal": 14,
+   "items": 12,
+   "modos": {
+    "escrito": 3,
+    "alternativas": 9
+   }
+  },
+  "2b-historia-S3": {
+   "archivo": "data/2b/historia/S3.json",
+   "titulo": "Prueba semanal 3 — Los pueblos originarios de Chile",
+   "puntajeTotal": 15,
+   "items": 12,
+   "modos": {
+    "escrito": 4,
+    "alternativas": 8
+   }
+  },
+  "2b-historia-S4": {
+   "archivo": "data/2b/historia/S4.json",
+   "titulo": "Prueba semanal 4 — Chile, una mezcla de culturas",
+   "puntajeTotal": 14,
+   "items": 12,
+   "modos": {
+    "escrito": 2,
+    "alternativas": 10
+   }
+  },
+  "2b-historia-S5": {
+   "archivo": "data/2b/historia/S5.json",
+   "titulo": "Prueba semanal 5 — Mi comunidad y los pueblos de hace muchísimo tiempo",
+   "puntajeTotal": 15,
+   "items": 12,
+   "modos": {
+    "escrito": 4,
+    "alternativas": 8
+   }
+  },
+  "2b-historia-EX": {
+   "archivo": "data/2b/historia/EX.json",
+   "titulo": "Examen final — Historia, Geografía y Cs. Sociales",
+   "puntajeTotal": 32,
+   "items": 21,
+   "modos": {
+    "escrito": 7,
+    "alternativas": 14
+   }
+  },
+  "2b-religion-S1": {
+   "archivo": "data/2b/religion/S1.json",
+   "titulo": "Prueba semanal 1 — Dios creador y el nacimiento de Jesús",
+   "puntajeTotal": 17,
+   "items": 12,
+   "modos": {
+    "oral": 2,
+    "escrito": 2,
+    "alternativas": 8
+   }
+  },
+  "2b-religion-S2": {
+   "archivo": "data/2b/religion/S2.json",
+   "titulo": "Prueba semanal 2 — La vida de Jesús: milagros, parábolas y apóstoles",
+   "puntajeTotal": 16,
+   "items": 12,
+   "modos": {
+    "oral": 1,
+    "escrito": 2,
+    "alternativas": 9
+   }
+  },
+  "2b-religion-S3": {
+   "archivo": "data/2b/religion/S3.json",
+   "titulo": "Prueba semanal 3 — Pasión, muerte y Resurrección de Jesús; la Iglesia",
+   "puntajeTotal": 16,
+   "items": 12,
+   "modos": {
+    "oral": 1,
+    "escrito": 3,
+    "alternativas": 8
+   }
+  },
+  "2b-religion-S4": {
+   "archivo": "data/2b/religion/S4.json",
+   "titulo": "Prueba semanal 4 — Los Diez Mandamientos y el mandamiento del amor",
+   "puntajeTotal": 19,
+   "items": 12,
+   "modos": {
+    "oral": 2,
+    "escrito": 3,
+    "alternativas": 7
+   }
+  },
+  "2b-religion-S5": {
+   "archivo": "data/2b/religion/S5.json",
+   "titulo": "Prueba semanal 5 — Los sacramentos, la Misa y el Antiguo Testamento",
+   "puntajeTotal": 20,
+   "items": 12,
+   "modos": {
+    "oral": 2,
+    "escrito": 5,
+    "alternativas": 5
+   }
+  },
+  "2b-religion-EX": {
+   "archivo": "data/2b/religion/EX.json",
+   "titulo": "Examen final — Todo el año",
+   "puntajeTotal": 32,
+   "items": 22,
+   "modos": {
+    "oral": 2,
+    "escrito": 6,
+    "alternativas": 14
+   }
+  },
+  "5b-lenguaje-S1": {
+   "archivo": "data/5b/lenguaje/S1.json",
+   "titulo": "Prueba semanal 1 — Repaso de 4º: comprensión de narraciones y clases de palabras",
+   "puntajeTotal": 26,
+   "items": 15,
+   "modos": {
+    "oral": 1,
+    "escrito": 6,
+    "alternativas": 8
+   }
+  },
+  "5b-lenguaje-S2": {
+   "archivo": "data/5b/lenguaje/S2.json",
+   "titulo": "Prueba semanal 2 — Narración: lenguaje figurado, ambiente y conectores",
+   "puntajeTotal": 27,
+   "items": 14,
+   "modos": {
+    "oral": 1,
+    "escrito": 7,
+    "alternativas": 6
+   }
+  },
+  "5b-lenguaje-S3": {
+   "archivo": "data/5b/lenguaje/S3.json",
+   "titulo": "Prueba semanal 3 — Texto informativo: ideas principales, propósito y verbos",
+   "puntajeTotal": 26,
+   "items": 16,
+   "modos": {
+    "oral": 1,
+    "escrito": 6,
+    "alternativas": 9
+   }
+  },
+  "5b-lenguaje-S4": {
+   "archivo": "data/5b/lenguaje/S4.json",
+   "titulo": "Prueba semanal 4 — Poesía, sinónimos, raya de diálogo y artículo informativo",
+   "puntajeTotal": 26,
+   "items": 15,
+   "modos": {
+    "oral": 1,
+    "escrito": 6,
+    "alternativas": 8
+   }
+  },
+  "5b-lenguaje-S5": {
+   "archivo": "data/5b/lenguaje/S5.json",
+   "titulo": "Prueba semanal 5 — Techo: citar el texto, comparar estructuras, punto de vista, afijos y argumentación",
+   "puntajeTotal": 29,
+   "items": 15,
+   "modos": {
+    "oral": 1,
+    "escrito": 6,
+    "alternativas": 8
+   }
+  },
+  "5b-lenguaje-EX": {
+   "archivo": "data/5b/lenguaje/EX.json",
+   "titulo": "Examen final — Acumulativo de Lenguaje 5º básico",
+   "puntajeTotal": 51,
+   "items": 31,
+   "modos": {
+    "oral": 1,
+    "escrito": 9,
+    "alternativas": 21
+   }
+  },
+  "5b-ingles-S1": {
+   "archivo": "data/5b/ingles/S1.json",
+   "titulo": "Weekly Test 1 — Reading a story, past simple and plurals",
+   "puntajeTotal": 30,
+   "items": 17,
+   "modos": {
+    "alternativas": 11,
+    "escrito": 5,
+    "oral": 1
+   }
+  },
+  "5b-ingles-S2": {
+   "archivo": "data/5b/ingles/S2.json",
+   "titulo": "Weekly Test 2 — Informational texts, comparatives and adverbs",
+   "puntajeTotal": 30,
+   "items": 17,
+   "modos": {
+    "alternativas": 13,
+    "escrito": 3,
+    "oral": 1
+   }
+  },
+  "5b-ingles-S3": {
+   "archivo": "data/5b/ingles/S3.json",
+   "titulo": "Weekly Test 3 — Poems, figurative language, word parts and punctuation",
+   "puntajeTotal": 30,
+   "items": 18,
+   "modos": {
+    "alternativas": 15,
+    "escrito": 2,
+    "oral": 1
+   }
+  },
+  "5b-ingles-S4": {
+   "archivo": "data/5b/ingles/S4.json",
+   "titulo": "Weekly Test 4 — Comparing texts, fact and opinion, present perfect and conjunctions",
+   "puntajeTotal": 30,
+   "items": 17,
+   "modos": {
+    "alternativas": 13,
+    "escrito": 3,
+    "oral": 1
+   }
+  },
+  "5b-ingles-S5": {
+   "archivo": "data/5b/ingles/S5.json",
+   "titulo": "Weekly Test 5 — Quoting evidence, text structure, point of view, word roots and arguments",
+   "puntajeTotal": 30,
+   "items": 16,
+   "modos": {
+    "alternativas": 12,
+    "escrito": 3,
+    "oral": 1
+   }
+  },
+  "5b-ingles-EX": {
+   "archivo": "data/5b/ingles/EX.json",
+   "titulo": "Final Exam — English, Grade 5",
+   "puntajeTotal": 49,
+   "items": 31,
+   "modos": {
+    "alternativas": 27,
+    "escrito": 3,
+    "oral": 1
+   }
+  },
+  "5b-matematica-S1": {
+   "archivo": "data/5b/matematica/S1.json",
+   "titulo": "Prueba semanal 1 — Tablas del 2, 5 y 10 · Repaso de 4º básico",
+   "puntajeTotal": 29,
+   "items": 15,
+   "modos": {
+    "escrito": 7,
+    "alternativas": 8
+   }
+  },
+  "5b-matematica-S2": {
+   "archivo": "data/5b/matematica/S2.json",
+   "titulo": "Prueba semanal 2 — Tablas del 6 y 7 · Números grandes · Multiplicar y dividir",
+   "puntajeTotal": 30,
+   "items": 14,
+   "modos": {
+    "escrito": 8,
+    "alternativas": 6
+   }
+  },
+  "5b-matematica-S3": {
+   "archivo": "data/5b/matematica/S3.json",
+   "titulo": "Prueba semanal 3 — Tablas del 8 y 9 · Operatoria combinada · Fracciones",
+   "puntajeTotal": 28,
+   "items": 15,
+   "modos": {
+    "escrito": 7,
+    "alternativas": 8
+   }
+  },
+  "5b-matematica-S4": {
+   "archivo": "data/5b/matematica/S4.json",
+   "titulo": "Prueba semanal 4 — Tablas y divisiones · Decimales · Ecuaciones y patrones",
+   "puntajeTotal": 30,
+   "items": 15,
+   "modos": {
+    "escrito": 8,
+    "alternativas": 7
+   }
+  },
+  "5b-matematica-S5": {
+   "archivo": "data/5b/matematica/S5.json",
+   "titulo": "Prueba semanal 5 — Geometría y medición · Datos y probabilidad · Porcentaje, división por 2 dígitos y volumen",
+   "puntajeTotal": 29,
+   "items": 16,
+   "modos": {
+    "escrito": 8,
+    "alternativas": 8
+   }
+  },
+  "5b-matematica-EX": {
+   "archivo": "data/5b/matematica/EX.json",
+   "titulo": "Examen final — Matemática 5º básico (acumulativo)",
+   "puntajeTotal": 51,
+   "items": 30,
+   "modos": {
+    "escrito": 14,
+    "alternativas": 16
+   }
+  },
+  "5b-ciencias-S1": {
+   "archivo": "data/5b/ciencias/S1.json",
+   "titulo": "Prueba semanal 1 — Organización del cuerpo, digestión y alimentación",
+   "puntajeTotal": 22,
+   "items": 18,
+   "modos": {
+    "alternativas": 14,
+    "escrito": 4
+   }
+  },
+  "5b-ciencias-S2": {
+   "archivo": "data/5b/ciencias/S2.json",
+   "titulo": "Prueba semanal 2 — Sistemas respiratorio y circulatorio, cigarrillo y microorganismos",
+   "puntajeTotal": 22,
+   "items": 18,
+   "modos": {
+    "alternativas": 14,
+    "escrito": 4
+   }
+  },
+  "5b-ciencias-S3": {
+   "archivo": "data/5b/ciencias/S3.json",
+   "titulo": "Prueba semanal 3 — Energía eléctrica, circuitos, conductores y seguridad",
+   "puntajeTotal": 24,
+   "items": 17,
+   "modos": {
+    "alternativas": 13,
+    "escrito": 4
+   }
+  },
+  "5b-ciencias-S4": {
+   "archivo": "data/5b/ciencias/S4.json",
+   "titulo": "Prueba semanal 4 — El agua de la Tierra: océanos, lagos, corrientes y cuidado del agua",
+   "puntajeTotal": 22,
+   "items": 18,
+   "modos": {
+    "alternativas": 15,
+    "escrito": 3
+   }
+  },
+  "5b-ciencias-S5": {
+   "archivo": "data/5b/ciencias/S5.json",
+   "titulo": "Prueba semanal 5 — La materia y sus cambios, gravedad, cadenas alimentarias y el cielo",
+   "puntajeTotal": 23,
+   "items": 18,
+   "modos": {
+    "alternativas": 15,
+    "escrito": 3
+   }
+  },
+  "5b-ciencias-EX": {
+   "archivo": "data/5b/ciencias/EX.json",
+   "titulo": "Examen final — Ciencias Naturales 5º básico (acumulativo)",
+   "puntajeTotal": 48,
+   "items": 34,
+   "modos": {
+    "alternativas": 26,
+    "escrito": 8
+   }
+  },
+  "5b-historia-S1": {
+   "archivo": "data/5b/historia/S1.json",
+   "titulo": "Prueba semanal 1 — Geografía de Chile: zonas naturales, recursos y riesgos",
+   "puntajeTotal": 24,
+   "items": 18,
+   "modos": {
+    "alternativas": 13,
+    "escrito": 5
+   }
+  },
+  "5b-historia-S2": {
+   "archivo": "data/5b/historia/S2.json",
+   "titulo": "Prueba semanal 2 — La expansión europea: Colón y Magallanes",
+   "puntajeTotal": 24,
+   "items": 17,
+   "modos": {
+    "alternativas": 12,
+    "escrito": 5
+   }
+  },
+  "5b-historia-S3": {
+   "archivo": "data/5b/historia/S3.json",
+   "titulo": "Prueba semanal 3 — La conquista de América y de Chile",
+   "puntajeTotal": 25,
+   "items": 17,
+   "modos": {
+    "alternativas": 12,
+    "escrito": 5
+   }
+  },
+  "5b-historia-S4": {
+   "archivo": "data/5b/historia/S4.json",
+   "titulo": "Prueba semanal 4 — La Colonia en Chile",
+   "puntajeTotal": 26,
+   "items": 18,
+   "modos": {
+    "alternativas": 13,
+    "escrito": 5
+   }
+  },
+  "5b-historia-S5": {
+   "archivo": "data/5b/historia/S5.json",
+   "titulo": "Prueba semanal 5 — Ciudadanía, grandes civilizaciones y evaluación de fuentes",
+   "puntajeTotal": 27,
+   "items": 18,
+   "modos": {
+    "alternativas": 13,
+    "escrito": 5
+   }
+  },
+  "5b-historia-EX": {
+   "archivo": "data/5b/historia/EX.json",
+   "titulo": "Examen final — Historia, Geografía y Ciencias Sociales 5º básico",
+   "puntajeTotal": 49,
+   "items": 33,
+   "modos": {
+    "alternativas": 24,
+    "escrito": 9
+   }
+  },
+  "5b-religion-S1": {
+   "archivo": "data/5b/religion/S1.json",
+   "titulo": "Prueba semanal 1 — El Padre Nuestro, la Revelación y las alianzas",
+   "puntajeTotal": 28,
+   "items": 17,
+   "modos": {
+    "oral": 1,
+    "escrito": 5,
+    "alternativas": 11
+   }
+  },
+  "5b-religion-S2": {
+   "archivo": "data/5b/religion/S2.json",
+   "titulo": "Prueba semanal 2 — El Credo, la vida de Jesús, el Espíritu Santo y la Iglesia",
+   "puntajeTotal": 27,
+   "items": 17,
+   "modos": {
+    "oral": 1,
+    "escrito": 4,
+    "alternativas": 12
+   }
+  },
+  "5b-religion-S3": {
+   "archivo": "data/5b/religion/S3.json",
+   "titulo": "Prueba semanal 3 — Los siete sacramentos y la Misa",
+   "puntajeTotal": 27,
+   "items": 17,
+   "modos": {
+    "oral": 1,
+    "escrito": 4,
+    "alternativas": 12
+   }
+  },
+  "5b-religion-S4": {
+   "archivo": "data/5b/religion/S4.json",
+   "titulo": "Prueba semanal 4 — Los Mandamientos, las Bienaventuranzas y las virtudes",
+   "puntajeTotal": 27,
+   "items": 17,
+   "modos": {
+    "oral": 1,
+    "escrito": 4,
+    "alternativas": 12
+   }
+  },
+  "5b-religion-S5": {
+   "archivo": "data/5b/religion/S5.json",
+   "titulo": "Prueba semanal 5 — El año litúrgico, María y los santos, la vida eterna y la oración",
+   "puntajeTotal": 28,
+   "items": 17,
+   "modos": {
+    "oral": 1,
+    "escrito": 4,
+    "alternativas": 12
+   }
+  },
+  "5b-religion-EX": {
+   "archivo": "data/5b/religion/EX.json",
+   "titulo": "Examen final — Credo, sacramentos, moral y oración",
+   "puntajeTotal": 54,
+   "items": 34,
+   "modos": {
+    "oral": 2,
+    "escrito": 8,
+    "alternativas": 24
+   }
+  }
+ }
+}
