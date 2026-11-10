@@ -117,6 +117,101 @@ def leer_pauta(texto):
     return meta, cuerpo, filas
 
 
+BLANCO = re.compile(r"(?:\\_|_){3,}")
+SEPARADOR = re.compile(r"^\|[\s\-:|]+\|$")
+SELECCIONES = json.loads((pathlib.Path(__file__).parent / "selecciones.json").read_text(encoding="utf-8"))
+
+
+def normal(t):
+    import unicodedata
+    t = unicodedata.normalize("NFD", str(t).lower().strip())
+    return "".join(c for c in t if unicodedata.category(c) != "Mn")
+
+
+def espacios(texto, conf):
+    """Cambia los espacios para responder (rayas, celdas vacías, ☐) por marcadores que la app
+    convierte en desplegables o casillas. Devuelve (texto, cuántos espacios, opciones por espacio)."""
+    por_espacio, salida, cabecera = [], [], None
+
+    def marcador(opciones=None):
+        por_espacio.append(opciones)
+        return f'<span class="sel" data-s="{len(por_espacio) - 1}"></span>'
+
+    for linea in texto.split("\n"):
+        s = linea.strip()
+        if s.startswith("|"):
+            celdas = s.strip("|").split("|")
+            if cabecera is None:
+                cabecera = [c.strip() for c in celdas]
+                linea = BLANCO.sub(lambda m: marcador(), linea)  # rayas en la fila de arriba
+            elif not SEPARADOR.match(s):
+                nuevas, marcas = [], []
+                for j, c in enumerate(celdas):
+                    vacia = (c.strip() == "" and not conf.get("rayas")) or BLANCO.fullmatch(c.strip())
+                    if conf.get("columna") and j != conf["columna"] - 1:
+                        nuevas.append(c)
+                        continue
+                    if conf.get("matriz") and vacia:
+                        marcas.append(cabecera[j])
+                        nuevas.append(f' <span class="marca" data-s="{len(por_espacio)}" data-o="{html.escape(cabecera[j])}"></span> ')
+                    elif vacia:
+                        nuevas.append(" " + marcador() + " ")
+                    else:
+                        nuevas.append(BLANCO.sub(lambda m: marcador(), c))
+                if marcas:
+                    por_espacio.append(marcas)
+                linea = "|" + "|".join(nuevas) + "|"
+            salida.append(linea)
+            continue
+        cabecera = None
+        if conf.get("lineas") and re.match(r"^[a-z]\) .+ – .+", s):
+            # «a) cat – dog – pig»: se toca una de las palabras de la línea
+            antes, resto = s.split(" ", 1)
+            salida.append(antes + " " + marcador([o.strip() for o in resto.split("–")]))
+            continue
+        if "☐" in s:
+            antes, *opciones = s.replace("&nbsp;", " ").split("☐")
+            salida.append(antes.strip() + " " + marcador([o.strip() for o in opciones]))
+            continue
+        salida.append(BLANCO.sub(lambda m: marcador(), linea))
+    texto = "\n".join(salida)
+    if conf.get("ultimos"):
+        # sólo los últimos N espacios se responden; los anteriores vuelven a ser rayas
+        sobran = len(por_espacio) - conf["ultimos"]
+        for k in range(len(por_espacio)):
+            nuevo = '<span class="blanco" style="width:4em"></span>' if k < sobran else f'<span class="sel" data-s="{k - sobran}"></span>'
+            texto = texto.replace(f'<span class="sel" data-s="{k}"></span>', nuevo, 1)
+        por_espacio = por_espacio[max(sobran, 0):]
+    if conf.get("agregar"):
+        # ítems sin espacios marcados (p. ej. «ordena estas palabras»): se agregan al final
+        texto += "\n\n" + " ".join(marcador() for _ in range(conf["agregar"]))
+    return texto, por_espacio
+
+
+def seleccion(clave, texto, conf, pts):
+    texto, por_espacio = espacios(texto, conf)
+    resp = conf["respuestas"]
+    if len(por_espacio) != len(resp):
+        raise SystemExit(f"{clave}: {len(por_espacio)} espacios en la prueba y {len(resp)} respuestas en selecciones.json")
+    if conf.get("matriz"):
+        tipo, opciones = "matriz", None
+    elif any(por_espacio):
+        tipo, opciones = "marcar", None
+    else:
+        tipo = "elegir"
+        opciones = conf.get("opciones") or [str(i) for i in range(1, len(resp) + 1)]
+    for i, r in enumerate(resp):
+        validas = por_espacio[i] if tipo != "elegir" else opciones
+        if normal(r) not in map(normal, validas):
+            raise SystemExit(f"{clave}: la respuesta {r!r} del espacio {i + 1} no está entre las opciones {validas}")
+    reglas = conf.get("reglas")
+    tope = max(r[-1] for r in reglas) if reglas else len(resp)
+    if tope != pts:
+        raise SystemExit(f"{clave}: las reglas dan como máximo {tope} pts y la pauta dice {pts}")
+    return texto, {"tipo": tipo, "opciones": opciones, "porEspacio": por_espacio if tipo != "elegir" else None,
+                   "respuestas": resp, "reglas": reglas}
+
+
 def convertir(fuente, materia, nivel, sesion):
     carpeta = fuente / materia / nivel
     instrumento = carpeta / ("EX-examen.md" if sesion == "EX" else f"{sesion}-prueba.md")
@@ -151,13 +246,19 @@ def convertir(fuente, materia, nivel, sesion):
             modo = "alternativas"
         else:
             modo = "oral" if oral else "escrito"
+        sel = None
+        clave_sel = f"{nivel}-{materia}-{sesion}#{n}"
+        if clave_sel in SELECCIONES:
+            texto, sel = seleccion(clave_sel, texto, SELECCIONES[clave_sel], fila["pts"])
+            modo = "seleccion"
+            usadas.add(clave_sel)
         lineas = texto.count('class="lineas"') + texto.count('class="cuadricula"')
         html_item = md(texto)
         for i, _ in enumerate(grupos):
             html_item = html_item.replace(f"<!--ALT{i}-->", f'<div class="alts" data-grupo="{i}"></div>')
         bloques.append({
             "tipo": "item", "n": n, "pts": fila["pts"], "modo": modo, "clave": clave,
-            "alternativas": grupos, "html": html_item,
+            "alternativas": grupos, "html": html_item, "seleccion": sel,
             "alto": max(3, lineas) if modo in ("escrito", "manual") else 0,
             "escribe": modo == "escrito" or (modo == "manual" and lineas > 0),
             "pauta": {"respuesta": md("\n\n".join(fila["respuestas"])) if fila["respuestas"] else "",
@@ -181,6 +282,9 @@ def convertir(fuente, materia, nivel, sesion):
         "bloques": bloques,
         "pautaHtml": md(pcuerpo),
     }, avisos
+
+
+usadas = set()
 
 
 def main():
@@ -209,6 +313,9 @@ def main():
                 for a in avisos:
                     problemas += 1
                     print(f"  aviso {prueba['id']}: {a}", file=sys.stderr)
+    sobran = set(SELECCIONES) - usadas - {"_formato"}
+    if sobran:
+        raise SystemExit(f"selecciones.json nombra ítems que no existen: {sorted(sobran)}")
     (datos / "index.json").write_text(json.dumps(indice, ensure_ascii=False, indent=1), encoding="utf-8")
     # Versión de los datos: cambia cuando cambia cualquier archivo, para renovar la caché offline.
     h = hashlib.sha256()

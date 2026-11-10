@@ -2,7 +2,7 @@
 // Pruebas en iPad — Javier (5º básico) y Lourdes (2º básico).
 // Los datos viven sólo en este iPad (IndexedDB). Las pruebas y pautas vienen de data/ (tools/convertir.py).
 
-const VERSION = "2026-11-10.1";
+const VERSION = "2026-11-10.2";
 const NINOS = {
   javier: { nombre: "Javier", nivel: "5b", curso: "5º básico" },
   lourdes: { nombre: "Lourdes", nivel: "2b", curso: "2º básico" },
@@ -82,6 +82,37 @@ function nota(p, total, exig = 60, nmin = 2.0) {
   return Math.round((n + 1e-9) * 10) / 10;
 }
 const fmt = (n) => (n == null || n === "" ? "—" : Number(n).toFixed(1).replace(".", ","));
+
+// ---------- ítems de elegir / marcar: corrección según las reglas de la pauta ----------
+const normal = (t) => String(t ?? "").toLowerCase().trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+function aciertosSeleccion(sel, elegidas) {
+  return sel.respuestas.map((r, i) => elegidas?.[i] != null && normal(elegidas[i]) === normal(r));
+}
+function puntajeSeleccion(sel, elegidas, pts) {
+  const bien = aciertosSeleccion(sel, elegidas);
+  const n = bien.filter(Boolean).length;
+  if (!sel.reglas) return Math.min(n, pts);
+  for (const [tipo, a, b] of sel.reglas) {
+    if (tipo === "aciertos" && n >= a) return b;
+    if (tipo === "filas" && a.every((i) => bien[i - 1])) return b;
+    if (tipo === "intercambio") {
+      const mal = bien.map((x, i) => (x ? -1 : i)).filter((i) => i >= 0);
+      if (mal.length === 2 && normal(elegidas[mal[0]]) === normal(sel.respuestas[mal[1]])
+        && normal(elegidas[mal[1]]) === normal(sel.respuestas[mal[0]])) return a;
+    }
+    if (tipo === "uno_fuera") {
+      // un solo valor fuera de lugar: al sacarlo, los demás quedan en el orden correcto
+      const pos = sel.respuestas.map((_, i) => sel.respuestas.findIndex((r) => normal(r) === normal(elegidas?.[i])));
+      if (pos.every((x) => x >= 0) && new Set(pos).size === pos.length) {
+        for (let k = 0; k < pos.length; k++) {
+          const resto = pos.filter((_, j) => j !== k);
+          if (resto.every((x, j) => j === 0 || x > resto[j - 1])) return a;
+        }
+      }
+    }
+  }
+  return 0;
+}
 
 // ---------- utilidades de interfaz ----------
 function h(tag, attrs = {}, ...hijos) {
@@ -327,6 +358,7 @@ function itemNino(b, resp, op) {
     });
     zona.append(...botones);
   });
+  if (b.seleccion) armarSeleccion(cuerpo, b.seleccion, resp, op);
   if (b.modo === "oral") cont.append(h("div", { class: "oral" }, "🗣️ Esta parte la haces en voz alta con el adulto."));
   if (b.escribe) {
     resp.lienzo = resp.lienzo || {};
@@ -334,6 +366,42 @@ function itemNino(b, resp, op) {
     cont.append(l.el);
   }
   return cont;
+}
+
+function armarSeleccion(cuerpo, sel, resp, op) {
+  resp.sel = resp.sel || {};
+  const cambiar = (i, v) => { resp.sel[i] = resp.sel[i] === v ? undefined : v; op.alCambiar(); };
+  cuerpo.querySelectorAll(".sel").forEach((zona) => {
+    const i = Number(zona.dataset.s);
+    if (sel.tipo === "elegir") {
+      const s = h("select", { class: "desplegable", disabled: !op.editable, "data-s": i },
+        h("option", { value: "" }, "—"), sel.opciones.map((o) => h("option", { value: o }, o)));
+      s.value = resp.sel[i] ?? "";
+      s.addEventListener("change", () => { resp.sel[i] = s.value || undefined; op.alCambiar(); });
+      zona.replaceWith(s);
+    } else {
+      const grupo = h("span", { class: "casillas", "data-s": i });
+      const pintar = () => grupo.querySelectorAll("button").forEach((x) => x.classList.toggle("marcada", resp.sel[i] === x.dataset.o));
+      grupo.append(...sel.porEspacio[i].map((o) => h("button", { class: "casilla", "data-o": o, disabled: !op.editable,
+        onclick: () => { cambiar(i, o); pintar(); } }, h("span", { class: "cuadro" }), o)));
+      pintar();
+      zona.replaceWith(grupo);
+    }
+  });
+  const celdas = [...cuerpo.querySelectorAll(".marca")];
+  const pintarMatriz = () => celdas.forEach((m) => {
+    const td = m.closest("td");
+    const on = resp.sel[m.dataset.s] === m.dataset.o;
+    td.classList.toggle("marcada", on);
+    m.textContent = on ? "✗" : "";
+  });
+  celdas.forEach((m) => {
+    const td = m.closest("td");
+    td.classList.add("celda-marca");
+    td.dataset.s = m.dataset.s; td.dataset.o = m.dataset.o;
+    if (op.editable) td.addEventListener("click", () => { cambiar(Number(m.dataset.s), m.dataset.o); pintarMatriz(); });
+  });
+  pintarMatriz();
 }
 
 // ---------- administración ----------
@@ -414,6 +482,7 @@ async function vistaAdminNino(nino) {
 
 function puntajeItem(b, resp, punt) {
   if (b.modo === "alternativas") return { valor: resp.alt?.[0] === b.clave ? b.pts : 0, auto: true };
+  if (b.modo === "seleccion") return { valor: puntajeSeleccion(b.seleccion, resp.sel, b.pts), auto: true };
   const v = punt[b.n];
   return { valor: v == null ? null : v, auto: false };
 }
@@ -488,12 +557,29 @@ async function vistaCorregir(nino, materia, sesion) {
         if (b.clave && resp.alt?.[g] === letra && letra !== b.clave) bt.classList.add("incorrecta");
       });
     });
+    if (b.seleccion) {
+      const bien = aciertosSeleccion(b.seleccion, resp.sel);
+      t.querySelectorAll("[data-s]").forEach((el) => {
+        if (el.tagName === "SPAN" && el.classList.contains("marca")) return;
+        const i = Number(el.dataset.s);
+        if (el.tagName === "TD" && resp.sel?.[i] !== el.dataset.o && normal(el.dataset.o) !== normal(b.seleccion.respuestas[i])) return;
+        el.classList.add(bien[i] ? "ok" : "error");
+        if (!bien[i] && el.tagName !== "TD") el.after(h("span", { class: "esperada" }, ` → ${b.seleccion.respuestas[i]}`));
+        if (!bien[i] && el.tagName === "TD" && normal(el.dataset.o) === normal(b.seleccion.respuestas[i])) { el.classList.remove("error"); el.classList.add("esperada-celda"); }
+      });
+    }
     t.querySelector(".oral")?.replaceChildren("🗣️ Oral: lo evalúas tú (ver rúbrica en la pauta).");
     t.append(h("div", { class: "pauta-item" }, h("strong", {}, "Pauta: "), h("span", { html: b.pauta.respuesta || "(sin fila en la pauta)" }),
       b.pauta.oa ? h("div", { style: "color:var(--suave)" }, b.pauta.oa) : null));
     const zona = h("div", { class: "puntaje" });
     const pintarPuntaje = () => {
       const { valor, auto } = puntajeItem(b, resp, r.puntajes);
+      if (auto && b.modo === "seleccion") {
+        const bien = aciertosSeleccion(b.seleccion, resp.sel);
+        zona.replaceChildren(h("span", { class: "auto " + (valor === b.pts ? "bien" : "mal") },
+          `${valor === b.pts ? "✓" : "✗"} ${bien.filter(Boolean).length} de ${bien.length} bien · ${valor}/${b.pts} (regla de la pauta)`));
+        return;
+      }
       if (auto) {
         zona.replaceChildren(h("span", { class: "auto " + (valor ? "bien" : "mal") },
           resp.alt?.[0] ? (valor ? `✓ Correcta · ${valor}/${b.pts}` : `✗ Marcó ${resp.alt[0]} (era ${b.clave}) · 0/${b.pts}`) : `Sin marcar · 0/${b.pts}`));
