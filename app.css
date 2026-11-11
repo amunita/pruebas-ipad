@@ -160,3 +160,22 @@ td.celda-marca.marcada { background: var(--azul-claro); }
 .error { outline: 3px solid var(--rojo); outline-offset: 2px; }
 .esperada { color: var(--verde); font-weight: 700; font-size: .85rem; }
 td.esperada-celda { background: var(--verde-claro); }
+
+/* Respaldo */
+.recordatorio { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin: 0 0 16px; padding: 10px 14px;
+  border-radius: var(--radio); background: var(--ambar-claro); color: var(--ambar); font-weight: 600; }
+.recordatorio button { min-height: 52px; }
+.msg-drive { font-weight: 600; min-height: 1.2em; }
+h3 { font-size: 1rem; margin: 1.2em 0 .3em; }
+.pie-version { position: fixed; left: 14px; bottom: calc(14px + env(safe-area-inset-bottom)); font-size: .7rem; color: var(--suave); }
+
+/* Sincronización */
+.sync { min-height: 40px; padding: 6px 12px; font-size: .75rem; font-weight: 600; border-radius: 999px; white-space: nowrap; }
+.sync.ok { color: var(--verde); border-color: var(--verde-claro); }
+.sync.pendiente { color: var(--ambar); background: var(--ambar-claro); border-color: transparent; }
+.sync.mal { color: var(--rojo); border-color: var(--rojo); }
+.sync[hidden] { display: none; }
+.pie-sync { position: fixed; right: 14px; top: calc(12px + env(safe-area-inset-top)); }
+.pestanas .espacio { flex: 1; }
+.otro-intento { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin: 10px 0; padding: 10px 14px;
+  border-radius: var(--radio); background: var(--ambar-claro); color: var(--ambar); font-weight: 600; }

@@ -1,8 +1,9 @@
 "use strict";
 // Pruebas en iPad — Javier (5º básico) y Lourdes (2º básico).
-// Los datos viven sólo en este iPad (IndexedDB). Las pruebas y pautas vienen de data/ (tools/convertir.py).
+// Los datos viven en el iPad (IndexedDB) y, si se activa, se sincronizan entre iPads por Google Drive.
+// Las pruebas y pautas vienen de data/ (tools/convertir.py).
 
-const VERSION = "2026-11-10.3";
+const VERSION = "2026-11-11.2";
 let hayVersionNueva = false; // el service worker trajo otra versión (ver route)
 const NINOS = {
   javier: { nombre: "Javier", nivel: "5b", curso: "5º básico" },
@@ -12,6 +13,9 @@ const NINOS = {
 const PIN_HUELLA_INICIAL = "e917ab2bc6189032be07582233692efe49ce1492c6a43e4ca5af817c7539f865";
 const SESION_NOMBRE = { S1: "Semana 1", S2: "Semana 2", S3: "Semana 3", S4: "Semana 4", S5: "Semana 5", EX: "Examen" };
 const ANCHO = 1000; // ancho lógico del lienzo: los trazos se guardan en esta escala
+// Claves propias de cada iPad: no viajan en los respaldos ni en la sincronización.
+const LOCALES = ["respaldo", "sync"];
+const ahora = () => new Date().toISOString();
 
 // ---------- almacenamiento (IndexedDB, una tabla clave → valor) ----------
 const almacen = (() => {
@@ -33,7 +37,8 @@ const almacen = (() => {
   };
   return {
     get: (k) => tx("readonly", (s) => s.get(k)),
-    set: (k, v) => tx("readwrite", (s) => s.put(v, k)),
+    set: (k, v) => tx("readwrite", (s) => s.put(v, k)).then((x) => { if (!LOCALES.includes(k)) marcarCambio(); return x; }),
+    poner: (k, v) => tx("readwrite", (s) => s.put(v, k)),
     del: (k) => tx("readwrite", (s) => s.delete(k)),
     todo: async () => {
       const d = await abrir();
@@ -45,6 +50,7 @@ const almacen = (() => {
       });
     },
     limpiar: () => tx("readwrite", (s) => s.clear()),
+    claves: () => tx("readonly", (s) => s.getAllKeys()),
   };
 })();
 
@@ -54,13 +60,30 @@ async function config() {
   c.pinHuella = c.pinHuella || PIN_HUELLA_INICIAL;
   return c;
 }
+// Cada cambio del config anota la fecha de los campos que tocó («pinHuella», «dedo», «hab:<niño>:<materia>:<sesión>»):
+// al sincronizar, gana el cambio más reciente de cada campo.
+function guardarConfig(cfg, ...campos) {
+  const t = cfg.actualizado = ahora();
+  cfg.mods = cfg.mods || {};
+  for (const c of campos) cfg.mods[c] = t;
+  return almacen.set("config", cfg);
+}
 const claveResp = (nino, materia, sesion) => `r:${nino}:${materia}:${sesion}`;
 async function respuesta(nino, materia, sesion) {
   const r = (await almacen.get(claveResp(nino, materia, sesion))) || { estado: "nueva", items: {}, puntajes: {}, observaciones: "" };
   r.items = r.items || {}; r.puntajes = r.puntajes || {};
   return r;
 }
-const guardarResp = (nino, materia, sesion, r) => { r.actualizado = new Date().toISOString(); return almacen.set(claveResp(nino, materia, sesion), r); };
+// parte = "respuesta" (lo que hace el niño, y reabrir) o "correccion" (puntajes y observaciones del adulto):
+// cada parte lleva su fecha para que la sincronización no pise una con la otra.
+function guardarResp(nino, materia, sesion, r, parte = "respuesta") {
+  // una respuesta de antes de la sincronización no tiene respondidoEn: se conserva cuándo se respondió
+  if (parte === "correccion" && !r.respondidoEn && !r.corregidoEn && r.actualizado && r.estado !== "nueva") r.respondidoEn = r.actualizado;
+  r.actualizado = ahora();
+  if (parte === "correccion") r.corregidoEn = r.actualizado; else r.respondidoEn = r.actualizado;
+  return almacen.set(claveResp(nino, materia, sesion), r);
+}
+const nuevoIntento = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
 
 // ---------- datos de las pruebas ----------
 let INDICE;
@@ -270,8 +293,10 @@ function vistaPortada() {
   pintar(
     h("h1", { style: "text-align:center;margin-top:1.2em" }, "¿Quién va a dar la prueba?"),
     h("div", { class: "ninos" }, Object.entries(NINOS).map(([id, n]) =>
-      h("button", { class: `nino ${id}`, onclick: () => ir(`/n/${id}`) }, n.nombre, h("small", {}, n.curso)))),
-    h("div", { class: "pie-admin" }, h("button", { onclick: () => ir("/admin") }, "Administración")));
+      h("button", { class: `nino ${id}`, onclick: () => { syncConToque(); ir(`/n/${id}`); } }, n.nombre, h("small", {}, n.curso)))),
+    h("div", { class: "pie-sync" }, chipSync),
+    h("div", { class: "pie-admin" }, h("button", { onclick: () => ir("/admin") }, "Administración")),
+    h("div", { class: "pie-version" }, `Versión ${VERSION}`));
 }
 
 const habilitada = (cfg, nino, materia, sesion) => !!cfg.habilitadas[nino]?.[`${materia}:${sesion}`];
@@ -282,7 +307,7 @@ async function vistaMaterias(nino) {
   const [cfg, ind] = [await config(), await indice()];
   const materias = Object.entries(ind.materias).filter(([m]) => ind.sesiones.some((s) => habilitada(cfg, nino, m, s)));
   pintar(
-    h("div", { class: "barra" }, volver("/")),
+    h("div", { class: "barra" }, volver("/"), h("span", { class: "espacio" }), chipSync),
     h("h1", {}, `Hola, ${n.nombre}. ¿Qué materia?`),
     materias.length ? h("div", { class: "grilla" }, materias.map(([m, nombre]) => h("button", { onclick: () => ir(`/n/${nino}/${m}`) }, nombre)))
       : h("p", { class: "vacio" }, "Todavía no hay pruebas listas. Pídele al adulto que las habilite."));
@@ -301,7 +326,7 @@ async function vistaSesiones(nino, materia) {
       SESION_NOMBRE[s], h("small", {}, hecha ? "✓ Guardada" : r.estado === "curso" ? "Empezada" : "Por hacer")));
   }
   pintar(
-    h("div", { class: "barra" }, volver(`/n/${nino}`)),
+    h("div", { class: "barra" }, volver(`/n/${nino}`), h("span", { class: "espacio" }), chipSync),
     h("h1", {}, ind.materias[materia] || materia),
     botones.length ? h("div", { class: "grilla" }, botones) : h("p", { class: "vacio" }, "No hay pruebas habilitadas en esta materia."));
 }
@@ -311,15 +336,17 @@ async function vistaPrueba(nino, materia, sesion) {
   nivelVisual(n.nivel);
   const cfg = await config();
   if (!habilitada(cfg, nino, materia, sesion)) return ir(`/n/${nino}`);
+  await syncAntesDeAbrir(); // trae lo que se haya hecho en otro iPad
+  if (!location.hash.startsWith(`#/p/${nino}/${materia}/${sesion}`)) return; // se fue mientras sincronizaba
   const [p, r] = [await prueba(n.nivel, materia, sesion), await respuesta(nino, materia, sesion)];
   const cerrada = r.estado === "entregada";
   let espera;
   const guardarBorrador = () => {
-    if (r.estado === "nueva") r.estado = "curso";
+    if (r.estado === "nueva") { r.estado = "curso"; r.intento = nuevoIntento(); }
     clearTimeout(espera); espera = setTimeout(() => guardarResp(nino, materia, sesion, r), 400);
   };
   const nodos = [
-    h("div", { class: "barra" }, volver(`/n/${nino}/${materia}`)),
+    h("div", { class: "barra" }, volver(`/n/${nino}/${materia}`), h("span", { class: "espacio" }), chipSync),
     h("div", { class: "cabecera" }, h("h1", {}, p.titulo), h("p", {}, `${n.nombre} · ${p.duracion} · ${p.puntajeTotal} puntos`)),
   ];
   if (cerrada) nodos.push(h("div", { class: "sello" }, "✓ Esta prueba ya está guardada."));
@@ -331,11 +358,13 @@ async function vistaPrueba(nino, materia, sesion) {
   if (!cerrada) {
     nodos.push(h("div", { class: "guardar" }, h("button", { class: "primario", onclick: async () => {
       if (!confirm("¿Terminaste la prueba? Al guardarla ya no se puede cambiar.")) return;
+      const permiso = permisoSync(); // dentro del toque, por si Google tiene que abrir su ventana
       clearTimeout(espera);
-      r.estado = "entregada"; r.entregadaEn = new Date().toISOString();
+      r.estado = "entregada"; r.entregadaEn = ahora(); r.intento = r.intento || nuevoIntento();
       await guardarResp(nino, materia, sesion, r);
       avisar("¡Prueba guardada! Muy bien.");
       ir(`/n/${nino}/${materia}`);
+      permiso.then((ok) => ok && sincronizar().then(trasSync));
     } }, "Guardar prueba")));
   }
   pintar(...nodos);
@@ -433,9 +462,11 @@ function vistaPin(destino) {
 
 function pestanas(activa) {
   const p = [["javier", "Javier"], ["lourdes", "Lourdes"], ["libreta", "Libreta de notas"], ["ajustes", "Ajustes"]];
-  return h("div", { class: "pestanas" }, p.map(([id, t]) =>
+  const recordatorio = h("div");
+  avisoRespaldo(recordatorio, activa);
+  return h("div", {}, h("div", { class: "pestanas" }, p.map(([id, t]) =>
     h("button", { class: id === activa ? "activa" : "", onclick: () => ir(id === "libreta" || id === "ajustes" ? `/admin/${id}` : `/admin/n/${id}`) }, t)),
-    h("button", { onclick: () => { adminOk = false; ir("/"); } }, "Salir"));
+    h("button", { onclick: () => { adminOk = false; ir("/"); } }, "Salir"), h("span", { class: "espacio" }), chipSync), recordatorio);
 }
 
 const ESTADO_TXT = { nueva: "", curso: "empezada", entregada: "entregada" };
@@ -451,7 +482,7 @@ async function vistaAdminNino(nino) {
     cab.append(h("th", { class: "centro" }, h("button", { title: "Habilitar o quitar en todas las materias", onclick: async () => {
       const todas = Object.keys(ind.materias).every((m) => hab[`${m}:${s}`]);
       Object.keys(ind.materias).forEach((m) => { hab[`${m}:${s}`] = !todas; });
-      await almacen.set("config", cfg); vistaAdminNino(nino);
+      await guardarConfig(cfg, ...Object.keys(ind.materias).map((m) => `hab:${nino}:${m}:${s}`)); vistaAdminNino(nino);
     } }, s)));
   }
   tabla.append(cab);
@@ -463,7 +494,7 @@ async function vistaAdminNino(nino) {
       const enLib = libreta[k];
       const celda = h("td", { class: "centro" },
         h("button", { class: "toggle" + (hab[k] ? " si" : ""), onclick: async () => {
-          hab[k] = !hab[k]; await almacen.set("config", cfg); vistaAdminNino(nino);
+          hab[k] = !hab[k]; await guardarConfig(cfg, `hab:${nino}:${k}`); vistaAdminNino(nino);
         } }, hab[k] ? "Visible" : "Oculta"));
       if (r || enLib) {
         const est = enLib ? `nota ${fmt(enLib.nota)}` : ESTADO_TXT[r.estado] || "";
@@ -492,6 +523,7 @@ async function libretaAlDia(nino) {
     let p;
     try { p = await prueba(NINOS[nino].nivel, materia, sesion); } catch { continue; }
     const r = await respuesta(nino, materia, sesion);
+    if ((e.intento || "0") !== (r.intento || "0")) continue; // la nota es de otro intento
     const suma = p.bloques.filter((b) => b.tipo === "item")
       .reduce((s, b) => s + (puntajeItem(b, r.items[b.n] || {}, r.puntajes).valor ?? 0), 0);
     if (suma === e.obtenido && p.puntajeTotal === e.total) continue;
@@ -542,16 +574,16 @@ async function vistaCorregir(nino, materia, sesion) {
   };
   const obs = h("textarea", { placeholder: "Observaciones (opcional)" });
   obs.value = libreta[`${materia}:${sesion}`]?.observaciones ?? r.observaciones ?? "";
-  obs.addEventListener("input", () => { r.observaciones = obs.value; guardarResp(nino, materia, sesion, r); });
+  obs.addEventListener("input", () => { r.observaciones = obs.value; guardarResp(nino, materia, sesion, r, "correccion"); });
 
   async function guardarLibreta() {
     const c = calcular();
     if (c.faltan && !confirm(`Faltan ${c.faltan} ítem(s) sin puntaje: cuentan como 0. ¿Guardar igual?`)) return;
     const lib = (await almacen.get(`l:${nino}`)) || {};
     lib[`${materia}:${sesion}`] = { obtenido: c.suma, total: p.puntajeTotal, porcentaje: c.pct, nota: c.nota,
-      observaciones: obs.value, fecha: new Date().toISOString(), titulo: p.titulo };
+      observaciones: obs.value, fecha: ahora(), titulo: p.titulo, intento: r.intento || "0" };
     await almacen.set(`l:${nino}`, lib);
-    await guardarResp(nino, materia, sesion, r);
+    await guardarResp(nino, materia, sesion, r, "correccion");
     avisar(`Guardado en la libreta: nota ${fmt(c.nota)}`);
   }
 
@@ -562,9 +594,21 @@ async function vistaCorregir(nino, materia, sesion) {
   if (r.estado === "entregada") {
     nodos.push(h("div", { class: "barra" }, h("button", { onclick: async () => {
       if (!confirm(`¿Reabrir la prueba para que ${n.nombre} la siga respondiendo?`)) return;
-      r.estado = "curso"; await guardarResp(nino, materia, sesion, r); avisar("Prueba reabierta");
+      r.estado = "curso"; r.reabiertaEn = ahora(); await guardarResp(nino, materia, sesion, r); avisar("Prueba reabierta");
       vistaCorregir(nino, materia, sesion);
     } }, "Reabrir para el niño")));
+  }
+  for (const o of r.otros || []) {
+    const cuando = (t) => (t ? new Date(t).toLocaleString("es-CL", { dateStyle: "short", timeStyle: "short", hourCycle: "h23" }) : "");
+    nodos.push(h("div", { class: "otro-intento" },
+      h("span", {}, `Hay otro intento de esta prueba, hecho en otro iPad: ${o.estado === "entregada" ? `entregado ${cuando(o.entregadaEn)}` : `empezado, último cambio ${cuando(o.respondidoEn)}`}. Aquí se muestra el de ${r.estado === "entregada" ? `entregado ${cuando(r.entregadaEn)}` : `último cambio ${cuando(r.respondidoEn || r.actualizado)}`}.`),
+      h("button", { onclick: async () => {
+        if (!confirm("¿Mostrar y corregir el otro intento? El actual queda guardado como «otro intento».")) return;
+        const { otros = [], ...actual } = r;
+        const nuevo = { ...o, otros: [...otros.filter((x) => x !== o), resumenIntento(actual)], elegidoEn: ahora() };
+        await guardarResp(nino, materia, sesion, nuevo, "correccion");
+        avisar("Intento cambiado: vuelve a guardar en la libreta"); vistaCorregir(nino, materia, sesion);
+      } }, "Usar ese intento")));
   }
   nodos.push(h("details", {}, h("summary", { class: "boton", style: "margin:10px 0" }, "Ver pauta completa"),
     h("div", { class: "pauta-completa", html: p.pautaHtml }, tablaNotas(p))));
@@ -612,7 +656,7 @@ async function vistaCorregir(nino, materia, sesion) {
       }
       zona.replaceChildren(h("span", {}, `Puntaje (máx. ${b.pts}):`),
         ...Array.from({ length: b.pts + 1 }, (_, v) => h("button", { class: valor === v ? "elegido" : "", onclick: async () => {
-          r.puntajes[b.n] = v; pintarPuntaje(); refrescar(); await guardarResp(nino, materia, sesion, r);
+          r.puntajes[b.n] = v; pintarPuntaje(); refrescar(); await guardarResp(nino, materia, sesion, r, "correccion");
         } }, String(v))));
     };
     pintarPuntaje();
@@ -679,53 +723,447 @@ async function vistaAjustes() {
   nivelVisual(null);
   const cfg = await config();
   const ind = await indice();
+  const resp = await estadoRespaldo();
+  cargarGis().catch(() => {});
   const pin1 = h("input", { type: "password", inputmode: "numeric", pattern: "[0-9]*", placeholder: "PIN nuevo (4 a 8 números)", style: "font:inherit;padding:12px;border-radius:10px;border:2px solid var(--linea)" });
   const archivo = h("input", { type: "file", accept: "application/json,.json", style: "display:none", onchange: async () => {
     const f = archivo.files[0]; if (!f) return;
-    try {
-      const datos = JSON.parse(await f.text());
-      if (datos.app !== "pruebas-ipad" || !datos.datos) throw new Error("no es un respaldo de esta app");
-      if (!confirm("Esto reemplaza todo lo que hay en este iPad por el respaldo. ¿Seguir?")) return;
-      await almacen.limpiar();
-      for (const [k, v] of Object.entries(datos.datos)) await almacen.set(k, v);
-      avisar("Respaldo restaurado"); vistaAjustes();
-    } catch (e) { alert("No se pudo leer el respaldo: " + e.message); }
+    try { if (await restaurar(JSON.parse(await f.text()))) vistaAjustes(); }
+    catch (e) { alert("No se pudo leer el respaldo: " + e.message); }
   } });
+  const msgDrive = h("p", { class: "msg-drive" });
+  const conMensaje = (fn) => async (ev) => {
+    const b = ev.currentTarget; b.disabled = true; msgDrive.textContent = "Conectando con Google Drive…";
+    try { msgDrive.textContent = await fn(); } catch (e) { msgDrive.textContent = "⚠️ " + e.message; }
+    b.disabled = false;
+  };
+  const listaDrive = h("div");
+  const msgSync = h("p", { class: "msg-drive" });
+  const sinGoogle = () => "⚠️ " + (SYNC.error || "No se pudo conectar con Google: vuelve a tocar.");
+  const textoSync = (res) => (res.ok ? `✅ Sincronizado${res.cambios ? `: ${res.cambios} cambio(s) traídos de otro iPad` : ""}.` : "⚠️ " + res.error);
+  const cuando = (t) => new Date(t).toLocaleString("es-CL");
   pintar(pestanas("ajustes"), h("h1", {}, "Ajustes"),
     h("h2", {}, "PIN de administración"),
     h("div", { class: "barra" }, pin1, h("button", { onclick: async () => {
       if (!/^\d{4,8}$/.test(pin1.value)) return avisar("El PIN debe tener de 4 a 8 números");
-      cfg.pinHuella = await huella(pin1.value); await almacen.set("config", cfg); pin1.value = ""; avisar("PIN cambiado");
+      cfg.pinHuella = await huella(pin1.value); await guardarConfig(cfg, "pinHuella"); pin1.value = ""; avisar("PIN cambiado");
     } }, "Cambiar PIN")),
     h("h2", {}, "Escritura"),
     h("div", { class: "barra" }, h("button", { class: "toggle" + (cfg.dedo ? " si" : ""), onclick: async () => {
-      cfg.dedo = !cfg.dedo; await almacen.set("config", cfg); vistaAjustes();
+      cfg.dedo = !cfg.dedo; await guardarConfig(cfg, "dedo"); vistaAjustes();
     } }, cfg.dedo ? "También se escribe con el dedo" : "Sólo se escribe con el lápiz"),
       h("span", { style: "color:var(--suave);font-size:.85rem" }, "Con «sólo lápiz», la palma apoyada no raya la hoja.")),
+    h("h2", {}, "Sincronización entre iPads"),
+    h("p", {}, "Para que los niños den las pruebas en cualquier iPad y el avance se vea en todos: actívala en cada iPad, entrando con la misma cuenta de Google. Se comparten respuestas, libreta, PIN y pruebas habilitadas, sin pisar resultados. Se sincroniza al abrir la app, al abrir y al guardar cada prueba, y al tocar ☁️."),
+    SYNC.activo
+      ? h("div", { class: "barra" },
+        h("button", { class: "primario", onclick: (ev) => {
+          const b = ev.currentTarget; b.disabled = true; msgSync.textContent = "Sincronizando…";
+          syncConToque().then((res) => { msgSync.textContent = res ? textoSync(res) : sinGoogle(); b.disabled = false; });
+        } }, "Sincronizar ahora"),
+        h("button", { onclick: async () => {
+          if (!confirm("¿Desactivar la sincronización en este iPad? Lo que hay aquí y en Drive se queda donde está.")) return;
+          await guardarEstadoSync({ activo: false }); vistaAjustes();
+        } }, "Desactivar en este iPad"))
+      : h("div", { class: "barra" }, h("button", { class: "primario", onclick: (ev) => {
+        const permiso = permisoSync(true); // en el mismo toque, por la ventana de Google
+        const b = ev.currentTarget; b.disabled = true; msgSync.textContent = "Conectando con Google Drive…";
+        permiso.then(async (ok) => {
+          if (!ok) { msgSync.textContent = sinGoogle(); b.disabled = false; return; }
+          await guardarEstadoSync({ activo: true, error: "" });
+          const res = await sincronizar();
+          msgSync.textContent = textoSync(res);
+          if (res.ok) setTimeout(vistaAjustes, 1500); else b.disabled = false;
+        });
+      } }, "Activar en este iPad")),
+    msgSync,
+    h("p", { style: "font-size:.85rem;color:var(--suave)" }, SYNC.activo
+      ? `Activa en este iPad. ${SYNC.ultimo ? `Última sincronización: ${cuando(SYNC.ultimo)}.` : "Todavía no se sincroniza."}${SYNC.error ? ` Último problema: ${SYNC.error}` : ""}`
+      : "Desactivada en este iPad: sus datos sólo quedan aquí."),
     h("h2", {}, "Respaldo"),
-    h("p", {}, "Los datos viven sólo en este iPad. Descarga un respaldo de vez en cuando (por ejemplo, a Archivos o iCloud Drive)."),
+    h("p", {}, "Los datos (respuestas, libreta, PIN y pruebas habilitadas) viven en este iPad y, si la sincronización está activa, en Drive. Si se borra la app sin respaldo ni sincronización, se pierden: respáldalos seguido. ",
+      h("strong", {}, resp.ultimo ? `Último respaldo: ${new Date(resp.ultimo).toLocaleString("es-CL")} (${resp.via === "drive" ? "Google Drive" : "archivo"}).` : "Todavía no hay respaldos.")),
+    h("h3", {}, "Google Drive"),
+    h("p", { style: "font-size:.85rem;color:var(--suave)" }, `Guarda «${DRIVE_ARCHIVO}» en tu Drive y una copia con la fecha de cada día. La app sólo ve sus propios archivos. La primera vez, Google te pide entrar con tu cuenta.`),
+    h("div", { class: "barra" },
+      h("button", { class: "primario", onclick: conMensaje(guardarEnDrive) }, "Guardar en Drive"),
+      h("button", { onclick: conMensaje(async () => {
+        const lista = await respaldosEnDrive();
+        if (!lista.length) return "Todavía no hay respaldos en Drive: usa «Guardar en Drive» primero.";
+        listaDrive.replaceChildren(h("p", {}, "Elige cuál restaurar (reemplaza todo lo de este iPad):"),
+          h("div", { class: "barra" }, lista.slice(0, 12).map((f) => h("button", { onclick: conMensaje(async () => {
+            const datos = await leerDeDrive(f.id);
+            if (await restaurar(datos)) { setTimeout(vistaAjustes, 1200); return "✅ Respaldo de Drive restaurado."; }
+            return "No se restauró.";
+          }) }, f.name === DRIVE_ARCHIVO ? `El más reciente (${new Date(f.modifiedTime).toLocaleString("es-CL")})` : f.name.replace(/^pruebas-ipad-respaldo-|\.json$/g, "")))));
+        return "";
+      }) }, "Restaurar desde Drive")),
+    msgDrive, listaDrive,
+    h("h3", {}, "Archivo en el iPad"),
+    h("p", { style: "font-size:.85rem;color:var(--suave)" }, "Descarga un archivo (por ejemplo, a Archivos o iCloud Drive) y restáuralo desde ahí si hace falta."),
     h("div", { class: "barra" },
       h("button", { onclick: exportar }, "Descargar respaldo"),
       h("button", { onclick: () => archivo.click() }, "Restaurar respaldo"), archivo),
+    h("h3", {}, "Recordatorio"),
+    h("div", { class: "barra" }, h("span", {}, "Avisarme en Administración si pasan más de"),
+      [3, 7, 14, 30].map((d) => h("button", { class: "toggle" + (resp.cadaDias === d ? " si" : ""), onclick: async () => {
+        await almacen.set(CLAVE_RESPALDO, { ...resp, cadaDias: d }); vistaAjustes();
+      } }, `${d} días`)), h("span", {}, "sin respaldo.")),
     h("h2", {}, "Versión"),
     h("p", { style: "color:var(--suave)" }, `App ${VERSION} · ${Object.keys(ind.pruebas).length} pruebas cargadas`));
 }
 
-async function exportar() {
+// ---------- respaldo ----------
+// La marca del último respaldo vive aparte y no viaja en el respaldo: restaurar uno viejo no la retrocede.
+const CLAVE_RESPALDO = "respaldo";
+async function estadoRespaldo() {
+  return { cadaDias: 7, ...((await almacen.get(CLAVE_RESPALDO)) || {}) };
+}
+async function marcarRespaldo(via) {
+  await almacen.set(CLAVE_RESPALDO, { ...(await estadoRespaldo()), ultimo: new Date().toISOString(), via });
+}
+async function textoRespaldo() {
   const datos = await almacen.todo();
-  const texto = JSON.stringify({ app: "pruebas-ipad", version: VERSION, fecha: new Date().toISOString(), datos });
+  for (const k of LOCALES) delete datos[k];
+  return JSON.stringify({ app: "pruebas-ipad", version: VERSION, fecha: new Date().toISOString(), datos });
+}
+async function restaurar(r) {
+  if (!r || r.app !== "pruebas-ipad" || !r.datos) throw new Error("no es un respaldo de esta app");
+  const fecha = r.fecha ? new Date(r.fecha).toLocaleString("es-CL") : "sin fecha";
+  const conSync = SYNC.activo ? "\n\nLa sincronización está activa: en la próxima, lo que sea más reciente en Drive se vuelve a sumar." : "";
+  if (!confirm(`Esto reemplaza todo lo que hay en este iPad por el respaldo del ${fecha}. ¿Seguir?${conSync}`)) return false;
+  const propias = await Promise.all(LOCALES.map((k) => almacen.get(k)));
+  await almacen.limpiar();
+  for (const [k, v] of Object.entries(r.datos)) if (!LOCALES.includes(k)) await almacen.set(k, v);
+  for (const [i, k] of LOCALES.entries()) if (propias[i]) await almacen.poner(k, propias[i]);
+  avisar("Respaldo restaurado");
+  return true;
+}
+async function avisoRespaldo(zona, activa) {
+  const r = await estadoRespaldo();
+  const dias = r.ultimo ? (Date.now() - new Date(r.ultimo)) / 864e5 : Infinity;
+  if (dias <= r.cadaDias) return;
+  const hayDatos = (await almacen.claves()).some((k) => k.startsWith("r:") || k.startsWith("l:"));
+  if (!hayDatos) return;
+  cargarGis().catch(() => {});
+  const msg = h("span", {}, r.ultimo ? `⚠️ Hace ${Math.floor(dias)} días que no se respalda.` : "⚠️ Todavía no hay ningún respaldo.");
+  zona.replaceChildren(h("div", { class: "recordatorio" }, msg,
+    h("button", { class: "primario", onclick: async (ev) => {
+      const b = ev.currentTarget; b.disabled = true; msg.textContent = "Conectando con Google Drive…";
+      try { msg.textContent = await guardarEnDrive(); setTimeout(() => zona.replaceChildren(), 2500); }
+      catch (e) { msg.textContent = "⚠️ " + e.message; b.disabled = false; }
+    } }, "Guardar en Drive"),
+    activa === "ajustes" ? null : h("button", { onclick: () => ir("/admin/ajustes") }, "Otras opciones")));
+}
+
+async function exportar() {
+  const texto = await textoRespaldo();
   const nombre = `respaldo-pruebas-${new Date().toISOString().slice(0, 10)}.json`;
   const archivo = new File([texto], nombre, { type: "application/json" });
   if (navigator.canShare && navigator.canShare({ files: [archivo] })) {
-    try { await navigator.share({ files: [archivo], title: nombre }); return; } catch (e) { if (e.name === "AbortError") return; }
+    try { await navigator.share({ files: [archivo], title: nombre }); await marcarRespaldo("archivo"); return; }
+    catch (e) { if (e.name === "AbortError") return; }
   }
   const a = h("a", { href: URL.createObjectURL(archivo), download: nombre });
   document.body.append(a); a.click(); a.remove();
+  await marcarRespaldo("archivo");
+}
+
+// Google Drive con Google Identity Services y scope drive.file (la app sólo ve los archivos que crea).
+// El client ID es público (no es un secreto) y es el mismo de amunita/curso-guitarra: su origen
+// autorizado, https://amunita.github.io, es también el de esta app.
+const DRIVE_CLIENT_ID = "217925521670-bkjei1es6u3lc6q253hvs43qh89gkpqp.apps.googleusercontent.com";
+const DRIVE_ARCHIVO = "pruebas-ipad-respaldo.json";
+let driveToken = null, driveVence = 0, gisCargado = null;
+// El permiso de Google dura una hora: se recuerda en este iPad para no pedirlo en cada recarga.
+try { const t = JSON.parse(localStorage.getItem("pruebas-ipad:google")); if (t?.vence > Date.now()) [driveToken, driveVence] = [t.token, t.vence]; } catch {}
+function recordarToken() {
+  try { localStorage.setItem("pruebas-ipad:google", JSON.stringify(driveToken ? { token: driveToken, vence: driveVence } : null)); } catch {}
+}
+const tokenVigente = () => !!driveToken && Date.now() < driveVence;
+function cargarGis() {
+  if (window.google?.accounts?.oauth2) return Promise.resolve();
+  return gisCargado || (gisCargado = new Promise((ok, mal) => {
+    const s = h("script", { src: "https://accounts.google.com/gsi/client" });
+    s.onload = ok;
+    s.onerror = () => { gisCargado = null; mal(new Error("No se pudo cargar Google (¿sin internet?).")); };
+    document.head.append(s);
+  }));
+}
+// Safari sólo abre la ventana de Google si se pide en el mismo toque: por eso Google se precarga al
+// mostrar los botones y el permiso se pide antes de cualquier otra espera.
+function tokenDrive() {
+  if (tokenVigente()) return Promise.resolve(driveToken);
+  return window.google?.accounts?.oauth2 ? pedirToken() : cargarGis().then(pedirToken);
+}
+function pedirToken() {
+  return new Promise((ok, mal) => {
+    const cliente = google.accounts.oauth2.initTokenClient({
+      client_id: DRIVE_CLIENT_ID, scope: "https://www.googleapis.com/auth/drive.file",
+      callback: (t) => {
+        if (t?.access_token) { driveToken = t.access_token; driveVence = Date.now() + ((t.expires_in || 3600) - 60) * 1000; recordarToken(); ok(driveToken); }
+        else mal(new Error("Google no dio permiso" + (t?.error ? ` (${t.error})` : "") + "."));
+      },
+      error_callback: (e) => mal(new Error(e?.type === "popup_closed" ? "Se cerró la ventana de Google."
+        : e?.type === "popup_failed_to_open" ? "El iPad no dejó abrir la ventana de Google: toca el botón otra vez." : e?.message || "Conexión cancelada.")),
+    });
+    cliente.requestAccessToken({ prompt: "" }); // Google pide el consentimiento sólo la primera vez
+  });
+}
+async function drive(url, opciones = {}) {
+  const tok = await tokenDrive();
+  const r = await fetch(url, { ...opciones, headers: { ...(opciones.headers || {}), Authorization: "Bearer " + tok } });
+  if (r.status === 401) { driveToken = null; recordarToken(); throw new Error("La sesión de Google venció: vuelve a intentarlo."); }
+  if (!r.ok) {
+    let por = "";
+    try { por = (await r.json()).error?.message || ""; } catch {}
+    if (/has not been used|is disabled/i.test(por)) por = "la API de Google Drive no está habilitada en el proyecto de Google Cloud";
+    throw new Error(`Drive respondió ${r.status}${por ? ": " + por : ""}`);
+  }
+  return r;
+}
+async function buscarEnDrive(nombre) {
+  const q = encodeURIComponent(`name = '${nombre}' and trashed = false`);
+  const j = await (await drive(`https://www.googleapis.com/drive/v3/files?q=${q}&fields=files(id,name,modifiedTime)`)).json();
+  return j.files?.[0] || null;
+}
+async function subirADrive(nombre, cuerpo) {
+  const f = await buscarEnDrive(nombre);
+  return f ? actualizarEnDrive(f.id, cuerpo) : crearEnDrive(nombre, cuerpo);
+}
+function actualizarEnDrive(id, cuerpo) {
+  return drive(`https://www.googleapis.com/upload/drive/v3/files/${id}?uploadType=media`,
+    { method: "PATCH", headers: { "Content-Type": "application/json" }, body: cuerpo });
+}
+function crearEnDrive(nombre, cuerpo) {
+  const borde = "respaldo" + Date.now();
+  const meta = JSON.stringify({ name: nombre, mimeType: "application/json" });
+  return drive("https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart", {
+    method: "POST", headers: { "Content-Type": `multipart/related; boundary=${borde}` },
+    body: `--${borde}\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n${meta}\r\n--${borde}\r\nContent-Type: application/json\r\n\r\n${cuerpo}\r\n--${borde}--`,
+  });
+}
+async function guardarEnDrive() {
+  await tokenDrive();
+  const cuerpo = await textoRespaldo();
+  await subirADrive(DRIVE_ARCHIVO, cuerpo);
+  await subirADrive(`pruebas-ipad-respaldo-${new Date().toISOString().slice(0, 10)}.json`, cuerpo); // histórico, uno por día
+  await marcarRespaldo("drive");
+  return `✅ Respaldo guardado en Google Drive (${Math.round(cuerpo.length / 1024)} KB).`;
+}
+async function respaldosEnDrive() {
+  const q = encodeURIComponent("name contains 'pruebas-ipad-respaldo' and trashed = false");
+  const j = await (await drive(`https://www.googleapis.com/drive/v3/files?q=${q}&orderBy=modifiedTime desc&pageSize=40&fields=files(id,name,modifiedTime)`)).json();
+  const fs = j.files || [];
+  return [...fs.filter((f) => f.name === DRIVE_ARCHIVO), ...fs.filter((f) => f.name !== DRIVE_ARCHIVO).sort((a, b) => b.name.localeCompare(a.name))];
+}
+async function leerDeDrive(id) {
+  return (await drive(`https://www.googleapis.com/drive/v3/files/${id}?alt=media`)).json();
+}
+
+// ---------- sincronización entre iPads ----------
+// Todos los iPads con la sincronización activa comparten «pruebas-ipad-sync.json» en el Drive de la misma
+// cuenta de Google (scope drive.file). Sincronizar = leer el archivo, fusionarlo con lo de este iPad sin
+// pisar resultados, guardar lo fusionado aquí y subirlo. Si dos iPads suben a la vez y uno pisa al otro,
+// lo de ese iPad sigue aquí y sube en la sincronización siguiente: la fusión no pierde nada por repetirse.
+const SYNC_ARCHIVO = "pruebas-ipad-sync.json";
+let SYNC = { activo: false };          // clave «sync» (propia del iPad): { activo, ultimo, error }
+let syncTrabajo = null, syncUlt = 0, syncCambios = 0;
+let pendiente = (() => { try { return localStorage.getItem("pruebas-ipad:pendiente") === "1"; } catch { return false; } })();
+const chipSync = h("button", { class: "sync", onclick: () => syncConToque(true) });
+
+function marcarCambio() {
+  syncCambios++;
+  if (!pendiente) { pendiente = true; try { localStorage.setItem("pruebas-ipad:pendiente", "1"); } catch {} }
+  pintarSync();
+}
+function pintarSync() {
+  chipSync.hidden = !SYNC.activo;
+  const hora = SYNC.ultimo ? new Date(SYNC.ultimo).toLocaleTimeString("es-CL", { hour: "2-digit", minute: "2-digit", hourCycle: "h23" }) : "";
+  const [clase, texto] = syncTrabajo ? ["", "☁️ Sincronizando…"]
+    : SYNC.error ? ["mal", "⚠️ Sin sincronizar · tocar"]
+    : pendiente || !SYNC.ultimo ? ["pendiente", "☁️ Sin sincronizar · tocar"]
+    : ["ok", `☁️ Sincronizado ${hora}`];
+  chipSync.className = "sync " + clase;
+  chipSync.textContent = texto;
+  chipSync.title = SYNC.error || (SYNC.ultimo ? `Última sincronización: ${new Date(SYNC.ultimo).toLocaleString("es-CL")}` : "");
+}
+async function guardarEstadoSync(cambios) {
+  Object.assign(SYNC, cambios);
+  await almacen.poner("sync", SYNC);
+  pintarSync();
+}
+
+// --- fusión (pura: no toca el almacén ni la red) ---
+const ts = (x) => x || "";
+// Orden estable de las claves, para comparar dos versiones de los datos.
+const canonico = (v) => JSON.stringify(v, (k, x) => (x && typeof x === "object" && !Array.isArray(x)
+  ? Object.fromEntries(Object.keys(x).sort().map((c) => [c, x[c]])) : x));
+function fusionar(local, remoto) {
+  const out = {};
+  for (const k of new Set([...Object.keys(local), ...Object.keys(remoto)])) {
+    if (LOCALES.includes(k)) continue;
+    const a = local[k], b = remoto[k];
+    if (a == null || b == null) { out[k] = a ?? b; continue; }
+    out[k] = k === "config" ? fusionarConfig(a, b) : k.startsWith("l:") ? fusionarLibreta(a, b)
+      : k.startsWith("r:") ? fusionarResp(a, b) : ts(b.actualizado) > ts(a.actualizado) ? b : a;
+  }
+  return out;
+}
+const leerCampo = (c, campo) => {
+  if (!campo.startsWith("hab:")) return c[campo];
+  const [, nino, ...ms] = campo.split(":");
+  return c.habilitadas?.[nino]?.[ms.join(":")];
+};
+const ponerCampo = (c, campo, v) => {
+  if (!campo.startsWith("hab:")) return void (c[campo] = v);
+  const [, nino, ...ms] = campo.split(":");
+  ((c.habilitadas = c.habilitadas || {})[nino] = c.habilitadas[nino] || {})[ms.join(":")] = v;
+};
+// Config: campo a campo gana el cambio más reciente (habilitar en un iPad y cambiar el PIN en otro no se pisan).
+function fusionarConfig(a, b) {
+  const out = JSON.parse(JSON.stringify(ts(b.actualizado) > ts(a.actualizado) ? b : a));
+  out.mods = { ...(out.mods || {}) };
+  for (const campo of new Set([...Object.keys(a.mods || {}), ...Object.keys(b.mods || {})])) {
+    const g = ts(b.mods?.[campo]) > ts(a.mods?.[campo]) ? b : a;
+    ponerCampo(out, campo, leerCampo(g, campo));
+    out.mods[campo] = g.mods[campo];
+  }
+  return out;
+}
+// Libreta: por prueba, la nota guardada más tarde (y, con la misma fecha, la recalculada más tarde).
+function fusionarLibreta(a, b) {
+  const out = { ...a };
+  const cuando = (e) => ts(e.fecha) + "|" + ts(e.recalculada);
+  for (const [k, e] of Object.entries(b)) if (!out[k] || cuando(e) > cuando(out[k])) out[k] = e;
+  return out;
+}
+// Respuestas: cada intento tiene su id. Del mismo intento queda una sola copia (lo respondido de la que
+// manda, lo corregido de la corrección más reciente). Si son intentos distintos, uno queda como principal
+// y el otro se guarda en «otros» para que el adulto lo vea y pueda elegirlo: no se pierde ninguno.
+const idIntento = (r) => (r.estado === "entregada" || r.estado === "curso" ? r.intento || "0" : null);
+const respondido = (r) => ts(r.respondidoEn || (r.corregidoEn ? "" : r.actualizado)); // sólo lo hecho por el niño
+const claveIntento = (r) => `${r.intento || "0"}|${respondido(r)}`;
+function hayRespuestas(r) {
+  return Object.values(r.items || {}).some((i) => Object.values(i.alt || {}).some(Boolean)
+    || Object.values(i.sel || {}).some((x) => x != null && x !== "") || i.lienzo?.trazos?.length);
+}
+const resumenIntento = (r) => ({ intento: r.intento || "0", estado: r.estado, entregadaEn: r.entregadaEn, reabiertaEn: r.reabiertaEn,
+  respondidoEn: respondido(r), items: r.items || {}, puntajes: r.puntajes || {}, observaciones: r.observaciones || "", corregidoEn: r.corregidoEn });
+function manda(a, b, mismo) {
+  if (!mismo && ts(a.elegidoEn) !== ts(b.elegidoEn)) return ts(b.elegidoEn) > ts(a.elegidoEn) ? b : a; // el adulto eligió uno
+  const ea = a.estado === "entregada", eb = b.estado === "entregada";
+  if (ea !== eb) { // la entregada gana, salvo que la otra copia sea la misma prueba reabierta después
+    const [ent, otra] = ea ? [a, b] : [b, a];
+    return mismo && ts(otra.reabiertaEn) > ts(ent.entregadaEn) ? otra : ent;
+  }
+  if (respondido(a) !== respondido(b)) return respondido(b) > respondido(a) ? b : a;
+  return canonico(b) > canonico(a) ? b : a; // empate: igual en los dos iPads, para que la fusión dé lo mismo en ambos
+}
+function fusionarResp(a, b) {
+  const [ia, ib] = [idIntento(a), idIntento(b)];
+  const mismo = ia == null || ib == null || ia === ib;
+  const g = manda(a, b, mismo), p = g === a ? b : a;
+  const out = JSON.parse(JSON.stringify(g));
+  const extra = [];
+  if (mismo) {
+    const c = ts(b.corregidoEn) > ts(a.corregidoEn) ? b : a;
+    out.puntajes = { ...(c === a ? b : a).puntajes, ...c.puntajes };
+    out.observaciones = c.observaciones ?? out.observaciones;
+    out.corregidoEn = c.corregidoEn;
+    out.elegidoEn = [a.elegidoEn, b.elegidoEn].sort().pop();
+    if (!out.intento && p.intento) out.intento = p.intento;
+    // la copia perdedora siguió respondiendo después de la entrega (otro iPad sin conexión): se guarda aparte
+    if (g.estado === "entregada" && p.estado === "curso" && respondido(p) > ts(g.entregadaEn) && hayRespuestas(p)) extra.push(resumenIntento(p));
+  } else if (p.estado === "entregada" || hayRespuestas(p)) extra.push(resumenIntento(p));
+  const vistos = new Set([claveIntento(out)]);
+  out.otros = [...(a.otros || []), ...(b.otros || []), ...extra].filter((o) => !vistos.has(claveIntento(o)) && vistos.add(claveIntento(o)));
+  if (!out.otros.length) delete out.otros;
+  out.actualizado = [a.actualizado, b.actualizado].sort().pop();
+  return out;
+}
+
+// --- con Drive ---
+async function sincronizar() {
+  if (!SYNC.activo) return { ok: false, cambios: 0 };
+  if (syncTrabajo) return syncTrabajo;
+  syncTrabajo = (async () => {
+    pintarSync();
+    const marca = syncCambios;
+    try {
+      const q = encodeURIComponent(`name = '${SYNC_ARCHIVO}' and trashed = false`);
+      const lista = (await (await drive(`https://www.googleapis.com/drive/v3/files?q=${q}&orderBy=createdTime&fields=files(id,name,createdTime)`)).json()).files || [];
+      let remoto = {};
+      for (const f of lista) remoto = fusionar(remoto, (await leerDeDrive(f.id)).datos || {}); // dos iPads crearon el archivo a la vez
+      const local = await almacen.todo();
+      const datos = fusionar(local, remoto);
+      let cambios = 0;
+      for (const [k, v] of Object.entries(datos)) {
+        if (canonico(v) === canonico(local[k])) continue;
+        if (canonico(await almacen.get(k)) !== canonico(local[k])) continue; // cambió mientras sincronizaba: va en la próxima
+        await almacen.poner(k, v); cambios++;
+      }
+      const cuerpo = JSON.stringify({ app: "pruebas-ipad", version: VERSION, fecha: ahora(), datos });
+      if (!lista.length) await crearEnDrive(SYNC_ARCHIVO, cuerpo);
+      else if (canonico(datos) !== canonico(remoto) || lista.length > 1) await actualizarEnDrive(lista[0].id, cuerpo);
+      for (const f of lista.slice(1)) await drive(`https://www.googleapis.com/drive/v3/files/${f.id}`, { method: "DELETE" });
+      if (syncCambios === marca) { pendiente = false; try { localStorage.removeItem("pruebas-ipad:pendiente"); } catch {} }
+      syncUlt = Date.now();
+      await guardarEstadoSync({ ultimo: ahora(), error: "" });
+      return { ok: true, cambios };
+    } catch (e) {
+      await guardarEstadoSync({ error: e.message });
+      return { ok: false, cambios: 0, error: e.message };
+    }
+  })().finally(() => { syncTrabajo = null; pintarSync(); });
+  pintarSync();
+  return syncTrabajo;
+}
+// Si llegaron datos de otro iPad, se vuelve a pintar la pantalla, salvo donde se está escribiendo.
+function trasSync(res) {
+  const ruta = location.hash.replace(/^#\/?/, "");
+  if (res?.cambios && !/^(p\/|admin\/c\/|admin\/ajustes)/.test(ruta) && !(ruta.startsWith("admin") && !adminOk)) route();
+  return res;
+}
+// Permiso de Google sin abrir ventanas: sólo si ya hay uno vigente.
+function syncEnFondo(minimoMs = 0) {
+  if (!SYNC.activo || syncTrabajo || !tokenVigente() || Date.now() - syncUlt < minimoMs) return pintarSync();
+  sincronizar().then(trasSync);
+}
+// Dentro de un toque: si el permiso venció, Google puede abrir su ventana (Safari sólo lo deja en el mismo toque).
+function permisoSync(forzar = false) {
+  if (!SYNC.activo && !forzar) return Promise.resolve(false);
+  if (tokenVigente()) return Promise.resolve(true);
+  if (!window.google?.accounts?.oauth2) { cargarGis().catch(() => {}); return Promise.resolve(false); }
+  return pedirToken().then(() => true, (e) => guardarEstadoSync({ error: e.message }).then(() => false));
+}
+function syncConToque(avisarFin = false) {
+  return permisoSync().then((ok) => ok && sincronizar()).then((res) => {
+    if (avisarFin && !res && !tokenVigente()) avisar(SYNC.error ? "⚠️ " + SYNC.error : "Conectando con Google… vuelve a tocar ☁️");
+    if (avisarFin && res) avisar(res.ok ? (res.cambios ? `Sincronizado: ${res.cambios} cambio(s) de otro iPad` : "Sincronizado") : "⚠️ " + res.error);
+    return trasSync(res);
+  });
+}
+// Al abrir una prueba: espera (hasta 8 s) a traer lo que haya en Drive.
+async function syncAntesDeAbrir() {
+  if (!SYNC.activo || !(syncTrabajo || tokenVigente())) return;
+  await Promise.race([syncTrabajo || sincronizar(), new Promise((ok) => setTimeout(ok, 8000))]);
+}
+async function cargarSync() {
+  SYNC = { activo: false, ...((await almacen.get("sync")) || {}) };
+  pintarSync();
+  if (!SYNC.activo) return;
+  cargarGis().catch(() => {});
+  syncEnFondo(); // al abrir la app
 }
 
 // ---------- rutas ----------
+let rutaAnterior = "";
 async function route() {
   const partes = location.hash.replace(/^#\/?/, "").split("/").filter(Boolean);
+  // Al moverse por la app se sincroniza en segundo plano (al salir de una prueba, siempre; si no, cada 30 s como mucho).
+  if (partes[0] !== "p") syncEnFondo(rutaAnterior.startsWith("p/") ? 0 : 30000);
+  rutaAnterior = partes.join("/");
   // Versión nueva lista: se aplica en la portada o antes del PIN, nunca en medio de una prueba.
   if (hayVersionNueva && (!partes.length || (partes[0] === "admin" && !adminOk))) return location.reload();
   try {
@@ -748,7 +1186,11 @@ async function route() {
   }
 }
 window.addEventListener("hashchange", route);
-route();
+cargarSync().finally(route);
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "visible") syncEnFondo(30000); // volvió a la app
+  else if (pendiente) syncEnFondo(); // se va: sube lo pendiente si alcanza
+});
 if ("serviceWorker" in navigator && location.protocol !== "file:") {
   const habiaVersion = !!navigator.serviceWorker.controller;
   navigator.serviceWorker.addEventListener("controllerchange", () => { if (habiaVersion) hayVersionNueva = true; });
