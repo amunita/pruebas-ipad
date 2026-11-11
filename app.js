@@ -2,7 +2,8 @@
 // Pruebas en iPad — Javier (5º básico) y Lourdes (2º básico).
 // Los datos viven sólo en este iPad (IndexedDB). Las pruebas y pautas vienen de data/ (tools/convertir.py).
 
-const VERSION = "2026-11-10.2";
+const VERSION = "2026-11-10.3";
+let hayVersionNueva = false; // el service worker trajo otra versión (ver route)
 const NINOS = {
   javier: { nombre: "Javier", nivel: "5b", curso: "5º básico" },
   lourdes: { nombre: "Lourdes", nivel: "2b", curso: "2º básico" },
@@ -442,7 +443,7 @@ async function vistaAdminNino(nino) {
   nivelVisual(null);
   const n = NINOS[nino]; if (!n) return ir("/admin/n/javier");
   const [cfg, ind] = [await config(), await indice()];
-  const libreta = (await almacen.get(`l:${nino}`)) || {};
+  const libreta = await libretaAlDia(nino);
   const hab = cfg.habilitadas[nino] = cfg.habilitadas[nino] || {};
   const tabla = h("table", { class: "tabla" });
   const cab = h("tr", {}, h("th", {}, "Materia"));
@@ -480,6 +481,30 @@ async function vistaAdminNino(nino) {
     h("div", { style: "overflow-x:auto" }, tabla));
 }
 
+// Si se corrigió una pauta (tools/correcciones-pauta.json), las notas ya guardadas se recalculan
+// con las respuestas guardadas. Lo puntuado a mano no cambia; lo que falte cuenta 0, como al guardar.
+async function libretaAlDia(nino) {
+  const lib = (await almacen.get(`l:${nino}`)) || {};
+  let cambio = false;
+  for (const [k, e] of Object.entries(lib)) {
+    const [materia, sesion] = k.split(":");
+    if (!(await almacen.get(claveResp(nino, materia, sesion)))) continue;
+    let p;
+    try { p = await prueba(NINOS[nino].nivel, materia, sesion); } catch { continue; }
+    const r = await respuesta(nino, materia, sesion);
+    const suma = p.bloques.filter((b) => b.tipo === "item")
+      .reduce((s, b) => s + (puntajeItem(b, r.items[b.n] || {}, r.puntajes).valor ?? 0), 0);
+    if (suma === e.obtenido && p.puntajeTotal === e.total) continue;
+    lib[k] = { ...e, obtenido: suma, total: p.puntajeTotal,
+      porcentaje: p.puntajeTotal ? Math.round((suma / p.puntajeTotal) * 100) : 0,
+      nota: nota(suma, p.puntajeTotal, p.exigencia, p.notaMinima),
+      recalculada: new Date().toISOString(), antes: e.antes || { obtenido: e.obtenido, nota: e.nota } };
+    cambio = true;
+  }
+  if (cambio) await almacen.set(`l:${nino}`, lib);
+  return lib;
+}
+
 function puntajeItem(b, resp, punt) {
   if (b.modo === "alternativas") return { valor: resp.alt?.[0] === b.clave ? b.pts : 0, auto: true };
   if (b.modo === "seleccion") return { valor: puntajeSeleccion(b.seleccion, resp.sel, b.pts), auto: true };
@@ -491,7 +516,7 @@ async function vistaCorregir(nino, materia, sesion) {
   nivelVisual(null);
   const n = NINOS[nino]; if (!n) return ir("/admin");
   const [p, r, ind] = [await prueba(n.nivel, materia, sesion), await respuesta(nino, materia, sesion), await indice()];
-  const libreta = (await almacen.get(`l:${nino}`)) || {};
+  const libreta = await libretaAlDia(nino);
   const items = p.bloques.filter((b) => b.tipo === "item");
   const resumen = h("div", { class: "resumen" });
   const tarjetas = {};
@@ -619,7 +644,7 @@ async function vistaLibreta() {
   const nodos = [pestanas("libreta"), h("h1", {}, "Libreta de notas"),
     h("p", {}, "Nota del período = 40% promedio de las semanales + 60% examen. Escala 2,0–7,0 con 60% de exigencia.")];
   for (const [nino, n] of Object.entries(NINOS)) {
-    const lib = (await almacen.get(`l:${nino}`)) || {};
+    const lib = await libretaAlDia(nino);
     const t = h("table", { class: "tabla notas-tabla" },
       h("tr", {}, h("th", {}, "Materia"), ind.sesiones.map((s) => h("th", {}, s)), h("th", {}, "Prom. semanales"), h("th", {}, "Nota período")));
     const periodos = [];
@@ -640,7 +665,9 @@ async function vistaLibreta() {
     for (const [m, nombre] of Object.entries(ind.materias)) for (const s of ind.sesiones) {
       const e = lib[`${m}:${s}`]; if (!e) continue;
       detalle.append(h("tr", {}, h("td", {}, nombre), h("td", {}, SESION_NOMBRE[s]), h("td", { class: "centro" }, String(e.obtenido)),
-        h("td", { class: "centro" }, String(e.total)), h("td", { class: "centro" }, `${e.porcentaje}%`), h("td", { class: "centro" }, fmt(e.nota)), h("td", {}, e.observaciones || "")));
+        h("td", { class: "centro" }, String(e.total)), h("td", { class: "centro" }, `${e.porcentaje}%`), h("td", { class: "centro" }, fmt(e.nota)),
+        h("td", {}, e.observaciones || "", e.antes ? h("div", { style: "color:var(--suave);font-size:.8rem" },
+          `Recalculada con la pauta corregida (antes ${e.antes.obtenido} pts, nota ${fmt(e.antes.nota)})`) : null)));
     }
     nodos.push(h("h2", {}, `${n.nombre} · ${n.curso}`), h("div", { style: "overflow-x:auto" }, t),
       detalle.children.length > 1 ? h("details", {}, h("summary", { class: "boton", style: "margin:8px 0" }, "Detalle"), h("div", { style: "overflow-x:auto" }, detalle)) : null);
@@ -699,6 +726,8 @@ async function exportar() {
 // ---------- rutas ----------
 async function route() {
   const partes = location.hash.replace(/^#\/?/, "").split("/").filter(Boolean);
+  // Versión nueva lista: se aplica en la portada o antes del PIN, nunca en medio de una prueba.
+  if (hayVersionNueva && (!partes.length || (partes[0] === "admin" && !adminOk))) return location.reload();
   try {
     if (!partes.length) return vistaPortada();
     if (partes[0] === "n" && partes.length === 2) return await vistaMaterias(partes[1]);
@@ -720,4 +749,8 @@ async function route() {
 }
 window.addEventListener("hashchange", route);
 route();
-if ("serviceWorker" in navigator && location.protocol !== "file:") navigator.serviceWorker.register("sw.js").catch(() => {});
+if ("serviceWorker" in navigator && location.protocol !== "file:") {
+  const habiaVersion = !!navigator.serviceWorker.controller;
+  navigator.serviceWorker.addEventListener("controllerchange", () => { if (habiaVersion) hayVersionNueva = true; });
+  navigator.serviceWorker.register("sw.js").catch(() => {});
+}

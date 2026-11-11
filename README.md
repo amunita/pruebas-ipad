@@ -14,6 +14,7 @@ Todas las sesiones (S1–S5 y Examen de las 6 materias) ya están cargadas; «s�
 ```
 uv venv .venv && uv pip install --python .venv/bin/python markdown==3.7
 .venv/bin/python tools/convertir.py          # lee las pruebas y pautas, escribe data/ y sw-archivos.js
+.venv/bin/python tools/revisar_claves.py     # revisa las claves de Matemática que se pueden calcular
 git add -A && git commit -m "pruebas: …" && git push   # GitHub Pages publica solo
 ```
 
