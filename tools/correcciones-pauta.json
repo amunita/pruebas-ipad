@@ -1,0 +1,8 @@
+{
+  "_formato": "Errores de las pautas fuente (fuentes/ no se edita). Clave: <nivel>-<materia>-<sesión>#<ítem>. 'dice' = la respuesta exacta de la fila en la pauta fuente (si la fuente cambia, el conversor se detiene); 'debe' = la respuesta corregida (para alternativas, empieza con la letra). 'fuente' = quién y cómo se detectó.",
+  "2b-matematica-S1#6": {
+    "dice": "B) 8",
+    "debe": "C) 9",
+    "fuente": "Andrés, Telegram 5630 (10-11-2026), con Lourdes rindiendo; confirmado por tools/revisar_claves.py: 6 + 3 = 9. Pauta fuente matematica/2b/S1-pauta.md, línea 19."
+  }
+}

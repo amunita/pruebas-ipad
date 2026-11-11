@@ -119,6 +119,7 @@ def leer_pauta(texto):
 
 BLANCO = re.compile(r"(?:\\_|_){3,}")
 SEPARADOR = re.compile(r"^\|[\s\-:|]+\|$")
+CORRECCIONES = json.loads((pathlib.Path(__file__).parent / "correcciones-pauta.json").read_text(encoding="utf-8"))
 SELECCIONES = json.loads((pathlib.Path(__file__).parent / "selecciones.json").read_text(encoding="utf-8"))
 
 
@@ -219,6 +220,7 @@ def convertir(fuente, materia, nivel, sesion):
     meta, cuerpo = frontmatter(instrumento.read_text(encoding="utf-8"))
     pmeta, pcuerpo, filas = leer_pauta(pauta_md.read_text(encoding="utf-8"))
     avisos = []
+    pcuerpo = corregir_pauta(f"{nivel}-{materia}-{sesion}", pcuerpo, filas)
 
     bloques, seccion = [], ""
     for b in partir_prueba(cuerpo):
@@ -287,6 +289,27 @@ def convertir(fuente, materia, nivel, sesion):
 usadas = set()
 
 
+def corregir_pauta(id_prueba, pcuerpo, filas):
+    """Aplica tools/correcciones-pauta.json a la fila del ítem y a la pauta completa."""
+    for clave, c in CORRECCIONES.items():
+        if not clave.startswith(id_prueba + "#"):
+            continue
+        n = int(clave.split("#")[1])
+        f = filas.get(n)
+        if not f or f["respuestas"] != [c["dice"]]:
+            raise SystemExit(f"{clave}: la pauta fuente ya no dice {c['dice']!r} (dice {f and f['respuestas']}); revisa correcciones-pauta.json")
+        nota = f" *(corregida; la pauta fuente decía {c['dice']})*"
+        f["respuestas"] = [c["debe"] + nota]
+        letra = re.match(r"^([A-E])\)", c["debe"])
+        f["claves"] = [letra.group(1) if letra else None]
+        fila_md = re.compile(rf"^(\|\s*{n}\s*\|\s*){re.escape(c['dice'])}(\s*\|)", re.M)
+        pcuerpo, k = fila_md.subn(lambda m: m[1] + c["debe"] + nota + m[2], pcuerpo)
+        if k != 1:
+            raise SystemExit(f"{clave}: no encontré la fila en la pauta completa")
+        usadas.add(clave)
+    return pcuerpo
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--fuente", type=pathlib.Path, default=FUENTE)
@@ -313,7 +336,7 @@ def main():
                 for a in avisos:
                     problemas += 1
                     print(f"  aviso {prueba['id']}: {a}", file=sys.stderr)
-    sobran = set(SELECCIONES) - usadas - {"_formato"}
+    sobran = (set(SELECCIONES) | set(CORRECCIONES)) - usadas - {"_formato"}
     if sobran:
         raise SystemExit(f"selecciones.json nombra ítems que no existen: {sorted(sobran)}")
     (datos / "index.json").write_text(json.dumps(indice, ensure_ascii=False, indent=1), encoding="utf-8")
