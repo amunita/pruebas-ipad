@@ -25,3 +25,11 @@ Los ítems que se responden eligiendo (ordenar o numerar con desplegable, comple
 **Errores de pauta.** `fuentes/` no se edita: la corrección va en `tools/correcciones-pauta.json`, con lo que dice la fuente, lo correcto y quién lo detectó. El conversor la aplica al ítem y a la pauta completa, y se detiene si la fuente cambió. En el iPad, las notas ya guardadas en la libreta se recalculan solas con las respuestas guardadas; la libreta muestra cuál era la nota anterior. La versión nueva se aplica al volver a la portada, nunca en medio de una prueba.
 
 `tools/revisar_claves.py` revisa sin IA las claves de alternativas de Matemática que se pueden calcular: operaciones, problemas de suma, resta y multiplicación, porcentajes, ecuaciones, promedios, áreas, volúmenes, fracciones, secuencias y el mayor o menor. Se corre después del conversor y sale con error si una clave no calza.
+
+## Respaldos
+
+Los datos (respuestas, libreta, PIN y pruebas habilitadas) viven sólo en el iPad. En Administración → Ajustes:
+
+- **Guardar en Drive / Restaurar desde Drive**: usa Google Identity Services con el scope `drive.file`, así que la app sólo ve los archivos que crea. Guarda `pruebas-ipad-respaldo.json` (el último) y `pruebas-ipad-respaldo-AAAA-MM-DD.json` (uno por día). El client ID de OAuth es público y es el mismo de `amunita/curso-guitarra`; su origen autorizado, `https://amunita.github.io`, sirve para las dos apps. No hay secretos.
+- **Descargar / Restaurar respaldo**: el mismo JSON, en un archivo.
+- **Recordatorio**: si hay datos y pasan más de N días (7 por defecto; 3, 7, 14 o 30) sin respaldo, Administración muestra un aviso con «Guardar en Drive».

@@ -2,7 +2,7 @@
 // Pruebas en iPad — Javier (5º básico) y Lourdes (2º básico).
 // Los datos viven sólo en este iPad (IndexedDB). Las pruebas y pautas vienen de data/ (tools/convertir.py).
 
-const VERSION = "2026-11-10.3";
+const VERSION = "2026-11-11.1";
 let hayVersionNueva = false; // el service worker trajo otra versión (ver route)
 const NINOS = {
   javier: { nombre: "Javier", nivel: "5b", curso: "5º básico" },
@@ -45,6 +45,7 @@ const almacen = (() => {
       });
     },
     limpiar: () => tx("readwrite", (s) => s.clear()),
+    claves: () => tx("readonly", (s) => s.getAllKeys()),
   };
 })();
 
@@ -271,7 +272,8 @@ function vistaPortada() {
     h("h1", { style: "text-align:center;margin-top:1.2em" }, "¿Quién va a dar la prueba?"),
     h("div", { class: "ninos" }, Object.entries(NINOS).map(([id, n]) =>
       h("button", { class: `nino ${id}`, onclick: () => ir(`/n/${id}`) }, n.nombre, h("small", {}, n.curso)))),
-    h("div", { class: "pie-admin" }, h("button", { onclick: () => ir("/admin") }, "Administración")));
+    h("div", { class: "pie-admin" }, h("button", { onclick: () => ir("/admin") }, "Administración")),
+    h("div", { class: "pie-version" }, `Versión ${VERSION}`));
 }
 
 const habilitada = (cfg, nino, materia, sesion) => !!cfg.habilitadas[nino]?.[`${materia}:${sesion}`];
@@ -433,9 +435,11 @@ function vistaPin(destino) {
 
 function pestanas(activa) {
   const p = [["javier", "Javier"], ["lourdes", "Lourdes"], ["libreta", "Libreta de notas"], ["ajustes", "Ajustes"]];
-  return h("div", { class: "pestanas" }, p.map(([id, t]) =>
+  const recordatorio = h("div");
+  avisoRespaldo(recordatorio, activa);
+  return h("div", {}, h("div", { class: "pestanas" }, p.map(([id, t]) =>
     h("button", { class: id === activa ? "activa" : "", onclick: () => ir(id === "libreta" || id === "ajustes" ? `/admin/${id}` : `/admin/n/${id}`) }, t)),
-    h("button", { onclick: () => { adminOk = false; ir("/"); } }, "Salir"));
+    h("button", { onclick: () => { adminOk = false; ir("/"); } }, "Salir")), recordatorio);
 }
 
 const ESTADO_TXT = { nueva: "", curso: "empezada", entregada: "entregada" };
@@ -679,18 +683,21 @@ async function vistaAjustes() {
   nivelVisual(null);
   const cfg = await config();
   const ind = await indice();
+  const resp = await estadoRespaldo();
+  cargarGis().catch(() => {});
   const pin1 = h("input", { type: "password", inputmode: "numeric", pattern: "[0-9]*", placeholder: "PIN nuevo (4 a 8 números)", style: "font:inherit;padding:12px;border-radius:10px;border:2px solid var(--linea)" });
   const archivo = h("input", { type: "file", accept: "application/json,.json", style: "display:none", onchange: async () => {
     const f = archivo.files[0]; if (!f) return;
-    try {
-      const datos = JSON.parse(await f.text());
-      if (datos.app !== "pruebas-ipad" || !datos.datos) throw new Error("no es un respaldo de esta app");
-      if (!confirm("Esto reemplaza todo lo que hay en este iPad por el respaldo. ¿Seguir?")) return;
-      await almacen.limpiar();
-      for (const [k, v] of Object.entries(datos.datos)) await almacen.set(k, v);
-      avisar("Respaldo restaurado"); vistaAjustes();
-    } catch (e) { alert("No se pudo leer el respaldo: " + e.message); }
+    try { if (await restaurar(JSON.parse(await f.text()))) vistaAjustes(); }
+    catch (e) { alert("No se pudo leer el respaldo: " + e.message); }
   } });
+  const msgDrive = h("p", { class: "msg-drive" });
+  const conMensaje = (fn) => async (ev) => {
+    const b = ev.currentTarget; b.disabled = true; msgDrive.textContent = "Conectando con Google Drive…";
+    try { msgDrive.textContent = await fn(); } catch (e) { msgDrive.textContent = "⚠️ " + e.message; }
+    b.disabled = false;
+  };
+  const listaDrive = h("div");
   pintar(pestanas("ajustes"), h("h1", {}, "Ajustes"),
     h("h2", {}, "PIN de administración"),
     h("div", { class: "barra" }, pin1, h("button", { onclick: async () => {
@@ -703,24 +710,173 @@ async function vistaAjustes() {
     } }, cfg.dedo ? "También se escribe con el dedo" : "Sólo se escribe con el lápiz"),
       h("span", { style: "color:var(--suave);font-size:.85rem" }, "Con «sólo lápiz», la palma apoyada no raya la hoja.")),
     h("h2", {}, "Respaldo"),
-    h("p", {}, "Los datos viven sólo en este iPad. Descarga un respaldo de vez en cuando (por ejemplo, a Archivos o iCloud Drive)."),
+    h("p", {}, "Los datos (respuestas, libreta, PIN y pruebas habilitadas) viven sólo en este iPad. Si se borra la app, se pierden: respáldalos seguido. ",
+      h("strong", {}, resp.ultimo ? `Último respaldo: ${new Date(resp.ultimo).toLocaleString("es-CL")} (${resp.via === "drive" ? "Google Drive" : "archivo"}).` : "Todavía no hay respaldos.")),
+    h("h3", {}, "Google Drive"),
+    h("p", { style: "font-size:.85rem;color:var(--suave)" }, `Guarda «${DRIVE_ARCHIVO}» en tu Drive y una copia con la fecha de cada día. La app sólo ve sus propios archivos. La primera vez, Google te pide entrar con tu cuenta.`),
+    h("div", { class: "barra" },
+      h("button", { class: "primario", onclick: conMensaje(guardarEnDrive) }, "Guardar en Drive"),
+      h("button", { onclick: conMensaje(async () => {
+        const lista = await respaldosEnDrive();
+        if (!lista.length) return "Todavía no hay respaldos en Drive: usa «Guardar en Drive» primero.";
+        listaDrive.replaceChildren(h("p", {}, "Elige cuál restaurar (reemplaza todo lo de este iPad):"),
+          h("div", { class: "barra" }, lista.slice(0, 12).map((f) => h("button", { onclick: conMensaje(async () => {
+            const datos = await leerDeDrive(f.id);
+            if (await restaurar(datos)) { setTimeout(vistaAjustes, 1200); return "✅ Respaldo de Drive restaurado."; }
+            return "No se restauró.";
+          }) }, f.name === DRIVE_ARCHIVO ? `El más reciente (${new Date(f.modifiedTime).toLocaleString("es-CL")})` : f.name.replace(/^pruebas-ipad-respaldo-|\.json$/g, "")))));
+        return "";
+      }) }, "Restaurar desde Drive")),
+    msgDrive, listaDrive,
+    h("h3", {}, "Archivo en el iPad"),
+    h("p", { style: "font-size:.85rem;color:var(--suave)" }, "Descarga un archivo (por ejemplo, a Archivos o iCloud Drive) y restáuralo desde ahí si hace falta."),
     h("div", { class: "barra" },
       h("button", { onclick: exportar }, "Descargar respaldo"),
       h("button", { onclick: () => archivo.click() }, "Restaurar respaldo"), archivo),
+    h("h3", {}, "Recordatorio"),
+    h("div", { class: "barra" }, h("span", {}, "Avisarme en Administración si pasan más de"),
+      [3, 7, 14, 30].map((d) => h("button", { class: "toggle" + (resp.cadaDias === d ? " si" : ""), onclick: async () => {
+        await almacen.set(CLAVE_RESPALDO, { ...resp, cadaDias: d }); vistaAjustes();
+      } }, `${d} días`)), h("span", {}, "sin respaldo.")),
     h("h2", {}, "Versión"),
     h("p", { style: "color:var(--suave)" }, `App ${VERSION} · ${Object.keys(ind.pruebas).length} pruebas cargadas`));
 }
 
-async function exportar() {
+// ---------- respaldo ----------
+// La marca del último respaldo vive aparte y no viaja en el respaldo: restaurar uno viejo no la retrocede.
+const CLAVE_RESPALDO = "respaldo";
+async function estadoRespaldo() {
+  return { cadaDias: 7, ...((await almacen.get(CLAVE_RESPALDO)) || {}) };
+}
+async function marcarRespaldo(via) {
+  await almacen.set(CLAVE_RESPALDO, { ...(await estadoRespaldo()), ultimo: new Date().toISOString(), via });
+}
+async function textoRespaldo() {
   const datos = await almacen.todo();
-  const texto = JSON.stringify({ app: "pruebas-ipad", version: VERSION, fecha: new Date().toISOString(), datos });
+  delete datos[CLAVE_RESPALDO];
+  return JSON.stringify({ app: "pruebas-ipad", version: VERSION, fecha: new Date().toISOString(), datos });
+}
+async function restaurar(r) {
+  if (!r || r.app !== "pruebas-ipad" || !r.datos) throw new Error("no es un respaldo de esta app");
+  const fecha = r.fecha ? new Date(r.fecha).toLocaleString("es-CL") : "sin fecha";
+  if (!confirm(`Esto reemplaza todo lo que hay en este iPad por el respaldo del ${fecha}. ¿Seguir?`)) return false;
+  const marca = await almacen.get(CLAVE_RESPALDO);
+  await almacen.limpiar();
+  for (const [k, v] of Object.entries(r.datos)) if (k !== CLAVE_RESPALDO) await almacen.set(k, v);
+  if (marca) await almacen.set(CLAVE_RESPALDO, marca);
+  avisar("Respaldo restaurado");
+  return true;
+}
+async function avisoRespaldo(zona, activa) {
+  const r = await estadoRespaldo();
+  const dias = r.ultimo ? (Date.now() - new Date(r.ultimo)) / 864e5 : Infinity;
+  if (dias <= r.cadaDias) return;
+  const hayDatos = (await almacen.claves()).some((k) => k.startsWith("r:") || k.startsWith("l:"));
+  if (!hayDatos) return;
+  cargarGis().catch(() => {});
+  const msg = h("span", {}, r.ultimo ? `⚠️ Hace ${Math.floor(dias)} días que no se respalda.` : "⚠️ Todavía no hay ningún respaldo.");
+  zona.replaceChildren(h("div", { class: "recordatorio" }, msg,
+    h("button", { class: "primario", onclick: async (ev) => {
+      const b = ev.currentTarget; b.disabled = true; msg.textContent = "Conectando con Google Drive…";
+      try { msg.textContent = await guardarEnDrive(); setTimeout(() => zona.replaceChildren(), 2500); }
+      catch (e) { msg.textContent = "⚠️ " + e.message; b.disabled = false; }
+    } }, "Guardar en Drive"),
+    activa === "ajustes" ? null : h("button", { onclick: () => ir("/admin/ajustes") }, "Otras opciones")));
+}
+
+async function exportar() {
+  const texto = await textoRespaldo();
   const nombre = `respaldo-pruebas-${new Date().toISOString().slice(0, 10)}.json`;
   const archivo = new File([texto], nombre, { type: "application/json" });
   if (navigator.canShare && navigator.canShare({ files: [archivo] })) {
-    try { await navigator.share({ files: [archivo], title: nombre }); return; } catch (e) { if (e.name === "AbortError") return; }
+    try { await navigator.share({ files: [archivo], title: nombre }); await marcarRespaldo("archivo"); return; }
+    catch (e) { if (e.name === "AbortError") return; }
   }
   const a = h("a", { href: URL.createObjectURL(archivo), download: nombre });
   document.body.append(a); a.click(); a.remove();
+  await marcarRespaldo("archivo");
+}
+
+// Google Drive con Google Identity Services y scope drive.file (la app sólo ve los archivos que crea).
+// El client ID es público (no es un secreto) y es el mismo de amunita/curso-guitarra: su origen
+// autorizado, https://amunita.github.io, es también el de esta app.
+const DRIVE_CLIENT_ID = "217925521670-bkjei1es6u3lc6q253hvs43qh89gkpqp.apps.googleusercontent.com";
+const DRIVE_ARCHIVO = "pruebas-ipad-respaldo.json";
+let driveToken = null, driveVence = 0, gisCargado = null;
+function cargarGis() {
+  if (window.google?.accounts?.oauth2) return Promise.resolve();
+  return gisCargado || (gisCargado = new Promise((ok, mal) => {
+    const s = h("script", { src: "https://accounts.google.com/gsi/client" });
+    s.onload = ok;
+    s.onerror = () => { gisCargado = null; mal(new Error("No se pudo cargar Google (¿sin internet?).")); };
+    document.head.append(s);
+  }));
+}
+// Safari sólo abre la ventana de Google si se pide en el mismo toque: por eso Google se precarga al
+// mostrar los botones y el permiso se pide antes de cualquier otra espera.
+function tokenDrive() {
+  if (driveToken && Date.now() < driveVence) return Promise.resolve(driveToken);
+  return window.google?.accounts?.oauth2 ? pedirToken() : cargarGis().then(pedirToken);
+}
+function pedirToken() {
+  return new Promise((ok, mal) => {
+    const cliente = google.accounts.oauth2.initTokenClient({
+      client_id: DRIVE_CLIENT_ID, scope: "https://www.googleapis.com/auth/drive.file",
+      callback: (t) => {
+        if (t?.access_token) { driveToken = t.access_token; driveVence = Date.now() + ((t.expires_in || 3600) - 60) * 1000; ok(driveToken); }
+        else mal(new Error("Google no dio permiso" + (t?.error ? ` (${t.error})` : "") + "."));
+      },
+      error_callback: (e) => mal(new Error(e?.type === "popup_closed" ? "Se cerró la ventana de Google." : e?.message || "Conexión cancelada.")),
+    });
+    cliente.requestAccessToken({ prompt: driveToken ? "" : "consent" });
+  });
+}
+async function drive(url, opciones = {}) {
+  const tok = await tokenDrive();
+  const r = await fetch(url, { ...opciones, headers: { ...(opciones.headers || {}), Authorization: "Bearer " + tok } });
+  if (r.status === 401) { driveToken = null; throw new Error("La sesión de Google venció: vuelve a intentarlo."); }
+  if (!r.ok) {
+    let por = "";
+    try { por = (await r.json()).error?.message || ""; } catch {}
+    if (/has not been used|is disabled/i.test(por)) por = "la API de Google Drive no está habilitada en el proyecto de Google Cloud";
+    throw new Error(`Drive respondió ${r.status}${por ? ": " + por : ""}`);
+  }
+  return r;
+}
+async function buscarEnDrive(nombre) {
+  const q = encodeURIComponent(`name = '${nombre}' and trashed = false`);
+  const j = await (await drive(`https://www.googleapis.com/drive/v3/files?q=${q}&fields=files(id,name,modifiedTime)`)).json();
+  return j.files?.[0] || null;
+}
+async function subirADrive(nombre, cuerpo) {
+  const f = await buscarEnDrive(nombre);
+  if (f) {
+    return drive(`https://www.googleapis.com/upload/drive/v3/files/${f.id}?uploadType=media`,
+      { method: "PATCH", headers: { "Content-Type": "application/json" }, body: cuerpo });
+  }
+  const borde = "respaldo" + Date.now();
+  const meta = JSON.stringify({ name: nombre, mimeType: "application/json" });
+  return drive("https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart", {
+    method: "POST", headers: { "Content-Type": `multipart/related; boundary=${borde}` },
+    body: `--${borde}\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n${meta}\r\n--${borde}\r\nContent-Type: application/json\r\n\r\n${cuerpo}\r\n--${borde}--`,
+  });
+}
+async function guardarEnDrive() {
+  await tokenDrive();
+  const cuerpo = await textoRespaldo();
+  await subirADrive(DRIVE_ARCHIVO, cuerpo);
+  await subirADrive(`pruebas-ipad-respaldo-${new Date().toISOString().slice(0, 10)}.json`, cuerpo); // histórico, uno por día
+  await marcarRespaldo("drive");
+  return `✅ Respaldo guardado en Google Drive (${Math.round(cuerpo.length / 1024)} KB).`;
+}
+async function respaldosEnDrive() {
+  const q = encodeURIComponent("name contains 'pruebas-ipad-respaldo' and trashed = false");
+  const j = await (await drive(`https://www.googleapis.com/drive/v3/files?q=${q}&orderBy=modifiedTime desc&pageSize=40&fields=files(id,name,modifiedTime)`)).json();
+  const fs = j.files || [];
+  return [...fs.filter((f) => f.name === DRIVE_ARCHIVO), ...fs.filter((f) => f.name !== DRIVE_ARCHIVO).sort((a, b) => b.name.localeCompare(a.name))];
+}
+async function leerDeDrive(id) {
+  return (await drive(`https://www.googleapis.com/drive/v3/files/${id}?alt=media`)).json();
 }
 
 // ---------- rutas ----------
