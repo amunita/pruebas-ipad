@@ -19,3 +19,9 @@ git add -A && git commit -m "pruebas: …" && git push   # GitHub Pages publica 
 ```
 
 El conversor es determinista (sin IA). Avisa si la suma de los ítems no coincide con el puntaje total o si falta un ítem en la pauta.
+
+Los ítems que se responden eligiendo (ordenar o numerar con desplegable, completar con palabras de un recuadro, marcar una X en una matriz, tocar ☐ o una palabra) están en `tools/selecciones.json`, con la respuesta y la regla de puntaje de la pauta. No llevan recuadro de lápiz y se corrigen solos. Si se agrega un ítem así a una prueba, se agrega su línea ahí. El conversor se detiene si el número de espacios, las respuestas o el puntaje no cuadran con la pauta.
+
+**Errores de pauta.** `fuentes/` no se edita: la corrección va en `tools/correcciones-pauta.json`, con lo que dice la fuente, lo correcto y quién lo detectó. El conversor la aplica al ítem y a la pauta completa, y se detiene si la fuente cambió. En el iPad, las notas ya guardadas en la libreta se recalculan solas con las respuestas guardadas; la libreta muestra cuál era la nota anterior. La versión nueva se aplica al volver a la portada, nunca en medio de una prueba.
+
+`tools/revisar_claves.py` revisa sin IA las claves de alternativas de Matemática que se pueden calcular: operaciones, problemas de suma, resta y multiplicación, porcentajes, ecuaciones, promedios, áreas, volúmenes, fracciones, secuencias y el mayor o menor. Se corre después del conversor y sale con error si una clave no calza.
