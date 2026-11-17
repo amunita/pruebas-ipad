@@ -1,9 +1,9 @@
 "use strict";
 // Pruebas en iPad — Javier (5º básico) y Lourdes (2º básico).
 // Los datos viven en el iPad (IndexedDB) y, si se activa, se sincronizan entre iPads por Google Drive.
-// Las pruebas y pautas vienen de data/ (tools/convertir.py).
+// Las pruebas, pautas y guías de estudio vienen de data/ (tools/convertir.py).
 
-const VERSION = "2026-11-11.2";
+const VERSION = "2026-11-17.2";
 let hayVersionNueva = false; // el service worker trajo otra versión (ver route)
 const NINOS = {
   javier: { nombre: "Javier", nivel: "5b", curso: "5º básico" },
@@ -174,27 +174,29 @@ function cuerpoHTML(html) {
 
 // ---------- lienzo para escribir con el lápiz ----------
 class Lienzo {
-  constructor(datos, { editable, lineas, nivel, dedo, alCambiar }) {
+  constructor(datos, { editable, lineas, nivel, dedo, alCambiar, celda }) {
     this.d = datos; this.d.trazos = this.d.trazos || []; this.d.extra = this.d.extra || 0;
     this.editable = editable; this.lineas = lineas; this.dedo = dedo; this.alCambiar = alCambiar || (() => {});
     this.paso = nivel === "2b" ? 115 : 95; // alto lógico de cada renglón
+    // En una celda de tabla el lienzo es chico y sin barra: su ancho lógico es menor para que el trazo no salga delgado.
+    this.celda = !!celda; this.ancho = celda ? 300 : ANCHO;
     this.herr = "lapiz"; this.historia = []; this.activo = null;
     this.canvas = h("canvas");
-    const barra = editable ? h("div", { class: "herramientas" },
+    const barra = editable && !celda ? h("div", { class: "herramientas" },
       this.bLapiz = h("button", { class: "activa", onclick: () => this.usar("lapiz") }, "✏️ Lápiz"),
       this.bGoma = h("button", { onclick: () => this.usar("borrar") }, "🧽 Borrar"),
       h("button", { onclick: () => this.deshacer() }, "↩︎ Deshacer"),
       h("button", { onclick: () => this.hojaExtra() }, "➕ Hoja extra"),
       h("button", { class: "peligro", onclick: () => this.limpiar() }, "Borrar todo")) : null;
-    this.el = h("div", { class: "lienzo" + (editable ? "" : " solo-lectura") }, barra, this.canvas);
+    this.el = h("div", { class: "lienzo" + (celda ? " lienzo-celda" : "") + (editable ? "" : " solo-lectura") }, barra, this.canvas);
     if (editable) this.eventos();
     new ResizeObserver(() => this.medir()).observe(this.canvas);
   }
-  altoLogico() { return (this.lineas + this.d.extra) * this.paso + 30; }
+  altoLogico() { return this.celda ? this.paso : (this.lineas + this.d.extra) * this.paso + 30; }
   medir() {
     const w = this.canvas.clientWidth; if (!w) return;
     const dpr = window.devicePixelRatio || 1;
-    this.escala = w / ANCHO;
+    this.escala = w / this.ancho;
     const hCss = this.altoLogico() * this.escala;
     this.canvas.style.height = hCss + "px";
     this.canvas.width = Math.round(w * dpr); this.canvas.height = Math.round(hCss * dpr);
@@ -204,9 +206,9 @@ class Lienzo {
   }
   dibujar() {
     const c = this.ctx; if (!c) return;
-    c.clearRect(0, 0, ANCHO, this.altoLogico());
+    c.clearRect(0, 0, this.ancho, this.altoLogico());
     c.strokeStyle = "#cfe0ee"; c.lineWidth = 2;
-    for (let y = this.paso; y < this.altoLogico(); y += this.paso) { c.beginPath(); c.moveTo(14, y); c.lineTo(ANCHO - 14, y); c.stroke(); }
+    for (let y = this.paso; !this.celda && y < this.altoLogico(); y += this.paso) { c.beginPath(); c.moveTo(14, y); c.lineTo(this.ancho - 14, y); c.stroke(); }
     c.strokeStyle = "#1a2b4a"; c.lineCap = "round"; c.lineJoin = "round";
     for (const t of this.d.trazos) this.trazo(t);
   }
@@ -306,9 +308,12 @@ async function vistaMaterias(nino) {
   nivelVisual(n.nivel);
   const [cfg, ind] = [await config(), await indice()];
   const materias = Object.entries(ind.materias).filter(([m]) => ind.sesiones.some((s) => habilitada(cfg, nino, m, s)));
+  const hayGuias = Object.keys(ind.materias).some((m) => ind.sesiones.some((s) => guiaHabilitada(cfg, ind, nino, m, s)));
   pintar(
     h("div", { class: "barra" }, volver("/"), h("span", { class: "espacio" }), chipSync),
-    h("h1", {}, `Hola, ${n.nombre}. ¿Qué materia?`),
+    h("h1", {}, `Hola, ${n.nombre}.`),
+    hayGuias ? h("button", { class: "boton-guias", onclick: () => ir(`/g/${nino}`) }, "📚 Guías de estudio") : null,
+    h("h2", {}, "📝 Pruebas: ¿qué materia?"),
     materias.length ? h("div", { class: "grilla" }, materias.map(([m, nombre]) => h("button", { onclick: () => ir(`/n/${nino}/${m}`) }, nombre)))
       : h("p", { class: "vacio" }, "Todavía no hay pruebas listas. Pídele al adulto que las habilite."));
 }
@@ -434,6 +439,152 @@ function armarSeleccion(cuerpo, sel, resp, op) {
   pintarMatriz();
 }
 
+// ---------- guías de estudio ----------
+// Lo que hace el niño queda en «g:<niño>:<materia>:<sesión>» = { items: { <clave>: { lienzo | valor, en } },
+// empezadaEn, terminadaEn, actualizado }. Las claves («e1»… para escribir, «c1»… para tocar una ☐) vienen de
+// tools/convertir.py. Las guías no llevan nota: sólo avance.
+const claveGuia = (nino, materia, sesion) => `g:${nino}:${materia}:${sesion}`;
+const guias = {};
+async function guia(nivel, materia, sesion) {
+  const id = `${nivel}-${materia}-${sesion}`;
+  if (!guias[id]) guias[id] = await (await fetch(`data/${nivel}/${materia}/${sesion}-guia.json`)).json();
+  return guias[id];
+}
+async function avanceGuia(nino, materia, sesion) {
+  const g = (await almacen.get(claveGuia(nino, materia, sesion))) || {};
+  g.items = g.items || {};
+  return g;
+}
+const hoyISO = () => {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+};
+// Lo que diga Administración; si nunca se tocó, están habilitadas las de la semana en curso y las anteriores.
+function guiaHabilitada(cfg, ind, nino, materia, sesion) {
+  const v = cfg.habilitadas[nino]?.[`guia:${materia}:${sesion}`];
+  if (v != null) return !!v;
+  const info = ind.guias?.[`${NINOS[nino].nivel}-${materia}-${sesion}`];
+  return !!info && info.fecha <= hoyISO();
+}
+const espacioRespondido = (it) => !!(it && (it.lienzo?.trazos?.length || (it.valor != null && it.valor !== "")));
+function avance(g, total) {
+  const hechos = Math.min(total, Object.values(g.items || {}).filter(espacioRespondido).length);
+  return { hechos, total, pct: total ? Math.round((hechos / total) * 100) : 0 };
+}
+const guiaTocada = (g) => !!g && (!!g.terminadaEn || Object.values(g.items || {}).some(espacioRespondido));
+
+async function vistaGuiasMaterias(nino) {
+  const n = NINOS[nino]; if (!n) return ir("/");
+  nivelVisual(n.nivel);
+  const [cfg, ind] = [await config(), await indice()];
+  const materias = Object.entries(ind.materias).filter(([m]) => ind.sesiones.some((s) => guiaHabilitada(cfg, ind, nino, m, s)));
+  pintar(
+    h("div", { class: "barra" }, volver(`/n/${nino}`), h("span", { class: "espacio" }), chipSync),
+    h("h1", {}, "📚 Guías de estudio: ¿qué materia?"),
+    materias.length ? h("div", { class: "grilla" }, materias.map(([m, nombre]) => h("button", { onclick: () => ir(`/g/${nino}/${m}`) }, nombre)))
+      : h("p", { class: "vacio" }, "Todavía no hay guías listas. Pídele al adulto que las habilite."));
+}
+
+async function vistaGuiasSemanas(nino, materia) {
+  const n = NINOS[nino]; if (!n) return ir("/");
+  nivelVisual(n.nivel);
+  const [cfg, ind] = [await config(), await indice()];
+  const botones = [];
+  for (const s of ind.sesiones.filter((x) => guiaHabilitada(cfg, ind, nino, materia, x))) {
+    const g = await avanceGuia(nino, materia, s);
+    const a = avance(g, ind.guias[`${n.nivel}-${materia}-${s}`]?.espacios || 0);
+    botones.push(h("button", { class: g.terminadaEn ? "hecha" : "", onclick: () => ir(`/gv/${nino}/${materia}/${s}`) },
+      SESION_NOMBRE[s], h("small", {}, g.terminadaEn ? "✓ Terminada" : a.hechos ? `Avance ${a.pct}%` : "Por hacer")));
+  }
+  pintar(
+    h("div", { class: "barra" }, volver(`/g/${nino}`), h("span", { class: "espacio" }), chipSync),
+    h("h1", {}, `Guías · ${ind.materias[materia] || materia}`),
+    botones.length ? h("div", { class: "grilla" }, botones) : h("p", { class: "vacio" }, "No hay guías habilitadas en esta materia."));
+}
+
+// La guía del niño (admin = false) o, en Administración, la misma guía para mirar sin escribir.
+async function vistaGuia(nino, materia, sesion, admin = false) {
+  const n = NINOS[nino]; if (!n) return ir(admin ? "/admin" : "/");
+  nivelVisual(admin ? null : n.nivel);
+  const [cfg, ind] = [await config(), await indice()];
+  if (!admin) {
+    if (!guiaHabilitada(cfg, ind, nino, materia, sesion)) return ir(`/g/${nino}`);
+    await syncAntesDeAbrir(); // trae lo que se haya hecho en otro iPad
+    if (!location.hash.startsWith(`#/gv/${nino}/${materia}/${sesion}`)) return; // se fue mientras sincronizaba
+  }
+  const [gd, g] = [await guia(n.nivel, materia, sesion), await avanceGuia(nino, materia, sesion)];
+  const clave = claveGuia(nino, materia, sesion);
+  const progreso = h("span", { class: "avance-guia" });
+  const pintarAvance = () => {
+    const a = avance(g, gd.claves.length);
+    progreso.textContent = a.total ? `Llevas ${a.hechos} de ${a.total}` : "";
+    progreso.hidden = !a.total; // una guía sin espacios para responder no muestra contador
+  };
+  let espera;
+  const guardar = () => {
+    clearTimeout(espera);
+    espera = setTimeout(() => { g.actualizado = ahora(); almacen.set(clave, g); }, 400);
+  };
+  const tocar = (k) => { g.items[k].en = ahora(); g.empezadaEn = g.empezadaEn || g.items[k].en; pintarAvance(); guardar(); };
+  const espacios = (d) => {
+    d.querySelectorAll(".escribir").forEach((z) => {
+      const k = z.dataset.k, it = (g.items[k] = g.items[k] || {});
+      it.lienzo = it.lienzo || {};
+      const l = new Lienzo(it.lienzo, { editable: !admin, nivel: n.nivel, dedo: !!cfg.dedo, lineas: Number(z.dataset.lineas) || 2,
+        celda: z.classList.contains("celda"), alCambiar: () => tocar(k) });
+      z.replaceWith(l.el);
+    });
+    d.querySelectorAll(".opciones").forEach((z) => {
+      const k = z.dataset.k, it = (g.items[k] = g.items[k] || {});
+      const grupo = h("span", { class: "casillas" });
+      const marcar = () => grupo.querySelectorAll("button").forEach((x) => x.classList.toggle("marcada", it.valor === x.dataset.o));
+      grupo.append(...(gd.opciones[k] || []).map((o) => h("button", { class: "casilla", "data-o": o, disabled: admin,
+        onclick: () => { it.valor = it.valor === o ? null : o; marcar(); tocar(k); } }, h("span", { class: "cuadro" }), o)));
+      marcar();
+      z.replaceWith(grupo);
+    });
+    return d;
+  };
+  const cuerpo = h("div", { class: "guia" });
+  let destino = cuerpo;
+  for (const b of gd.bloques) {
+    if (b.tipo === "seccion") {
+      if (b.respuestas) {
+        destino = h("div");
+        cuerpo.append(h("details", { class: "respuestas-guia" }, h("summary", {}, `${b.titulo} (para revisar cuando termines)`), destino));
+      } else {
+        destino = cuerpo;
+        cuerpo.append(h("h2", {}, b.titulo));
+      }
+      continue;
+    }
+    const d = espacios(cuerpoHTML(b.html));
+    destino.append(b.tipo === "ejercicio" ? h("div", { class: "item" }, h("div", { class: "num" }, String(b.n)), d) : h("div", { class: "bloque" }, d));
+  }
+  pintarAvance();
+  const terminada = g.terminadaEn ? `Terminada el ${new Date(g.terminadaEn).toLocaleDateString("es-CL")}` : "";
+  const nodos = [
+    admin ? pestanas(nino) : null,
+    h("div", { class: "barra" }, volver(admin ? `/admin/n/${nino}` : `/g/${nino}/${materia}`), h("span", { class: "espacio" }), admin ? null : chipSync),
+    h("div", { class: "cabecera" }, h("h1", {}, gd.titulo),
+      h("p", {}, `${n.nombre} · ${ind.materias[materia]} · ${SESION_NOMBRE[sesion]} · `, progreso, terminada ? ` · ${terminada}` : "")),
+  ];
+  if (g.terminadaEn && !admin) nodos.push(h("div", { class: "sello" }, "✓ Ya terminaste esta guía. Puedes seguir practicando."));
+  nodos.push(cuerpo);
+  if (!admin) {
+    nodos.push(h("div", { class: "guardar" }, h("button", { class: "primario", onclick: async () => {
+      const permiso = permisoSync(); // dentro del toque, por si Google tiene que abrir su ventana
+      clearTimeout(espera);
+      g.terminadaEn = g.terminadaEn || ahora(); g.actualizado = ahora();
+      await almacen.set(clave, g);
+      avisar("¡Guía guardada! Muy bien.");
+      ir(`/g/${nino}/${materia}`);
+      permiso.then((ok) => ok && sincronizar().then(trasSync));
+    } }, g.terminadaEn ? "Listo, volver" : "Terminé la guía")));
+  }
+  pintar(...nodos.filter(Boolean));
+}
+
 // ---------- administración ----------
 let adminOk = false;
 async function huella(pin) {
@@ -509,7 +660,45 @@ async function vistaAdminNino(nino) {
   }
   pintar(pestanas(nino), h("h1", {}, `${n.nombre} · ${n.curso}`),
     h("p", {}, "«Visible» = la prueba aparece en la portada de ", n.nombre, ". Toca S1…EX para habilitar una semana en todas las materias. Toca el estado para ver y corregir la prueba."),
-    h("div", { style: "overflow-x:auto" }, tabla));
+    h("div", { style: "overflow-x:auto" }, tabla),
+    h("h2", {}, "📚 Guías de estudio"),
+    h("p", {}, "Las guías no llevan nota. «Por fecha» = nadie la ha tocado aquí: se ve desde el lunes de su semana. Toca el avance para ver lo que hizo ", n.nombre, "."),
+    h("div", { style: "overflow-x:auto" }, await tablaGuiasAdmin(nino, cfg, ind)));
+}
+
+async function tablaGuiasAdmin(nino, cfg, ind) {
+  const hab = cfg.habilitadas[nino];
+  const materias = Object.keys(ind.materias);
+  const cambiar = async (pares) => {
+    for (const [m, s, v] of pares) hab[`guia:${m}:${s}`] = v;
+    await guardarConfig(cfg, ...pares.map(([m, s]) => `hab:${nino}:guia:${m}:${s}`));
+    vistaAdminNino(nino);
+  };
+  const tabla = h("table", { class: "tabla" }, h("tr", {}, h("th", {}, "Materia"), ind.sesiones.map((s) => h("th", { class: "centro" },
+    h("button", { title: "Habilitar o quitar la guía de esta semana en todas las materias", onclick: () => {
+      const todas = materias.every((m) => guiaHabilitada(cfg, ind, nino, m, s));
+      cambiar(materias.map((m) => [m, s, !todas]));
+    } }, s)))));
+  for (const [m, nombre] of Object.entries(ind.materias)) {
+    const fila = h("tr", {}, h("th", {}, nombre));
+    for (const s of ind.sesiones) {
+      const info = ind.guias?.[`${NINOS[nino].nivel}-${m}-${s}`];
+      if (!info) { fila.append(h("td", { class: "centro" }, "—")); continue; }
+      const on = guiaHabilitada(cfg, ind, nino, m, s);
+      const celda = h("td", { class: "centro" },
+        h("button", { class: "toggle" + (on ? " si" : ""), onclick: () => cambiar([[m, s, !on]]) }, on ? "Visible" : "Oculta"),
+        hab[`guia:${m}:${s}`] == null ? h("div", { style: "font-size:.7rem;color:var(--suave)" }, "por fecha") : null);
+      const g = await almacen.get(claveGuia(nino, m, s));
+      if (guiaTocada(g)) {
+        const a = avance(g, info.espacios);
+        celda.append(h("div", { style: "margin-top:6px" }, h("button", { onclick: () => ir(`/admin/g/${nino}/${m}/${s}`) },
+          h("span", { class: "estado " + (g.terminadaEn ? "entregada" : "curso") }, g.terminadaEn ? `✓ ${a.pct}%` : `${a.pct}%`))));
+      }
+      fila.append(celda);
+    }
+    tabla.append(fila);
+  }
+  return tabla;
 }
 
 // Si se corrigió una pauta (tools/correcciones-pauta.json), las notas ya guardadas se recalculan
@@ -754,7 +943,7 @@ async function vistaAjustes() {
     } }, cfg.dedo ? "También se escribe con el dedo" : "Sólo se escribe con el lápiz"),
       h("span", { style: "color:var(--suave);font-size:.85rem" }, "Con «sólo lápiz», la palma apoyada no raya la hoja.")),
     h("h2", {}, "Sincronización entre iPads"),
-    h("p", {}, "Para que los niños den las pruebas en cualquier iPad y el avance se vea en todos: actívala en cada iPad, entrando con la misma cuenta de Google. Se comparten respuestas, libreta, PIN y pruebas habilitadas, sin pisar resultados. Se sincroniza al abrir la app, al abrir y al guardar cada prueba, y al tocar ☁️."),
+    h("p", {}, "Para que los niños den las pruebas en cualquier iPad y el avance se vea en todos: actívala en cada iPad, entrando con la misma cuenta de Google. Se comparten respuestas, guías, libreta, PIN y pruebas habilitadas, sin pisar resultados. Se sincroniza al abrir la app, al abrir y al guardar cada prueba, y al tocar ☁️."),
     SYNC.activo
       ? h("div", { class: "barra" },
         h("button", { class: "primario", onclick: (ev) => {
@@ -781,7 +970,7 @@ async function vistaAjustes() {
       ? `Activa en este iPad. ${SYNC.ultimo ? `Última sincronización: ${cuando(SYNC.ultimo)}.` : "Todavía no se sincroniza."}${SYNC.error ? ` Último problema: ${SYNC.error}` : ""}`
       : "Desactivada en este iPad: sus datos sólo quedan aquí."),
     h("h2", {}, "Respaldo"),
-    h("p", {}, "Los datos (respuestas, libreta, PIN y pruebas habilitadas) viven en este iPad y, si la sincronización está activa, en Drive. Si se borra la app sin respaldo ni sincronización, se pierden: respáldalos seguido. ",
+    h("p", {}, "Los datos (respuestas, avance de las guías, libreta, PIN y pruebas habilitadas) viven en este iPad y, si la sincronización está activa, en Drive. Si se borra la app sin respaldo ni sincronización, se pierden: respáldalos seguido. ",
       h("strong", {}, resp.ultimo ? `Último respaldo: ${new Date(resp.ultimo).toLocaleString("es-CL")} (${resp.via === "drive" ? "Google Drive" : "archivo"}).` : "Todavía no hay respaldos.")),
     h("h3", {}, "Google Drive"),
     h("p", { style: "font-size:.85rem;color:var(--suave)" }, `Guarda «${DRIVE_ARCHIVO}» en tu Drive y una copia con la fecha de cada día. La app sólo ve sus propios archivos. La primera vez, Google te pide entrar con tu cuenta.`),
@@ -810,7 +999,7 @@ async function vistaAjustes() {
         await almacen.set(CLAVE_RESPALDO, { ...resp, cadaDias: d }); vistaAjustes();
       } }, `${d} días`)), h("span", {}, "sin respaldo.")),
     h("h2", {}, "Versión"),
-    h("p", { style: "color:var(--suave)" }, `App ${VERSION} · ${Object.keys(ind.pruebas).length} pruebas cargadas`));
+    h("p", { style: "color:var(--suave)" }, `App ${VERSION} · ${Object.keys(ind.pruebas).length} pruebas y ${Object.keys(ind.guias || {}).length} guías cargadas`));
 }
 
 // ---------- respaldo ----------
@@ -843,7 +1032,7 @@ async function avisoRespaldo(zona, activa) {
   const r = await estadoRespaldo();
   const dias = r.ultimo ? (Date.now() - new Date(r.ultimo)) / 864e5 : Infinity;
   if (dias <= r.cadaDias) return;
-  const hayDatos = (await almacen.claves()).some((k) => k.startsWith("r:") || k.startsWith("l:"));
+  const hayDatos = (await almacen.claves()).some((k) => k.startsWith("r:") || k.startsWith("l:") || k.startsWith("g:"));
   if (!hayDatos) return;
   cargarGis().catch(() => {});
   const msg = h("span", {}, r.ultimo ? `⚠️ Hace ${Math.floor(dias)} días que no se respalda.` : "⚠️ Todavía no hay ningún respaldo.");
@@ -1006,7 +1195,7 @@ function fusionar(local, remoto) {
     const a = local[k], b = remoto[k];
     if (a == null || b == null) { out[k] = a ?? b; continue; }
     out[k] = k === "config" ? fusionarConfig(a, b) : k.startsWith("l:") ? fusionarLibreta(a, b)
-      : k.startsWith("r:") ? fusionarResp(a, b) : ts(b.actualizado) > ts(a.actualizado) ? b : a;
+      : k.startsWith("r:") ? fusionarResp(a, b) : k.startsWith("g:") ? fusionarGuia(a, b) : ts(b.actualizado) > ts(a.actualizado) ? b : a;
   }
   return out;
 }
@@ -1036,6 +1225,22 @@ function fusionarLibreta(a, b) {
   const out = { ...a };
   const cuando = (e) => ts(e.fecha) + "|" + ts(e.recalculada);
   for (const [k, e] of Object.entries(b)) if (!out[k] || cuando(e) > cuando(out[k])) out[k] = e;
+  return out;
+}
+// Guías: espacio por espacio gana el cambio más reciente, así la misma guía hecha en dos iPads se junta.
+function fusionarGuia(a, b) {
+  const items = {};
+  for (const k of new Set([...Object.keys(a.items || {}), ...Object.keys(b.items || {})])) {
+    const x = a.items?.[k], y = b.items?.[k];
+    items[k] = x == null || y == null ? x ?? y
+      : ts(x.en) !== ts(y.en) ? (ts(y.en) > ts(x.en) ? y : x) : canonico(y) > canonico(x) ? y : x;
+  }
+  const out = { items };
+  const primero = [a.empezadaEn, b.empezadaEn].filter(Boolean).sort()[0];
+  const ultimo = (c) => [a[c], b[c]].filter(Boolean).sort().pop();
+  if (primero) out.empezadaEn = primero;
+  if (ultimo("terminadaEn")) out.terminadaEn = ultimo("terminadaEn");
+  if (ultimo("actualizado")) out.actualizado = ultimo("actualizado");
   return out;
 }
 // Respuestas: cada intento tiene su id. Del mismo intento queda una sola copia (lo respondido de la que
@@ -1122,7 +1327,7 @@ async function sincronizar() {
 // Si llegaron datos de otro iPad, se vuelve a pintar la pantalla, salvo donde se está escribiendo.
 function trasSync(res) {
   const ruta = location.hash.replace(/^#\/?/, "");
-  if (res?.cambios && !/^(p\/|admin\/c\/|admin\/ajustes)/.test(ruta) && !(ruta.startsWith("admin") && !adminOk)) route();
+  if (res?.cambios && !/^(p\/|gv\/|admin\/c\/|admin\/ajustes)/.test(ruta) && !(ruta.startsWith("admin") && !adminOk)) route();
   return res;
 }
 // Permiso de Google sin abrir ventanas: sólo si ya hay uno vigente.
@@ -1161,8 +1366,9 @@ async function cargarSync() {
 let rutaAnterior = "";
 async function route() {
   const partes = location.hash.replace(/^#\/?/, "").split("/").filter(Boolean);
-  // Al moverse por la app se sincroniza en segundo plano (al salir de una prueba, siempre; si no, cada 30 s como mucho).
-  if (partes[0] !== "p") syncEnFondo(rutaAnterior.startsWith("p/") ? 0 : 30000);
+  // Al moverse por la app se sincroniza en segundo plano (al salir de una prueba o guía, siempre; si no, cada 30 s como mucho).
+  const trabajando = (p) => p === "p" || p === "gv";
+  if (!trabajando(partes[0])) syncEnFondo(trabajando(rutaAnterior.split("/")[0]) ? 0 : 30000);
   rutaAnterior = partes.join("/");
   // Versión nueva lista: se aplica en la portada o antes del PIN, nunca en medio de una prueba.
   if (hayVersionNueva && (!partes.length || (partes[0] === "admin" && !adminOk))) return location.reload();
@@ -1171,11 +1377,15 @@ async function route() {
     if (partes[0] === "n" && partes.length === 2) return await vistaMaterias(partes[1]);
     if (partes[0] === "n" && partes.length === 3) return await vistaSesiones(partes[1], partes[2]);
     if (partes[0] === "p" && partes.length === 4) return await vistaPrueba(partes[1], partes[2], partes[3]);
+    if (partes[0] === "g" && partes.length === 2) return await vistaGuiasMaterias(partes[1]);
+    if (partes[0] === "g" && partes.length === 3) return await vistaGuiasSemanas(partes[1], partes[2]);
+    if (partes[0] === "gv" && partes.length === 4) return await vistaGuia(partes[1], partes[2], partes[3]);
     if (partes[0] === "admin") {
       if (!adminOk) return vistaPin(location.hash.slice(1));
       if (partes.length === 1) return ir("/admin/n/javier");
       if (partes[1] === "n") return await vistaAdminNino(partes[2]);
       if (partes[1] === "c") return await vistaCorregir(partes[2], partes[3], partes[4]);
+      if (partes[1] === "g") return await vistaGuia(partes[2], partes[3], partes[4], true);
       if (partes[1] === "libreta") return await vistaLibreta();
       if (partes[1] === "ajustes") return await vistaAjustes();
     }

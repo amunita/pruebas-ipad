@@ -5,7 +5,8 @@ Uso:
   .venv/bin/python tools/convertir.py [--fuente RUTA_A_contenido]   (o variable PRUEBAS_FUENTE)
 
 Lee  <fuente>/<materia>/<2b|5b>/S{1..5}-prueba.md, S{n}-pauta.md, EX-examen.md, EX-pauta.md
-Escribe data/index.json y data/<nivel>/<materia>/<S1..S5|EX>.json, y la lista de
+     y las guías de estudio S{1..5}-guia.md y EX-guia.md
+Escribe data/index.json, data/<nivel>/<materia>/<S1..S5|EX>.json, data/<nivel>/<materia>/<S1..S5|EX>-guia.json y la lista de
 archivos que el service worker deja disponibles sin conexión (sw-archivos.js).
 La fuente no se edita: sólo se lee. Sin LLM: es un script determinista.
 """
@@ -310,6 +311,187 @@ def corregir_pauta(id_prueba, pcuerpo, filas):
     return pcuerpo
 
 
+# ---------- guías de estudio ----------
+# Las guías no llevan nota: el niño escribe con el lápiz en los ejercicios y toca las ☐. Cada espacio para
+# responder tiene una clave anclada a su sección y a su ejercicio («practica:ej3:e1» = primer recuadro del
+# ejercicio 3 de la práctica; «experimentos-de-la-semana:c2» = segundo grupo de ☐ de esa sección), para que
+# editar otra parte de la guía no mueva lo que el niño ya escribió.
+MESES = {m: i for i, m in enumerate(["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto",
+                                      "septiembre", "octubre", "noviembre", "diciembre"], 1)}
+# Secciones donde cada ítem numerado es un ejercicio con su recuadro para escribir.
+PRACTICA = re.compile(r"^(practica|práctica|practice|reto|retos)\b", re.I)
+# Secciones con las respuestas: en la app quedan plegadas («Ver respuestas»), sin espacios para responder.
+RESPUESTAS = re.compile(r"^(respuestas|practice answers|answers)\b", re.I)
+# Secciones de explicación: sus tablas son de ejemplo, sus celdas vacías no se responden.
+EXPLICA = re.compile(r"^(para recordar|remember|ejemplos|worked examples|tabla|qué vas|what you)", re.I)
+ESPACIOS = re.compile(r'(?:<div class="(?:lineas|cuadricula)"></div>\s*)+')
+ILUS = re.compile(r'<div class="ilus[^"]*"[^>]*>.*?</div>', re.S)
+# Dentro de un ejercicio, después de una línea en blanco siguen siendo del ejercicio las tablas, las líneas
+# para escribir, las citas, las rayas y las listas; cualquier otro párrafo («Writing.», «Ortografía:») lo cierra.
+CONTINUA = re.compile(r'^(\||<div class="(lineas|cuadricula)"|>|\\?_|[-*]\s|[a-z]\)\s)')
+
+
+def fecha_iso(texto):
+    m = re.search(r"(\d{1,2}) de ([a-záéíóú]+) de (\d{4})", texto or "", re.I)
+    return f"{int(m.group(3)):04d}-{MESES[m.group(2).lower()]:02d}-{int(m.group(1)):02d}" if m else ""
+
+
+def slug(t):
+    return re.sub(r"[^a-z0-9]+", "-", normal(t)).strip("-") or "seccion"
+
+
+class Claves:
+    def __init__(self):
+        self.lista, self.opciones, self.ambito, self.cuenta = [], {}, "", {}
+
+    def nueva(self, tipo):
+        n = self.cuenta[(self.ambito, tipo)] = self.cuenta.get((self.ambito, tipo), 0) + 1
+        k = f"{self.ambito}:{tipo}{n}"
+        if k in self.lista:
+            raise SystemExit(f"clave repetida {k}")
+        self.lista.append(k)
+        return k
+
+    def escribir(self, lineas, celda=False):
+        k = self.nueva("e")
+        return (f'<span class="escribir celda" data-k="{k}" data-lineas="1"></span>' if celda
+                else f'<div class="escribir" data-k="{k}" data-lineas="{lineas}"></div>')
+
+    def casillas(self, opciones):
+        k = self.nueva("c")
+        self.opciones[k] = opciones
+        return f'<span class="opciones" data-k="{k}"></span>'
+
+
+def sin_ilustraciones(texto):
+    """Los bloques de ilustración (y sus prompts) no se muestran: queda un marcador discreto."""
+    texto = re.sub(r"<!--.*?-->", "", texto, flags=re.S)
+    return ILUS.sub('<div class="ilus-marca" aria-hidden="true">🖼️</div>', texto)
+
+
+def casillas_guia(texto, claves, celdas):
+    """Cada línea (o celda de tabla) con ☐ pasa a ser un grupo de casillas para tocar; si `celdas`, las celdas
+    vacías de una tabla (bajo un encabezado con texto) pasan a ser un recuadro para escribir."""
+    def grupo(t):
+        if "☐" not in t:
+            return t
+        antes, *opciones = t.replace("&nbsp;", " ").split("☐")
+        return antes.rstrip() + " " + claves.casillas([o.strip() for o in opciones if o.strip()])
+
+    vacia = lambda c: c.replace("&nbsp;", "").strip() == ""
+    salida, cabecera = [], None
+    for linea in texto.split("\n"):
+        s = linea.strip()
+        if s.startswith("|"):
+            celdas_fila = s.strip("|").split("|")
+            if cabecera is None:
+                cabecera = [c.strip() for c in celdas_fila]
+            elif not SEPARADOR.match(s):
+                nuevas = []
+                for j, c in enumerate(celdas_fila):
+                    if celdas and vacia(c) and j < len(cabecera) and not vacia(cabecera[j]):
+                        nuevas.append(" " + claves.escribir(1, celda=True) + " ")
+                    else:
+                        nuevas.append(grupo(c))
+                linea = "|" + "|".join(nuevas) + "|"
+            salida.append(linea)
+            continue
+        cabecera = None
+        salida.append(grupo(linea))
+    return "\n".join(salida)
+
+
+def espacios_guia(texto, claves):
+    """Las líneas y cuadrículas para escribir del PDF pasan a ser un recuadro para el lápiz."""
+    def recuadro(m):
+        lineas = m.group(0).count('class="lineas"')
+        cuadros = m.group(0).count('class="cuadricula"')
+        return "\n\n" + claves.escribir(max(2, -(-lineas * 3 // 2)) + 5 * cuadros) + "\n\n"
+    return ESPACIOS.sub(recuadro, texto)
+
+
+def numerar_practica(cuerpo):
+    """En la práctica, «**3.** texto» es el ejercicio 3, igual que «3. texto»."""
+    seccion, salida = "", []
+    for linea in cuerpo.split("\n"):
+        if linea.startswith("## "):
+            seccion = linea[3:].strip()
+        elif PRACTICA.match(seccion):
+            linea = re.sub(r"^\*\*(\d+)\.\*\*\s*", r"\1. ", linea)
+        salida.append(linea)
+    return "\n".join(salida)
+
+
+def partir_guia(cuerpo):
+    """Divide la guía en secciones, texto suelto y ejercicios. Sólo en la práctica un ítem numerado es un
+    ejercicio; en el resto de la guía las listas numeradas son texto."""
+    bloques, actual, prof, blanco_antes, seccion = [], None, 0, True, ""
+
+    def cerrar():
+        if actual and (actual["tipo"] == "item" or "".join(actual["lineas"]).strip()):
+            bloques.append(actual)
+
+    for linea in cuerpo.split("\n"):
+        s = linea.strip()
+        if prof == 0 and s.startswith("## "):
+            cerrar()
+            seccion = s[3:].strip()
+            bloques.append({"tipo": "seccion", "titulo": seccion})
+            actual = {"tipo": "libre", "lineas": []}
+        elif prof == 0 and (PRACTICA.match(seccion) or RESPUESTAS.match(seccion)) and re.match(r"^\d+\.\s", s):
+            cerrar()
+            n, resto = s.split(".", 1)
+            actual = {"tipo": "item", "n": int(n), "lineas": [resto.strip()]}
+        elif (prof == 0 and actual and actual["tipo"] == "item" and blanco_antes and s
+              and not linea[:1].isspace() and not CONTINUA.match(s)):
+            cerrar()
+            actual = {"tipo": "libre", "lineas": [linea]}
+        else:
+            if actual is None:
+                actual = {"tipo": "libre", "lineas": []}
+            actual["lineas"].append(linea)
+        prof += len(re.findall(r"<div\b", s)) - len(re.findall(r"</div>", s))
+        blanco_antes = s == ""
+    cerrar()
+    return bloques
+
+
+def convertir_guia(fuente, materia, nivel, sesion):
+    archivo = fuente / materia / nivel / f"{sesion}-guia.md"
+    meta, cuerpo = frontmatter(archivo.read_text(encoding="utf-8"))
+    cuerpo = numerar_practica(sin_ilustraciones(cuerpo).replace('<div class="salto"></div>', ""))
+    claves, bloques, seccion, sec_slug, vistas = Claves(), [], "", "inicio", {}
+    for b in partir_guia(cuerpo):
+        if b["tipo"] == "seccion":
+            seccion = b["titulo"]
+            base = slug(seccion)
+            vistas[base] = vistas.get(base, 0) + 1
+            sec_slug = base if vistas[base] == 1 else f"{base}-{vistas[base]}"
+            bloques.append({"tipo": "seccion", "titulo": seccion, "respuestas": bool(RESPUESTAS.match(seccion))})
+            continue
+        texto = "\n".join(b["lineas"])
+        if RESPUESTAS.match(seccion):
+            if b["tipo"] == "item":
+                texto = f"{b['n']}. {texto}"
+            bloques.append({"tipo": "libre", "html": md(ESPACIOS.sub("", texto))})
+            continue
+        claves.ambito = f"{sec_slug}:ej{b['n']}" if b["tipo"] == "item" else sec_slug
+        texto = casillas_guia(texto, claves, celdas=not EXPLICA.match(seccion))
+        tenia_espacio = bool(ESPACIOS.search(texto)) or 'class="escribir' in texto
+        texto = espacios_guia(texto, claves)
+        if b["tipo"] == "item":
+            if not tenia_espacio and 'class="opciones"' not in texto:
+                texto += "\n\n" + claves.escribir(2 if nivel == "2b" else 3)
+            bloques.append({"tipo": "ejercicio", "n": b["n"], "html": md(texto)})
+        else:
+            bloques.append({"tipo": "libre", "html": md(texto)})
+    return {
+        "id": f"{nivel}-{materia}-{sesion}-guia", "nivel": nivel, "materia": materia, "sesion": sesion,
+        "titulo": meta.get("titulo", ""), "fecha": meta.get("fecha", ""), "fechaISO": fecha_iso(meta.get("fecha", "")),
+        "bloques": bloques, "claves": claves.lista, "opciones": claves.opciones,
+    }
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--fuente", type=pathlib.Path, default=FUENTE)
@@ -336,6 +518,25 @@ def main():
                 for a in avisos:
                     problemas += 1
                     print(f"  aviso {prueba['id']}: {a}", file=sys.stderr)
+    indice["guias"] = {}
+    guias = 0
+    for nivel, _ in NIVELES:
+        for materia, _ in MATERIAS:
+            for sesion in SESIONES:
+                if not (args.fuente / materia / nivel / f"{sesion}-guia.md").exists():
+                    print(f"  aviso: falta la guía {nivel}/{materia}/{sesion}-guia.md", file=sys.stderr)
+                    problemas += 1
+                    continue
+                guia = convertir_guia(args.fuente, materia, nivel, sesion)
+                if not guia["fechaISO"]:
+                    raise SystemExit(f"{guia['id']}: no entiendo la fecha {guia['fecha']!r}")
+                destino = datos / nivel / materia / f"{sesion}-guia.json"
+                destino.write_text(json.dumps(guia, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+                rel = destino.relative_to(RAIZ).as_posix()
+                archivos.append(rel)
+                guias += 1
+                indice["guias"][f"{nivel}-{materia}-{sesion}"] = {
+                    "archivo": rel, "titulo": guia["titulo"], "fecha": guia["fechaISO"], "espacios": len(guia["claves"])}
     sobran = (set(SELECCIONES) | set(CORRECCIONES)) - usadas - {"_formato"}
     if sobran:
         raise SystemExit(f"selecciones.json nombra ítems que no existen: {sorted(sobran)}")
@@ -348,7 +549,7 @@ def main():
         "// Generado por tools/convertir.py: no editar a mano.\n"
         f"self.VERSION_DATOS = {json.dumps(h.hexdigest()[:12])};\n"
         f"self.ARCHIVOS_DATOS = {json.dumps(['data/index.json'] + archivos, indent=0)};\n", encoding="utf-8")
-    print(f"{len(archivos)} pruebas convertidas · {problemas} avisos · datos {h.hexdigest()[:12]}")
+    print(f"{len(archivos) - guias} pruebas y {guias} guías convertidas · {problemas} avisos · datos {h.hexdigest()[:12]}")
 
 
 if __name__ == "__main__":

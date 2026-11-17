@@ -179,3 +179,19 @@ h3 { font-size: 1rem; margin: 1.2em 0 .3em; }
 .pestanas .espacio { flex: 1; }
 .otro-intento { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin: 10px 0; padding: 10px 14px;
   border-radius: var(--radio); background: var(--ambar-claro); color: var(--ambar); font-weight: 600; }
+
+/* Guías de estudio */
+.boton-guias { width: 100%; min-height: 96px; font-size: 1.3rem; font-weight: 700; margin: 4px 0 6px;
+  background: var(--ambar-claro); border: 3px solid var(--ambar); border-radius: 20px; }
+body.nivel-2b .guia { font-size: 1.15em; } /* letra grande en 2º, como en el PDF */
+.guia .item { padding-top: 22px; }
+.guia .recordar { background: var(--verde-claro); border-color: var(--verde); margin: 12px 0; }
+.guia .caja { margin: 12px 0; }
+.avance-guia { font-weight: 600; color: var(--verde); }
+details.respuestas-guia { margin: 24px 0; border: 2px dashed var(--linea); border-radius: var(--radio); background: var(--papel); }
+details.respuestas-guia summary { padding: 12px 16px; min-height: 56px; display: flex; align-items: center; font-weight: 600; color: var(--suave); cursor: pointer; }
+details.respuestas-guia > div { padding: 0 16px 12px; }
+.ilus-marca { display: inline-block; font-size: .9rem; opacity: .35; margin: 4px 0; }
+/* recuadro para escribir dentro de una celda de tabla (guías) */
+.guia td .lienzo-celda { margin: 0; min-width: 7em; }
+.guia td .lienzo-celda canvas { border-width: 1.5px; border-radius: 6px; }
