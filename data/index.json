@@ -830,49 +830,49 @@
    "archivo": "data/2b/lenguaje/S1-guia.json",
    "titulo": "Guía de estudio 1 — Leo sílabas y palabras, entiendo lo que leo",
    "fecha": "2026-11-09",
-   "espacios": 14
+   "espacios": 18
   },
   "2b-lenguaje-S2": {
    "archivo": "data/2b/lenguaje/S2-guia.json",
    "titulo": "Guía de estudio 2 — Entiendo un cuento corto y escribo oraciones",
    "fecha": "2026-11-16",
-   "espacios": 12
+   "espacios": 16
   },
   "2b-lenguaje-S3": {
    "archivo": "data/2b/lenguaje/S3-guia.json",
    "titulo": "Guía de estudio 3 — Letras con dos sonidos: c, g y r",
    "fecha": "2026-11-23",
-   "espacios": 13
+   "espacios": 17
   },
   "2b-lenguaje-S4": {
    "archivo": "data/2b/lenguaje/S4-guia.json",
    "titulo": "Guía de estudio 4 — Dos consonantes juntas, un poema y un cuento",
    "fecha": "2026-11-30",
-   "espacios": 11
+   "espacios": 15
   },
   "2b-lenguaje-S5": {
    "archivo": "data/2b/lenguaje/S5-guia.json",
    "titulo": "Guía de estudio 5 — Güe, güi, vocales juntas y palabras largas",
    "fecha": "2026-12-07",
-   "espacios": 12
+   "espacios": 16
   },
   "2b-lenguaje-EX": {
    "archivo": "data/2b/lenguaje/EX-guia.json",
    "titulo": "Guía de repaso — Examen final de Lenguaje",
    "fecha": "2026-12-07",
-   "espacios": 12
+   "espacios": 16
   },
   "2b-ingles-S1": {
    "archivo": "data/2b/ingles/S1-guia.json",
    "titulo": "Guía 1 — Letters and sounds: palabras cortas y sight words",
    "fecha": "2026-11-09",
-   "espacios": 12
+   "espacios": 24
   },
   "2b-ingles-S2": {
    "archivo": "data/2b/ingles/S2-guia.json",
    "titulo": "Guía 2 — Word families y oraciones cortas: My house",
    "fecha": "2026-11-16",
-   "espacios": 12
+   "espacios": 18
   },
   "2b-ingles-S3": {
    "archivo": "data/2b/ingles/S3-guia.json",
@@ -938,37 +938,37 @@
    "archivo": "data/2b/ciencias/S1-guia.json",
    "titulo": "Guía de estudio 1 — Seres vivos y animales vertebrados",
    "fecha": "2026-11-09",
-   "espacios": 12
+   "espacios": 22
   },
   "2b-ciencias-S2": {
    "archivo": "data/2b/ciencias/S2-guia.json",
    "titulo": "Guía de estudio 2 — Invertebrados, ciclos de vida y hábitats",
    "fecha": "2026-11-16",
-   "espacios": 13
+   "espacios": 18
   },
   "2b-ciencias-S3": {
    "archivo": "data/2b/ciencias/S3-guia.json",
    "titulo": "Guía de estudio 3 — Mi cuerpo en acción: observo, predigo y registro",
    "fecha": "2026-11-23",
-   "espacios": 16
+   "espacios": 22
   },
   "2b-ciencias-S4": {
    "archivo": "data/2b/ciencias/S4-guia.json",
    "titulo": "Guía de estudio 4 — Los materiales, el agua y los cambios con calor y frío",
    "fecha": "2026-11-30",
-   "espacios": 18
+   "espacios": 34
   },
   "2b-ciencias-S5": {
    "archivo": "data/2b/ciencias/S5-guia.json",
    "titulo": "Guía de estudio 5 — La Tierra cambia: el agua, el tiempo y lo que necesitan las plantas",
    "fecha": "2026-12-07",
-   "espacios": 16
+   "espacios": 36
   },
   "2b-ciencias-EX": {
    "archivo": "data/2b/ciencias/EX-guia.json",
    "titulo": "Guía de repaso para el examen — Todo el año, como científica",
    "fecha": "2026-12-07",
-   "espacios": 18
+   "espacios": 27
   },
   "2b-historia-S1": {
    "archivo": "data/2b/historia/S1-guia.json",

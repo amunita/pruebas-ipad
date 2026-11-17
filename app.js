@@ -3,7 +3,7 @@
 // Los datos viven en el iPad (IndexedDB) y, si se activa, se sincronizan entre iPads por Google Drive.
 // Las pruebas, pautas y guías de estudio vienen de data/ (tools/convertir.py).
 
-const VERSION = "2026-11-17.1";
+const VERSION = "2026-11-17.2";
 let hayVersionNueva = false; // el service worker trajo otra versión (ver route)
 const NINOS = {
   javier: { nombre: "Javier", nivel: "5b", curso: "5º básico" },
@@ -174,27 +174,29 @@ function cuerpoHTML(html) {
 
 // ---------- lienzo para escribir con el lápiz ----------
 class Lienzo {
-  constructor(datos, { editable, lineas, nivel, dedo, alCambiar }) {
+  constructor(datos, { editable, lineas, nivel, dedo, alCambiar, celda }) {
     this.d = datos; this.d.trazos = this.d.trazos || []; this.d.extra = this.d.extra || 0;
     this.editable = editable; this.lineas = lineas; this.dedo = dedo; this.alCambiar = alCambiar || (() => {});
     this.paso = nivel === "2b" ? 115 : 95; // alto lógico de cada renglón
+    // En una celda de tabla el lienzo es chico y sin barra: su ancho lógico es menor para que el trazo no salga delgado.
+    this.celda = !!celda; this.ancho = celda ? 300 : ANCHO;
     this.herr = "lapiz"; this.historia = []; this.activo = null;
     this.canvas = h("canvas");
-    const barra = editable ? h("div", { class: "herramientas" },
+    const barra = editable && !celda ? h("div", { class: "herramientas" },
       this.bLapiz = h("button", { class: "activa", onclick: () => this.usar("lapiz") }, "✏️ Lápiz"),
       this.bGoma = h("button", { onclick: () => this.usar("borrar") }, "🧽 Borrar"),
       h("button", { onclick: () => this.deshacer() }, "↩︎ Deshacer"),
       h("button", { onclick: () => this.hojaExtra() }, "➕ Hoja extra"),
       h("button", { class: "peligro", onclick: () => this.limpiar() }, "Borrar todo")) : null;
-    this.el = h("div", { class: "lienzo" + (editable ? "" : " solo-lectura") }, barra, this.canvas);
+    this.el = h("div", { class: "lienzo" + (celda ? " lienzo-celda" : "") + (editable ? "" : " solo-lectura") }, barra, this.canvas);
     if (editable) this.eventos();
     new ResizeObserver(() => this.medir()).observe(this.canvas);
   }
-  altoLogico() { return (this.lineas + this.d.extra) * this.paso + 30; }
+  altoLogico() { return this.celda ? this.paso : (this.lineas + this.d.extra) * this.paso + 30; }
   medir() {
     const w = this.canvas.clientWidth; if (!w) return;
     const dpr = window.devicePixelRatio || 1;
-    this.escala = w / ANCHO;
+    this.escala = w / this.ancho;
     const hCss = this.altoLogico() * this.escala;
     this.canvas.style.height = hCss + "px";
     this.canvas.width = Math.round(w * dpr); this.canvas.height = Math.round(hCss * dpr);
@@ -204,9 +206,9 @@ class Lienzo {
   }
   dibujar() {
     const c = this.ctx; if (!c) return;
-    c.clearRect(0, 0, ANCHO, this.altoLogico());
+    c.clearRect(0, 0, this.ancho, this.altoLogico());
     c.strokeStyle = "#cfe0ee"; c.lineWidth = 2;
-    for (let y = this.paso; y < this.altoLogico(); y += this.paso) { c.beginPath(); c.moveTo(14, y); c.lineTo(ANCHO - 14, y); c.stroke(); }
+    for (let y = this.paso; !this.celda && y < this.altoLogico(); y += this.paso) { c.beginPath(); c.moveTo(14, y); c.lineTo(this.ancho - 14, y); c.stroke(); }
     c.strokeStyle = "#1a2b4a"; c.lineCap = "round"; c.lineJoin = "round";
     for (const t of this.d.trazos) this.trazo(t);
   }
@@ -516,6 +518,7 @@ async function vistaGuia(nino, materia, sesion, admin = false) {
   const pintarAvance = () => {
     const a = avance(g, gd.claves.length);
     progreso.textContent = a.total ? `Llevas ${a.hechos} de ${a.total}` : "";
+    progreso.hidden = !a.total; // una guía sin espacios para responder no muestra contador
   };
   let espera;
   const guardar = () => {
@@ -527,7 +530,8 @@ async function vistaGuia(nino, materia, sesion, admin = false) {
     d.querySelectorAll(".escribir").forEach((z) => {
       const k = z.dataset.k, it = (g.items[k] = g.items[k] || {});
       it.lienzo = it.lienzo || {};
-      const l = new Lienzo(it.lienzo, { editable: !admin, nivel: n.nivel, dedo: !!cfg.dedo, lineas: Number(z.dataset.lineas) || 2, alCambiar: () => tocar(k) });
+      const l = new Lienzo(it.lienzo, { editable: !admin, nivel: n.nivel, dedo: !!cfg.dedo, lineas: Number(z.dataset.lineas) || 2,
+        celda: z.classList.contains("celda"), alCambiar: () => tocar(k) });
       z.replaceWith(l.el);
     });
     d.querySelectorAll(".opciones").forEach((z) => {
