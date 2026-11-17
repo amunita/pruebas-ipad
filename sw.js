@@ -1,6 +1,6 @@
-// Service worker: deja la app y todas las pruebas disponibles sin conexión.
+// Service worker: deja la app, todas las pruebas y todas las guías disponibles sin conexión.
 importScripts("sw-archivos.js");
-const VERSION_APP = "2026-11-11.2";
+const VERSION_APP = "2026-11-17.1";
 const CACHE = `pruebas-${VERSION_APP}-${self.VERSION_DATOS}`;
 const BASE = ["./", "index.html", "app.css", "app.js", "manifest.webmanifest", "sw-archivos.js",
   "icons/icon-192.png", "icons/icon-512.png", "icons/apple-touch-icon.png"];

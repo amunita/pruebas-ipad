@@ -13,7 +13,7 @@ Todas las sesiones (S1–S5 y Examen de las 6 materias) ya están cargadas; «s�
 
 ```
 uv venv .venv && uv pip install --python .venv/bin/python markdown==3.7
-.venv/bin/python tools/convertir.py          # lee las pruebas y pautas, escribe data/ y sw-archivos.js
+PRUEBAS_FUENTE=…/pruebas/contenido .venv/bin/python tools/convertir.py   # lee pruebas, pautas y guías; escribe data/ y sw-archivos.js
 .venv/bin/python tools/revisar_claves.py     # revisa las claves de Matemática que se pueden calcular
 git add -A && git commit -m "pruebas: …" && git push   # GitHub Pages publica solo
 ```
@@ -25,6 +25,16 @@ Los ítems que se responden eligiendo (ordenar o numerar con desplegable, comple
 **Errores de pauta.** `fuentes/` no se edita: la corrección va en `tools/correcciones-pauta.json`, con lo que dice la fuente, lo correcto y quién lo detectó. El conversor la aplica al ítem y a la pauta completa, y se detiene si la fuente cambió. En el iPad, las notas ya guardadas en la libreta se recalculan solas con las respuestas guardadas; la libreta muestra cuál era la nota anterior. La versión nueva se aplica al volver a la portada, nunca en medio de una prueba.
 
 `tools/revisar_claves.py` revisa sin IA las claves de alternativas de Matemática que se pueden calcular: operaciones, problemas de suma, resta y multiplicación, porcentajes, ecuaciones, promedios, áreas, volúmenes, fracciones, secuencias y el mayor o menor. Se corre después del conversor y sale con error si una clave no calza.
+
+## Guías
+
+Las guías de estudio de cada semana (`S1-guia.md` … `S5-guia.md` y `EX-guia.md`) se hacen en el iPad, sin imprimir.
+
+- **Niño:** nombre → «📚 Guías de estudio» → materia → semana. La guía se ve con letra grande en 2º (como en el PDF). Cada ejercicio de «Practica» tiene su recuadro para el Apple Pencil (la palma no raya; «Hoja extra» da más espacio), las líneas y cuadrículas del PDF también, y las ☐ se tocan. Las respuestas de la práctica quedan plegadas al final. Todo se guarda solo; «Terminé la guía» la marca como terminada, y se puede seguir practicando.
+- **Sin nota:** las guías sólo muestran avance (espacios respondidos de los que tiene la guía).
+- **Administración:** en la pestaña de cada niño, bajo la tabla de pruebas, «Guías de estudio»: Visible/Oculta por guía o por semana (S1…EX), y el avance (✓ si la terminó); al tocarlo se ve lo que hizo, sin poder escribir. Si nadie la ha tocado («por fecha»), una guía se ve desde el lunes de su semana: la semana en curso y las anteriores.
+- **Datos:** clave `g:<niño>:<materia>:<sesión>` en el mismo IndexedDB (sin cambio de esquema). Entra en el respaldo y en la sincronización; al fusionar, gana espacio por espacio el cambio más reciente, así la misma guía hecha en dos iPads se junta.
+- **Conversor:** `tools/convertir.py` también escribe `data/<nivel>/<materia>/<sesión>-guia.json` y las agrega al índice y al service worker (funcionan sin conexión). Es determinista: los espacios para responder se numeran en orden (`e1`… para escribir, `c1`… para las ☐). Los bloques de ilustración (`<div class="ilus">`) y los comentarios HTML no se muestran: queda un marcador 🖼️ discreto. Si se cambia una guía después de que un niño la empezó, lo escrito queda en el espacio con el mismo número.
 
 ## Respaldos
 

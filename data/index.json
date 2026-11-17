@@ -824,5 +824,439 @@
     "seleccion": 2
    }
   }
+ },
+ "guias": {
+  "2b-lenguaje-S1": {
+   "archivo": "data/2b/lenguaje/S1-guia.json",
+   "titulo": "Guía de estudio 1 — Leo sílabas y palabras, entiendo lo que leo",
+   "fecha": "2026-11-09",
+   "espacios": 14
+  },
+  "2b-lenguaje-S2": {
+   "archivo": "data/2b/lenguaje/S2-guia.json",
+   "titulo": "Guía de estudio 2 — Entiendo un cuento corto y escribo oraciones",
+   "fecha": "2026-11-16",
+   "espacios": 12
+  },
+  "2b-lenguaje-S3": {
+   "archivo": "data/2b/lenguaje/S3-guia.json",
+   "titulo": "Guía de estudio 3 — Letras con dos sonidos: c, g y r",
+   "fecha": "2026-11-23",
+   "espacios": 13
+  },
+  "2b-lenguaje-S4": {
+   "archivo": "data/2b/lenguaje/S4-guia.json",
+   "titulo": "Guía de estudio 4 — Dos consonantes juntas, un poema y un cuento",
+   "fecha": "2026-11-30",
+   "espacios": 11
+  },
+  "2b-lenguaje-S5": {
+   "archivo": "data/2b/lenguaje/S5-guia.json",
+   "titulo": "Guía de estudio 5 — Güe, güi, vocales juntas y palabras largas",
+   "fecha": "2026-12-07",
+   "espacios": 12
+  },
+  "2b-lenguaje-EX": {
+   "archivo": "data/2b/lenguaje/EX-guia.json",
+   "titulo": "Guía de repaso — Examen final de Lenguaje",
+   "fecha": "2026-12-07",
+   "espacios": 12
+  },
+  "2b-ingles-S1": {
+   "archivo": "data/2b/ingles/S1-guia.json",
+   "titulo": "Guía 1 — Letters and sounds: palabras cortas y sight words",
+   "fecha": "2026-11-09",
+   "espacios": 12
+  },
+  "2b-ingles-S2": {
+   "archivo": "data/2b/ingles/S2-guia.json",
+   "titulo": "Guía 2 — Word families y oraciones cortas: My house",
+   "fecha": "2026-11-16",
+   "espacios": 12
+  },
+  "2b-ingles-S3": {
+   "archivo": "data/2b/ingles/S3-guia.json",
+   "titulo": "Guía 3 — Blend and spell: sh, ch, th, ck, ng",
+   "fecha": "2026-11-23",
+   "espacios": 10
+  },
+  "2b-ingles-S4": {
+   "archivo": "data/2b/ingles/S4-guia.json",
+   "titulo": "Guía 4 — Long vowel sounds: ee, oo, ai, oa · I want to be a…",
+   "fecha": "2026-11-30",
+   "espacios": 11
+  },
+  "2b-ingles-S5": {
+   "archivo": "data/2b/ingles/S5-guia.json",
+   "titulo": "Guía 5 — Magic e y mis primeras oraciones: Delicious food",
+   "fecha": "2026-12-07",
+   "espacios": 13
+  },
+  "2b-ingles-EX": {
+   "archivo": "data/2b/ingles/EX-guia.json",
+   "titulo": "Guía del examen final — Todos los sonidos y todos los temas",
+   "fecha": "2026-12-07",
+   "espacios": 13
+  },
+  "2b-matematica-S1": {
+   "archivo": "data/2b/matematica/S1-guia.json",
+   "titulo": "Guía de estudio 1 — Números hasta 50, sumas y restas hasta 10",
+   "fecha": "2026-11-09",
+   "espacios": 15
+  },
+  "2b-matematica-S2": {
+   "archivo": "data/2b/matematica/S2-guia.json",
+   "titulo": "Guía de estudio 2 — Números hasta 100: decenas y unidades",
+   "fecha": "2026-11-16",
+   "espacios": 15
+  },
+  "2b-matematica-S3": {
+   "archivo": "data/2b/matematica/S3-guia.json",
+   "titulo": "Guía de estudio 3 — Sumar y restar hasta 100 con números conectados y barras",
+   "fecha": "2026-11-23",
+   "espacios": 14
+  },
+  "2b-matematica-S4": {
+   "archivo": "data/2b/matematica/S4-guia.json",
+   "titulo": "Guía de estudio 4 — Grupos iguales: multiplicar por 2, 5 y 10, la hora y el calendario",
+   "fecha": "2026-11-30",
+   "espacios": 14
+  },
+  "2b-matematica-S5": {
+   "archivo": "data/2b/matematica/S5-guia.json",
+   "titulo": "Guía de estudio 5 — Figuras, medir, gráficos y el desafío de cambiar 10 por 1",
+   "fecha": "2026-12-07",
+   "espacios": 14
+  },
+  "2b-matematica-EX": {
+   "archivo": "data/2b/matematica/EX-guia.json",
+   "titulo": "Guía de repaso — Examen final de Matemática (todo el año)",
+   "fecha": "2026-12-07",
+   "espacios": 17
+  },
+  "2b-ciencias-S1": {
+   "archivo": "data/2b/ciencias/S1-guia.json",
+   "titulo": "Guía de estudio 1 — Seres vivos y animales vertebrados",
+   "fecha": "2026-11-09",
+   "espacios": 12
+  },
+  "2b-ciencias-S2": {
+   "archivo": "data/2b/ciencias/S2-guia.json",
+   "titulo": "Guía de estudio 2 — Invertebrados, ciclos de vida y hábitats",
+   "fecha": "2026-11-16",
+   "espacios": 13
+  },
+  "2b-ciencias-S3": {
+   "archivo": "data/2b/ciencias/S3-guia.json",
+   "titulo": "Guía de estudio 3 — Mi cuerpo en acción: observo, predigo y registro",
+   "fecha": "2026-11-23",
+   "espacios": 16
+  },
+  "2b-ciencias-S4": {
+   "archivo": "data/2b/ciencias/S4-guia.json",
+   "titulo": "Guía de estudio 4 — Los materiales, el agua y los cambios con calor y frío",
+   "fecha": "2026-11-30",
+   "espacios": 18
+  },
+  "2b-ciencias-S5": {
+   "archivo": "data/2b/ciencias/S5-guia.json",
+   "titulo": "Guía de estudio 5 — La Tierra cambia: el agua, el tiempo y lo que necesitan las plantas",
+   "fecha": "2026-12-07",
+   "espacios": 16
+  },
+  "2b-ciencias-EX": {
+   "archivo": "data/2b/ciencias/EX-guia.json",
+   "titulo": "Guía de repaso para el examen — Todo el año, como científica",
+   "fecha": "2026-12-07",
+   "espacios": 18
+  },
+  "2b-historia-S1": {
+   "archivo": "data/2b/historia/S1-guia.json",
+   "titulo": "Guía de estudio 1 — ¿Dónde vivo? Chile en el mapa",
+   "fecha": "2026-11-09",
+   "espacios": 14
+  },
+  "2b-historia-S2": {
+   "archivo": "data/2b/historia/S2-guia.json",
+   "titulo": "Guía de estudio 2 — Los paisajes de Chile",
+   "fecha": "2026-11-16",
+   "espacios": 15
+  },
+  "2b-historia-S3": {
+   "archivo": "data/2b/historia/S3-guia.json",
+   "titulo": "Guía de estudio 3 — ¿Cómo sabemos cómo vivían los primeros habitantes de Chile?",
+   "fecha": "2026-11-23",
+   "espacios": 12
+  },
+  "2b-historia-S4": {
+   "archivo": "data/2b/historia/S4-guia.json",
+   "titulo": "Guía de estudio 4 — ¿De dónde viene lo que comemos, hablamos y celebramos?",
+   "fecha": "2026-11-30",
+   "espacios": 12
+  },
+  "2b-historia-S5": {
+   "archivo": "data/2b/historia/S5-guia.json",
+   "titulo": "Guía de estudio 5 — ¿Cómo vivimos juntos y cómo conseguimos lo que necesitamos?",
+   "fecha": "2026-12-07",
+   "espacios": 12
+  },
+  "2b-historia-EX": {
+   "archivo": "data/2b/historia/EX-guia.json",
+   "titulo": "Guía del examen final — Repaso de todo el año",
+   "fecha": "2026-12-07",
+   "espacios": 14
+  },
+  "2b-religion-S1": {
+   "archivo": "data/2b/religion/S1-guia.json",
+   "titulo": "Guía de estudio 1 — Dios creador y el nacimiento de Jesús",
+   "fecha": "2026-11-09",
+   "espacios": 15
+  },
+  "2b-religion-S2": {
+   "archivo": "data/2b/religion/S2-guia.json",
+   "titulo": "Guía de estudio 2 — La vida de Jesús: milagros, parábolas y apóstoles",
+   "fecha": "2026-11-16",
+   "espacios": 15
+  },
+  "2b-religion-S3": {
+   "archivo": "data/2b/religion/S3-guia.json",
+   "titulo": "Guía de estudio 3 — Pasión, muerte y Resurrección de Jesús; la Iglesia",
+   "fecha": "2026-11-23",
+   "espacios": 15
+  },
+  "2b-religion-S4": {
+   "archivo": "data/2b/religion/S4-guia.json",
+   "titulo": "Guía de estudio 4 — Los Diez Mandamientos y el mandamiento del amor",
+   "fecha": "2026-11-30",
+   "espacios": 15
+  },
+  "2b-religion-S5": {
+   "archivo": "data/2b/religion/S5-guia.json",
+   "titulo": "Guía de estudio 5 — Los sacramentos, la Misa y los amigos de Dios del Antiguo Testamento",
+   "fecha": "2026-12-07",
+   "espacios": 18
+  },
+  "2b-religion-EX": {
+   "archivo": "data/2b/religion/EX-guia.json",
+   "titulo": "Guía de repaso para el examen final — Todo el año",
+   "fecha": "2026-12-07",
+   "espacios": 0
+  },
+  "5b-lenguaje-S1": {
+   "archivo": "data/5b/lenguaje/S1-guia.json",
+   "titulo": "Guía de estudio 1 — Repaso de 4º: comprensión de narraciones y clases de palabras",
+   "fecha": "2026-11-09",
+   "espacios": 15
+  },
+  "5b-lenguaje-S2": {
+   "archivo": "data/5b/lenguaje/S2-guia.json",
+   "titulo": "Guía de estudio 2 — Narración: lenguaje figurado, ambiente y conectores",
+   "fecha": "2026-11-16",
+   "espacios": 14
+  },
+  "5b-lenguaje-S3": {
+   "archivo": "data/5b/lenguaje/S3-guia.json",
+   "titulo": "Guía de estudio 3 — Lectura analítica de textos informativos, raíces griegas y latinas, y párrafo de opinión",
+   "fecha": "2026-11-23",
+   "espacios": 13
+  },
+  "5b-lenguaje-S4": {
+   "archivo": "data/5b/lenguaje/S4-guia.json",
+   "titulo": "Guía de estudio 4 — Literatura: punto de vista, lenguaje figurado y tema; matices de las palabras y argumentar con citas",
+   "fecha": "2026-11-30",
+   "espacios": 15
+  },
+  "5b-lenguaje-S5": {
+   "archivo": "data/5b/lenguaje/S5-guia.json",
+   "titulo": "Guía de estudio 5 — Argumentación: evaluar argumentos, comparar puntos de vista y escribir un ensayo breve",
+   "fecha": "2026-12-07",
+   "espacios": 13
+  },
+  "5b-lenguaje-EX": {
+   "archivo": "data/5b/lenguaje/EX-guia.json",
+   "titulo": "Guía de estudio — Examen final: lectura analítica, literatura, argumentación y lenguaje",
+   "fecha": "2026-12-07",
+   "espacios": 19
+  },
+  "5b-ingles-S1": {
+   "archivo": "data/5b/ingles/S1-guia.json",
+   "titulo": "Study Guide 1 — Reading a story, past simple and plurals",
+   "fecha": "2026-11-09",
+   "espacios": 15
+  },
+  "5b-ingles-S2": {
+   "archivo": "data/5b/ingles/S2-guia.json",
+   "titulo": "Study Guide 2 — Informational texts, comparatives and adverbs",
+   "fecha": "2026-11-16",
+   "espacios": 15
+  },
+  "5b-ingles-S3": {
+   "archivo": "data/5b/ingles/S3-guia.json",
+   "titulo": "Study Guide 3 — Literary analysis: theme, point of view and figurative language",
+   "fecha": "2026-11-23",
+   "espacios": 14
+  },
+  "5b-ingles-S4": {
+   "archivo": "data/5b/ingles/S4-guia.json",
+   "titulo": "Study Guide 4 — Informational texts: two texts, one topic",
+   "fecha": "2026-11-30",
+   "espacios": 13
+  },
+  "5b-ingles-S5": {
+   "archivo": "data/5b/ingles/S5-guia.json",
+   "titulo": "Study Guide 5 — Argument: claims, counterclaims and persuasive writing",
+   "fecha": "2026-12-07",
+   "espacios": 15
+  },
+  "5b-ingles-EX": {
+   "archivo": "data/5b/ingles/EX-guia.json",
+   "titulo": "Final Exam Study Guide — Review of the whole year",
+   "fecha": "2026-12-07",
+   "espacios": 16
+  },
+  "5b-matematica-S1": {
+   "archivo": "data/5b/matematica/S1-guia.json",
+   "titulo": "Guía de estudio 1 — Tablas del 2, 5 y 10 · Repaso de 4º básico",
+   "fecha": "2026-11-09",
+   "espacios": 15
+  },
+  "5b-matematica-S2": {
+   "archivo": "data/5b/matematica/S2-guia.json",
+   "titulo": "Guía de estudio 2 — Tablas del 6 y 7 · Números grandes · Multiplicar y dividir",
+   "fecha": "2026-11-16",
+   "espacios": 14
+  },
+  "5b-matematica-S3": {
+   "archivo": "data/5b/matematica/S3-guia.json",
+   "titulo": "Guía de estudio 3 — Tablas del 8 y 9 · Fracciones con modelo de barras · Orden de las operaciones",
+   "fecha": "2026-11-23",
+   "espacios": 12
+  },
+  "5b-matematica-S4": {
+   "archivo": "data/5b/matematica/S4-guia.json",
+   "titulo": "Guía de estudio 4 — Todas las tablas y sus divisiones · Decimales · Razones y porcentajes · Álgebra",
+   "fecha": "2026-11-30",
+   "espacios": 14
+  },
+  "5b-matematica-S5": {
+   "archivo": "data/5b/matematica/S5-guia.json",
+   "titulo": "Guía de estudio 5 — Cálculo veloz · Ángulos, áreas y volumen · Promedio, tasa y velocidad · Datos y probabilidad",
+   "fecha": "2026-12-07",
+   "espacios": 14
+  },
+  "5b-matematica-EX": {
+   "archivo": "data/5b/matematica/EX-guia.json",
+   "titulo": "Guía de repaso para el examen final — Todo el año, al nivel internacional",
+   "fecha": "2026-12-07",
+   "espacios": 16
+  },
+  "5b-ciencias-S1": {
+   "archivo": "data/5b/ciencias/S1-guia.json",
+   "titulo": "Guía de estudio 1 — Cómo está organizado tu cuerpo: células, digestión y alimentación",
+   "fecha": "2026-11-09",
+   "espacios": 15
+  },
+  "5b-ciencias-S2": {
+   "archivo": "data/5b/ciencias/S2-guia.json",
+   "titulo": "Guía de estudio 2 — Respirar y circular: oxígeno, sangre, cigarrillo y microorganismos",
+   "fecha": "2026-11-16",
+   "espacios": 15
+  },
+  "5b-ciencias-S3": {
+   "archivo": "data/5b/ciencias/S3-guia.json",
+   "titulo": "Guía de estudio 3 — Electricidad: circuitos, prueba justa y diseño de ingeniería",
+   "fecha": "2026-11-23",
+   "espacios": 11
+  },
+  "5b-ciencias-S4": {
+   "archivo": "data/5b/ciencias/S4-guia.json",
+   "titulo": "Guía de estudio 4 — La Tierra como sistema: agua, esferas, sombras, estaciones y gravedad",
+   "fecha": "2026-11-30",
+   "espacios": 12
+  },
+  "5b-ciencias-S5": {
+   "archivo": "data/5b/ciencias/S5-guia.json",
+   "titulo": "Guía de estudio 5 — Materia y partículas; materia y energía en los seres vivos",
+   "fecha": "2026-12-07",
+   "espacios": 12
+  },
+  "5b-ciencias-EX": {
+   "archivo": "data/5b/ciencias/EX-guia.json",
+   "titulo": "Guía de repaso para el examen final — Pensar como científico todo el año",
+   "fecha": "2026-12-07",
+   "espacios": 13
+  },
+  "5b-historia-S1": {
+   "archivo": "data/5b/historia/S1-guia.json",
+   "titulo": "Guía de estudio 1 — Geografía de Chile: zonas naturales, recursos y riesgos",
+   "fecha": "2026-11-09",
+   "espacios": 12
+  },
+  "5b-historia-S2": {
+   "archivo": "data/5b/historia/S2-guia.json",
+   "titulo": "Guía de estudio 2 — La expansión europea del siglo XV: Colón y Magallanes",
+   "fecha": "2026-11-16",
+   "espacios": 12
+  },
+  "5b-historia-S3": {
+   "archivo": "data/5b/historia/S3-guia.json",
+   "titulo": "Guía de estudio 3 — Encuentro y conquista: una historia mundial (1492-1598)",
+   "fecha": "2026-11-23",
+   "espacios": 9
+  },
+  "5b-historia-S4": {
+   "archivo": "data/5b/historia/S4-guia.json",
+   "titulo": "Guía de estudio 4 — La Colonia en Chile dentro del imperio español (1598-1810)",
+   "fecha": "2026-11-30",
+   "espacios": 6
+  },
+  "5b-historia-S5": {
+   "archivo": "data/5b/historia/S5-guia.json",
+   "titulo": "Guía de estudio 5 — Ciudadanía, derechos y la historia larga de las ideas",
+   "fecha": "2026-12-07",
+   "espacios": 6
+  },
+  "5b-historia-EX": {
+   "archivo": "data/5b/historia/EX-guia.json",
+   "titulo": "Guía de estudio del examen — Chile en el mundo: todo el año en cuatro herramientas",
+   "fecha": "2026-12-07",
+   "espacios": 6
+  },
+  "5b-religion-S1": {
+   "archivo": "data/5b/religion/S1-guia.json",
+   "titulo": "Guía de estudio 1 — El Padre Nuestro, la Revelación y las alianzas del Antiguo Testamento",
+   "fecha": "2026-11-09",
+   "espacios": 15
+  },
+  "5b-religion-S2": {
+   "archivo": "data/5b/religion/S2-guia.json",
+   "titulo": "Guía de estudio 2 — El Credo, la vida de Jesús, el Espíritu Santo y la Iglesia",
+   "fecha": "2026-11-16",
+   "espacios": 15
+  },
+  "5b-religion-S3": {
+   "archivo": "data/5b/religion/S3-guia.json",
+   "titulo": "Guía de estudio 3 — Los siete sacramentos y la Misa: signos que hacen lo que dicen",
+   "fecha": "2026-11-23",
+   "espacios": 9
+  },
+  "5b-religion-S4": {
+   "archivo": "data/5b/religion/S4-guia.json",
+   "titulo": "Guía de estudio 4 — Mandamientos, Bienaventuranzas y virtudes: cómo se decide bien",
+   "fecha": "2026-11-30",
+   "espacios": 10
+  },
+  "5b-religion-S5": {
+   "archivo": "data/5b/religion/S5-guia.json",
+   "titulo": "Guía de estudio 5 — El año litúrgico, María y los santos, la vida eterna y la oración",
+   "fecha": "2026-12-07",
+   "espacios": 10
+  },
+  "5b-religion-EX": {
+   "archivo": "data/5b/religion/EX-guia.json",
+   "titulo": "Guía de estudio — Examen final de Religión",
+   "fecha": "2026-12-07",
+   "espacios": 11
+  }
  }
 }

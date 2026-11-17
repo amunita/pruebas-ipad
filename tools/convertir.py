@@ -5,7 +5,8 @@ Uso:
   .venv/bin/python tools/convertir.py [--fuente RUTA_A_contenido]   (o variable PRUEBAS_FUENTE)
 
 Lee  <fuente>/<materia>/<2b|5b>/S{1..5}-prueba.md, S{n}-pauta.md, EX-examen.md, EX-pauta.md
-Escribe data/index.json y data/<nivel>/<materia>/<S1..S5|EX>.json, y la lista de
+     y las guías de estudio S{1..5}-guia.md y EX-guia.md
+Escribe data/index.json, data/<nivel>/<materia>/<S1..S5|EX>.json, data/<nivel>/<materia>/<S1..S5|EX>-guia.json y la lista de
 archivos que el service worker deja disponibles sin conexión (sw-archivos.js).
 La fuente no se edita: sólo se lee. Sin LLM: es un script determinista.
 """
@@ -310,6 +311,120 @@ def corregir_pauta(id_prueba, pcuerpo, filas):
     return pcuerpo
 
 
+# ---------- guías de estudio ----------
+# Las guías no llevan nota: el niño escribe con el lápiz en los ejercicios y toca las ☐. Cada espacio para
+# responder tiene una clave estable dentro de la guía («e1», «e2»… para escribir; «c1»… para las casillas).
+MESES = {m: i for i, m in enumerate(["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto",
+                                      "septiembre", "octubre", "noviembre", "diciembre"], 1)}
+# Secciones donde cada ítem numerado es un ejercicio con su recuadro para escribir.
+PRACTICA = re.compile(r"^(practica|práctica|practice|reto|retos)\b", re.I)
+# Secciones con las respuestas: en la app quedan plegadas («Ver respuestas»), sin espacios para responder.
+RESPUESTAS = re.compile(r"^(respuestas|practice answers|answers)\b", re.I)
+ESPACIOS = re.compile(r'(?:<div class="(?:lineas|cuadricula)"></div>\s*)+')
+ILUS = re.compile(r'<div class="ilus[^"]*"[^>]*>.*?</div>', re.S)
+
+
+def fecha_iso(texto):
+    m = re.search(r"(\d{1,2}) de ([a-záéíóú]+) de (\d{4})", texto or "", re.I)
+    return f"{int(m.group(3)):04d}-{MESES[m.group(2).lower()]:02d}-{int(m.group(1)):02d}" if m else ""
+
+
+class Claves:
+    def __init__(self):
+        self.lista, self.opciones, self.e, self.c = [], {}, 0, 0
+
+    def escribir(self, lineas):
+        self.e += 1
+        k = f"e{self.e}"
+        self.lista.append(k)
+        return f'<div class="escribir" data-k="{k}" data-lineas="{lineas}"></div>'
+
+    def casillas(self, opciones):
+        self.c += 1
+        k = f"c{self.c}"
+        self.lista.append(k)
+        self.opciones[k] = opciones
+        return f'<span class="opciones" data-k="{k}"></span>'
+
+
+def sin_ilustraciones(texto):
+    """Los bloques de ilustración (y sus prompts) no se muestran: queda un marcador discreto."""
+    texto = re.sub(r"<!--.*?-->", "", texto, flags=re.S)
+    return ILUS.sub('<div class="ilus-marca" aria-hidden="true">🖼️</div>', texto)
+
+
+def casillas_guia(texto, claves):
+    """Cada línea (o celda de tabla) con ☐ pasa a ser un grupo de casillas para tocar."""
+    def grupo(t):
+        if "☐" not in t:
+            return t
+        antes, *opciones = t.replace("&nbsp;", " ").split("☐")
+        return antes.rstrip() + " " + claves.casillas([o.strip() for o in opciones if o.strip()])
+
+    salida = []
+    for linea in texto.split("\n"):
+        if linea.strip().startswith("|") and "☐" in linea:
+            linea = "|".join(grupo(c) for c in linea.split("|"))
+        else:
+            linea = grupo(linea)
+        salida.append(linea)
+    return "\n".join(salida)
+
+
+def espacios_guia(texto, claves):
+    """Las líneas y cuadrículas para escribir del PDF pasan a ser un recuadro para el lápiz."""
+    def recuadro(m):
+        lineas = m.group(0).count('class="lineas"')
+        cuadros = m.group(0).count('class="cuadricula"')
+        return "\n\n" + claves.escribir(max(2, -(-lineas * 3 // 2)) + 5 * cuadros) + "\n\n"
+    return ESPACIOS.sub(recuadro, texto)
+
+
+def numerar_practica(cuerpo):
+    """En la práctica, «**3.** texto» es el ejercicio 3, igual que «3. texto»."""
+    seccion, salida = "", []
+    for linea in cuerpo.split("\n"):
+        if linea.startswith("## "):
+            seccion = linea[3:].strip()
+        elif PRACTICA.match(seccion):
+            linea = re.sub(r"^\*\*(\d+)\.\*\*\s*", r"\1. ", linea)
+        salida.append(linea)
+    return "\n".join(salida)
+
+
+def convertir_guia(fuente, materia, nivel, sesion):
+    archivo = fuente / materia / nivel / f"{sesion}-guia.md"
+    meta, cuerpo = frontmatter(archivo.read_text(encoding="utf-8"))
+    cuerpo = numerar_practica(sin_ilustraciones(cuerpo).replace('<div class="salto"></div>', ""))
+    claves, bloques, seccion, en_respuestas = Claves(), [], "", False
+    for b in partir_prueba(cuerpo):
+        if b["tipo"] == "seccion":
+            seccion = b["titulo"]
+            en_respuestas = bool(RESPUESTAS.match(seccion))
+            bloques.append({"tipo": "seccion", "titulo": seccion, "respuestas": en_respuestas})
+            continue
+        texto = "\n".join(b["lineas"])
+        if en_respuestas:
+            if b["tipo"] == "item":
+                texto = f"{b['n']}. {texto}"
+            bloques.append({"tipo": "libre", "html": md(ESPACIOS.sub("", texto))})
+            continue
+        texto = casillas_guia(texto, claves)
+        tenia_espacio = bool(ESPACIOS.search(texto))
+        texto = espacios_guia(texto, claves)
+        if b["tipo"] == "item" and PRACTICA.match(seccion) and not tenia_espacio and 'class="opciones"' not in texto:
+            texto += "\n\n" + claves.escribir(2 if nivel == "2b" else 3)
+        if b["tipo"] == "item":
+            bloques.append({"tipo": "ejercicio", "n": b["n"], "html": md(texto)})
+        else:
+            bloques.append({"tipo": "libre", "html": md(texto)})
+    return {
+        "id": f"{nivel}-{materia}-{sesion}-guia", "nivel": nivel, "materia": materia, "sesion": sesion,
+        "titulo": meta.get("titulo", ""), "fecha": meta.get("fecha", ""), "fechaISO": fecha_iso(meta.get("fecha", "")),
+        "bloques": bloques, "claves": claves.lista, "opciones": claves.opciones,
+    }
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--fuente", type=pathlib.Path, default=FUENTE)
@@ -336,6 +451,25 @@ def main():
                 for a in avisos:
                     problemas += 1
                     print(f"  aviso {prueba['id']}: {a}", file=sys.stderr)
+    indice["guias"] = {}
+    guias = 0
+    for nivel, _ in NIVELES:
+        for materia, _ in MATERIAS:
+            for sesion in SESIONES:
+                if not (args.fuente / materia / nivel / f"{sesion}-guia.md").exists():
+                    print(f"  aviso: falta la guía {nivel}/{materia}/{sesion}-guia.md", file=sys.stderr)
+                    problemas += 1
+                    continue
+                guia = convertir_guia(args.fuente, materia, nivel, sesion)
+                if not guia["fechaISO"]:
+                    raise SystemExit(f"{guia['id']}: no entiendo la fecha {guia['fecha']!r}")
+                destino = datos / nivel / materia / f"{sesion}-guia.json"
+                destino.write_text(json.dumps(guia, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+                rel = destino.relative_to(RAIZ).as_posix()
+                archivos.append(rel)
+                guias += 1
+                indice["guias"][f"{nivel}-{materia}-{sesion}"] = {
+                    "archivo": rel, "titulo": guia["titulo"], "fecha": guia["fechaISO"], "espacios": len(guia["claves"])}
     sobran = (set(SELECCIONES) | set(CORRECCIONES)) - usadas - {"_formato"}
     if sobran:
         raise SystemExit(f"selecciones.json nombra ítems que no existen: {sorted(sobran)}")
@@ -348,7 +482,7 @@ def main():
         "// Generado por tools/convertir.py: no editar a mano.\n"
         f"self.VERSION_DATOS = {json.dumps(h.hexdigest()[:12])};\n"
         f"self.ARCHIVOS_DATOS = {json.dumps(['data/index.json'] + archivos, indent=0)};\n", encoding="utf-8")
-    print(f"{len(archivos)} pruebas convertidas · {problemas} avisos · datos {h.hexdigest()[:12]}")
+    print(f"{len(archivos) - guias} pruebas y {guias} guías convertidas · {problemas} avisos · datos {h.hexdigest()[:12]}")
 
 
 if __name__ == "__main__":
