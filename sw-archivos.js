@@ -1,5 +1,5 @@
 // Generado por tools/convertir.py: no editar a mano.
-self.VERSION_DATOS = "ba11f10d964a";
+self.VERSION_DATOS = "f10732500b36";
 self.ARCHIVOS_DATOS = [
 "data/index.json",
 "data/2b/lenguaje/S1.json",

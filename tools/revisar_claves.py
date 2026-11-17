@@ -16,6 +16,18 @@ import sys
 from fractions import Fraction
 
 RAIZ = pathlib.Path(__file__).resolve().parent.parent
+# Enunciados que las reglas de abajo reconocen mal (calculan otra cosa) y cuya clave se
+# comprobó a mano contra la pauta el 17-11-2026. No se cuentan como revisadas ni como malas.
+VERIFICADAS_A_MANO = {
+    "5b-matematica-S3#2": "3 ÷ 4 = 3/4",
+    "5b-matematica-S3#11": "2k + 3k = 35 → k = 7 → denominador 21",
+    "5b-matematica-S4#3": "12,5 − 3,75 = 8,75 (la clave es 8,75, escrito con coma)",
+    "5b-matematica-S4#9": "400 + 150k",
+    "5b-matematica-S4#10": "4x − 6 = 30 → x = 9 (36 es 4x, no x)",
+    "5b-matematica-S4#11": "niñas 60 %, niños 40 %: 20 % = 6 → 30 personas",
+    "5b-matematica-S5#3": "8 × 5 + 8 × 3 ÷ 2 = 40 + 12 = 52",
+    "5b-matematica-EX#6": "mcm(6, 8) = 24",
+}
 NUM = r"\d{1,3}(?:\.\d{3})+|\d+(?:,\d+)?"
 
 
@@ -119,6 +131,8 @@ def main():
                         r = None
                     break
             id_item = f"{p['id']}#{b['n']}"
+            if id_item in VERIFICADAS_A_MANO:
+                continue
             if r is None:
                 sin_calculo.append(id_item)
                 continue
