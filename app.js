@@ -3,7 +3,7 @@
 // Los datos viven en el iPad (IndexedDB) y, si se activa, se sincronizan entre iPads por Google Drive.
 // Las pruebas, pautas y guías de estudio vienen de data/ (tools/convertir.py).
 
-const VERSION = "2026-11-17.5";
+const VERSION = "2026-11-17.6";
 let hayVersionNueva = false; // el service worker trajo otra versión (ver route)
 const NINOS = {
   javier: { nombre: "Javier", nivel: "5b", curso: "5º básico" },
@@ -239,6 +239,7 @@ class Lienzo {
       if (!acepta(e) || this.activo != null) return;
       e.preventDefault();
       cv.setPointerCapture(e.pointerId);
+      this.eligiendo = !!this.grupo && this.grupo.sel !== this; // primer toque en una casilla que no era la activa
       if (this.grupo) this.grupo.elegir(this);
       this.activo = e.pointerId;
       this.guardarHistoria();
@@ -268,7 +269,7 @@ class Lienzo {
     const fin = (e) => {
       if (e.pointerId !== this.activo) return;
       // en una casilla, tocar sólo para elegirla no deja un punto suelto
-      if (this.grupo && this.actual && this.herr !== "borrar" && this.movioPoco(this.actual)) {
+      if (this.eligiendo && this.actual && this.herr !== "borrar" && this.movioPoco(this.actual)) {
         this.d.trazos = this.d.trazos.filter((t) => t !== this.actual); this.historia.pop(); this.dibujar();
       }
       this.activo = null; this.actual = null;
