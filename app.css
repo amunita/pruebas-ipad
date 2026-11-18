@@ -195,3 +195,10 @@ details.respuestas-guia > div { padding: 0 16px 12px; }
 /* recuadro para escribir dentro de una celda de tabla (guías) */
 .guia td .lienzo-celda { margin: 0; min-width: 7em; }
 .guia td .lienzo-celda canvas { border-width: 1.5px; border-radius: 6px; }
+
+/* barra compartida de las casillas de una tabla */
+.herramientas-tabla { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin: 12px 0 8px; position: sticky; top: 0; z-index: 5; background: var(--fondo); padding: 6px 0; }
+.herramientas-tabla button { min-height: 52px; padding: 0 14px; font-size: .85rem; }
+.herramientas-tabla button.activa { background: var(--tinta); color: #fff; border-color: var(--tinta); }
+.herramientas-tabla .estado-celda { font-size: .8rem; color: var(--suave); white-space: nowrap; flex: 1 1 0; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.guia td .lienzo-celda.elegida canvas { border-color: var(--tinta); box-shadow: 0 0 0 3px rgba(26,43,74,.25); }
