@@ -3,7 +3,7 @@
 // Los datos viven en el iPad (IndexedDB) y, si se activa, se sincronizan entre iPads por Google Drive.
 // Las pruebas, pautas y guías de estudio vienen de data/ (tools/convertir.py).
 
-const VERSION = "2026-11-17.3";
+const VERSION = "2026-11-17.4";
 let hayVersionNueva = false; // el service worker trajo otra versión (ver route)
 const NINOS = {
   javier: { nombre: "Javier", nivel: "5b", curso: "5º básico" },
@@ -267,6 +267,10 @@ class Lienzo {
     });
     const fin = (e) => {
       if (e.pointerId !== this.activo) return;
+      // en una casilla, tocar sólo para elegirla no deja un punto suelto
+      if (this.grupo && this.actual && this.herr !== "borrar" && this.actual.p.length <= 2) {
+        this.d.trazos = this.d.trazos.filter((t) => t !== this.actual); this.historia.pop(); this.dibujar();
+      }
       this.activo = null; this.actual = null;
       this.alCambiar();
     };
@@ -565,7 +569,11 @@ async function vistaGuia(nino, materia, sesion, admin = false) {
       const tabla = celda && !admin ? z.closest("table") : null;
       let grupo = null;
       if (tabla) {
-        if (!grupos.has(tabla)) { const gc = new GrupoCeldas(); tabla.before(gc.el); grupos.set(tabla, gc); }
+        if (!grupos.has(tabla)) {
+          // la barra queda fuera del contenedor con scroll lateral (si no, ni queda fija ni se queda quieta al correr la tabla)
+          const gc = new GrupoCeldas(), caja = h("div", { class: "tabla-scroll" });
+          tabla.replaceWith(caja); caja.append(tabla); caja.before(gc.el); grupos.set(tabla, gc);
+        }
         grupo = grupos.get(tabla);
       }
       const l = new Lienzo(it.lienzo, { editable: !admin, nivel: n.nivel, dedo: !!cfg.dedo, lineas: Number(z.dataset.lineas) || 2,

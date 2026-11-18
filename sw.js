@@ -1,12 +1,12 @@
 // Service worker: deja la app, todas las pruebas y todas las guías disponibles sin conexión.
 importScripts("sw-archivos.js");
-const VERSION_APP = "2026-11-17.3";
+const VERSION_APP = "2026-11-17.4";
 const CACHE = `pruebas-${VERSION_APP}-${self.VERSION_DATOS}`;
 const BASE = ["./", "index.html", "app.css", "app.js", "manifest.webmanifest", "sw-archivos.js",
   "icons/icon-192.png", "icons/icon-512.png", "icons/apple-touch-icon.png"];
 
 self.addEventListener("install", (e) => {
-  e.waitUntil(caches.open(CACHE).then((c) => c.addAll([...BASE, ...self.ARCHIVOS_DATOS])).then(() => self.skipWaiting()));
+  e.waitUntil(caches.open(CACHE).then((c) => c.addAll([...BASE, ...self.ARCHIVOS_DATOS].map((u) => new Request(u, { cache: "reload" })))).then(() => self.skipWaiting()));
 });
 
 self.addEventListener("activate", (e) => {

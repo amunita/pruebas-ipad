@@ -65,6 +65,8 @@ blockquote { margin: 12px 0; padding: 12px 18px; background: #f3efe4; border-lef
 table { border-collapse: collapse; margin: 10px 0; max-width: 100%; }
 td, th { border: 1px solid var(--linea); padding: 8px 10px; text-align: left; vertical-align: top; font-weight: 400; }
 .cuerpo-item { overflow-x: auto; }
+.cuerpo-item:has(.herramientas-tabla) { overflow: visible; }
+.tabla-scroll { overflow-x: auto; }
 .blanco { display: inline-block; border-bottom: 2px solid var(--tinta); height: 1.1em; vertical-align: baseline; margin: 0 3px; }
 .lineas, .cuadricula { display: none; }
 .caja, .recordar { border: 2px solid var(--linea); border-radius: 10px; padding: 10px 14px; background: var(--papel); }
