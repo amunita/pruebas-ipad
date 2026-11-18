@@ -3,7 +3,7 @@
 // Los datos viven en el iPad (IndexedDB) y, si se activa, se sincronizan entre iPads por Google Drive.
 // Las pruebas, pautas y guías de estudio vienen de data/ (tools/convertir.py).
 
-const VERSION = "2026-11-17.2";
+const VERSION = "2026-11-17.6";
 let hayVersionNueva = false; // el service worker trajo otra versión (ver route)
 const NINOS = {
   javier: { nombre: "Javier", nivel: "5b", curso: "5º básico" },
@@ -174,13 +174,15 @@ function cuerpoHTML(html) {
 
 // ---------- lienzo para escribir con el lápiz ----------
 class Lienzo {
-  constructor(datos, { editable, lineas, nivel, dedo, alCambiar, celda }) {
+  constructor(datos, { editable, lineas, nivel, dedo, alCambiar, celda, grupo }) {
     this.d = datos; this.d.trazos = this.d.trazos || []; this.d.extra = this.d.extra || 0;
     this.editable = editable; this.lineas = lineas; this.dedo = dedo; this.alCambiar = alCambiar || (() => {});
     this.paso = nivel === "2b" ? 115 : 95; // alto lógico de cada renglón
     // En una celda de tabla el lienzo es chico y sin barra: su ancho lógico es menor para que el trazo no salga delgado.
     this.celda = !!celda; this.ancho = celda ? 300 : ANCHO;
     this.herr = "lapiz"; this.historia = []; this.activo = null;
+    this.grupo = grupo || null; // celdas de una misma tabla: comparten una barra (GrupoCeldas)
+    if (this.grupo) this.grupo.lienzos.push(this);
     this.canvas = h("canvas");
     const barra = editable && !celda ? h("div", { class: "herramientas" },
       this.bLapiz = h("button", { class: "activa", onclick: () => this.usar("lapiz") }, "✏️ Lápiz"),
@@ -226,8 +228,8 @@ class Lienzo {
   }
   usar(herr) {
     this.herr = herr;
-    this.bLapiz.classList.toggle("activa", herr === "lapiz");
-    this.bGoma.classList.toggle("activa", herr === "borrar");
+    this.bLapiz?.classList.toggle("activa", herr === "lapiz");
+    this.bGoma?.classList.toggle("activa", herr === "borrar");
   }
   guardarHistoria() { this.historia.push(this.d.trazos.slice()); if (this.historia.length > 60) this.historia.shift(); }
   eventos() {
@@ -237,6 +239,8 @@ class Lienzo {
       if (!acepta(e) || this.activo != null) return;
       e.preventDefault();
       cv.setPointerCapture(e.pointerId);
+      this.eligiendo = !!this.grupo && this.grupo.sel !== this; // primer toque en una casilla que no era la activa
+      if (this.grupo) this.grupo.elegir(this);
       this.activo = e.pointerId;
       this.guardarHistoria();
       if (this.herr === "borrar") { this.borrarEn(this.punto(e)); return; }
@@ -264,6 +268,10 @@ class Lienzo {
     });
     const fin = (e) => {
       if (e.pointerId !== this.activo) return;
+      // en una casilla, tocar sólo para elegirla no deja un punto suelto
+      if (this.eligiendo && this.actual && this.herr !== "borrar" && this.movioPoco(this.actual)) {
+        this.d.trazos = this.d.trazos.filter((t) => t !== this.actual); this.historia.pop(); this.dibujar();
+      }
       this.activo = null; this.actual = null;
       this.alCambiar();
     };
@@ -271,6 +279,12 @@ class Lienzo {
     cv.addEventListener("pointercancel", fin);
     // Safari: evita que el toque del lápiz seleccione texto o haga zoom
     cv.addEventListener("touchstart", (e) => { if (this.dedo || [...e.touches].some((t) => t.touchType === "stylus")) e.preventDefault(); }, { passive: false });
+  }
+  // desplazamiento del trazo en px de pantalla: menos de 4 px es un toque (para elegir la casilla), no un trazo
+  movioPoco(t) {
+    const p = t.p; let x0 = p[0], x1 = p[0], y0 = p[1], y1 = p[1];
+    for (let i = 2; i < p.length; i += 2) { x0 = Math.min(x0, p[i]); x1 = Math.max(x1, p[i]); y0 = Math.min(y0, p[i + 1]); y1 = Math.max(y1, p[i + 1]); }
+    return Math.max(x1 - x0, y1 - y0) * this.escala < 4;
   }
   borrarEn([x, y]) {
     const r2 = 22 * 22;
@@ -283,10 +297,37 @@ class Lienzo {
   }
   deshacer() { if (!this.historia.length) return; this.d.trazos = this.historia.pop(); this.dibujar(); this.alCambiar(); }
   limpiar() {
-    if (!this.d.trazos.length || !confirm("¿Borrar todo lo escrito en este recuadro?")) return;
+    if (!this.d.trazos.length || !confirm(this.celda ? "¿Borrar todo lo escrito en esta casilla?" : "¿Borrar todo lo escrito en este recuadro?")) return;
     this.guardarHistoria(); this.d.trazos = []; this.dibujar(); this.alCambiar();
   }
   hojaExtra() { this.d.extra += 6; this.medir(); this.alCambiar(); this.canvas.scrollIntoView({ block: "end", behavior: "smooth" }); }
+}
+
+// Barra compartida de las celdas de una tabla de la guía: lápiz, goma, deshacer y borrar todo
+// actúan sobre la última casilla tocada (queda resaltada). No cambia cómo se guardan los trazos.
+class GrupoCeldas {
+  constructor() {
+    this.lienzos = []; this.herr = "lapiz"; this.sel = null;
+    this.estado = h("span", { class: "estado-celda" }, "👆 Toca una casilla");
+    this.bLapiz = h("button", { class: "activa", onclick: () => this.usar("lapiz") }, "✏️ Lápiz");
+    this.bGoma = h("button", { onclick: () => this.usar("borrar") }, "🧽 Borrar");
+    this.el = h("div", { class: "herramientas herramientas-tabla" }, this.bLapiz, this.bGoma,
+      h("button", { onclick: () => this.conSel((l) => l.deshacer()) }, "↩︎ Deshacer"),
+      h("button", { class: "peligro", onclick: () => this.conSel((l) => l.limpiar()) }, "Borrar todo"),
+      this.estado);
+  }
+  usar(herr) {
+    this.herr = herr;
+    this.lienzos.forEach((l) => { l.herr = herr; });
+    this.bLapiz.classList.toggle("activa", herr === "lapiz");
+    this.bGoma.classList.toggle("activa", herr === "borrar");
+  }
+  elegir(l) {
+    this.sel = l;
+    this.lienzos.forEach((x) => x.el.classList.toggle("elegida", x === l));
+    this.estado.textContent = "✔ Casilla elegida";
+  }
+  conSel(f) { if (!this.sel) return avisar("Toca primero una casilla"); f(this.sel); }
 }
 
 // ---------- pantallas del niño ----------
@@ -527,11 +568,23 @@ async function vistaGuia(nino, materia, sesion, admin = false) {
   };
   const tocar = (k) => { g.items[k].en = ahora(); g.empezadaEn = g.empezadaEn || g.items[k].en; pintarAvance(); guardar(); };
   const espacios = (d) => {
+    const grupos = new Map(); // una barra compacta por tabla con casillas para escribir
     d.querySelectorAll(".escribir").forEach((z) => {
       const k = z.dataset.k, it = (g.items[k] = g.items[k] || {});
       it.lienzo = it.lienzo || {};
+      const celda = z.classList.contains("celda");
+      const tabla = celda && !admin ? z.closest("table") : null;
+      let grupo = null;
+      if (tabla) {
+        if (!grupos.has(tabla)) {
+          // la barra queda fuera del contenedor con scroll lateral (si no, ni queda fija ni se queda quieta al correr la tabla)
+          const gc = new GrupoCeldas(), caja = h("div", { class: "tabla-scroll" }), todo = h("div", { class: "grupo-tabla" });
+          tabla.replaceWith(todo); caja.append(tabla); todo.append(gc.el, caja); grupos.set(tabla, gc); // el sticky termina donde termina la tabla
+        }
+        grupo = grupos.get(tabla);
+      }
       const l = new Lienzo(it.lienzo, { editable: !admin, nivel: n.nivel, dedo: !!cfg.dedo, lineas: Number(z.dataset.lineas) || 2,
-        celda: z.classList.contains("celda"), alCambiar: () => tocar(k) });
+        celda, grupo, alCambiar: () => tocar(k) });
       z.replaceWith(l.el);
     });
     d.querySelectorAll(".opciones").forEach((z) => {
