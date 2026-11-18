@@ -3,7 +3,7 @@
 // Los datos viven en el iPad (IndexedDB) y, si se activa, se sincronizan entre iPads por Google Drive.
 // Las pruebas, pautas y guías de estudio vienen de data/ (tools/convertir.py).
 
-const VERSION = "2026-11-17.4";
+const VERSION = "2026-11-17.5";
 let hayVersionNueva = false; // el service worker trajo otra versión (ver route)
 const NINOS = {
   javier: { nombre: "Javier", nivel: "5b", curso: "5º básico" },
@@ -268,7 +268,7 @@ class Lienzo {
     const fin = (e) => {
       if (e.pointerId !== this.activo) return;
       // en una casilla, tocar sólo para elegirla no deja un punto suelto
-      if (this.grupo && this.actual && this.herr !== "borrar" && this.actual.p.length <= 2) {
+      if (this.grupo && this.actual && this.herr !== "borrar" && this.movioPoco(this.actual)) {
         this.d.trazos = this.d.trazos.filter((t) => t !== this.actual); this.historia.pop(); this.dibujar();
       }
       this.activo = null; this.actual = null;
@@ -278,6 +278,12 @@ class Lienzo {
     cv.addEventListener("pointercancel", fin);
     // Safari: evita que el toque del lápiz seleccione texto o haga zoom
     cv.addEventListener("touchstart", (e) => { if (this.dedo || [...e.touches].some((t) => t.touchType === "stylus")) e.preventDefault(); }, { passive: false });
+  }
+  // desplazamiento del trazo en px de pantalla: menos de 4 px es un toque (para elegir la casilla), no un trazo
+  movioPoco(t) {
+    const p = t.p; let x0 = p[0], x1 = p[0], y0 = p[1], y1 = p[1];
+    for (let i = 2; i < p.length; i += 2) { x0 = Math.min(x0, p[i]); x1 = Math.max(x1, p[i]); y0 = Math.min(y0, p[i + 1]); y1 = Math.max(y1, p[i + 1]); }
+    return Math.max(x1 - x0, y1 - y0) * this.escala < 4;
   }
   borrarEn([x, y]) {
     const r2 = 22 * 22;
@@ -571,8 +577,8 @@ async function vistaGuia(nino, materia, sesion, admin = false) {
       if (tabla) {
         if (!grupos.has(tabla)) {
           // la barra queda fuera del contenedor con scroll lateral (si no, ni queda fija ni se queda quieta al correr la tabla)
-          const gc = new GrupoCeldas(), caja = h("div", { class: "tabla-scroll" });
-          tabla.replaceWith(caja); caja.append(tabla); caja.before(gc.el); grupos.set(tabla, gc);
+          const gc = new GrupoCeldas(), caja = h("div", { class: "tabla-scroll" }), todo = h("div", { class: "grupo-tabla" });
+          tabla.replaceWith(todo); caja.append(tabla); todo.append(gc.el, caja); grupos.set(tabla, gc); // el sticky termina donde termina la tabla
         }
         grupo = grupos.get(tabla);
       }
