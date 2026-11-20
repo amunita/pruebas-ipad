@@ -1,0 +1,1044 @@
+{
+ "id": "matematica",
+ "titulo": "Matemática",
+ "emoji": "🧮",
+ "intro": "<p>Vamos a dibujar un mapa. No un mapa de lo inteligente que eres, sino de por dónde has pasado. Hay temas de matemática que ya conoces de memoria, otros que viste alguna vez y se te borraron, y otros que simplemente nadie te ha enseñado, porque son de cursos que no te han tocado.</p>\n<p>En cada pregunta puedes dar una de tres respuestas, y <strong>las tres sirven igual</strong>:</p>\n<ol>\n<li><strong>La resuelves.</strong> Territorio conocido.</li>\n<li><strong>«Lo he visto, pero no me acuerdo».</strong> Niebla: pasaste por ahí, falta despejar.</li>\n<li><strong>«Esto no lo he visto nunca».</strong> Tierra sin explorar.</li>\n</ol>\n<p>La tercera es la más útil de todas. Un cartógrafo que deja un hueco en el mapa y escribe «aquí no he estado» hace un mapa mejor que el que rellena el hueco inventando. Si dices «no lo he visto» cuando es verdad, me ahorras semanas de adivinar. Si lo adivinas y le achuntas por suerte, el mapa queda malo y después te van a aburrir con cosas mal elegidas.</p>\n<p>Si algo no lo has visto pero te dan ganas de intentarlo igual, dilo así: «no lo he visto, pero pruebo». También sirve.</p>\n<p>No hay nota, no hay reloj y no hay respuestas que te dejen mal.</p>",
+ "estados": [
+  "La resuelvo",
+  "La he visto, pero no me acuerdo",
+  "Esto no lo he visto nunca"
+ ],
+ "extras": false,
+ "cierre": "¿Quieres revisar alguna antes de seguir?",
+ "etapas": [
+  {
+   "grupo": "Números",
+   "titulo": "Números · Tramo 1",
+   "intro": "",
+   "items": [
+    {
+     "codigo": "N1",
+     "titulo": "",
+     "enunciado": "",
+     "partes": [
+      {
+       "letra": "a",
+       "html": "<p>408 × 35</p>"
+      },
+      {
+       "letra": "b",
+       "html": "<p>2.952 ÷ 8</p>"
+      }
+     ]
+    },
+    {
+     "codigo": "N2",
+     "titulo": "",
+     "enunciado": "<p>Un escriba calculó 6 + 4 × 5 y le dio 50. Otro escriba dice que da 26. ¿Quién tiene razón, y por qué?</p>",
+     "partes": [
+      {
+       "letra": "",
+       "html": ""
+      }
+     ]
+    },
+    {
+     "codigo": "N3",
+     "titulo": "",
+     "enunciado": "",
+     "partes": [
+      {
+       "letra": "a",
+       "html": "<p>1/2 + 1/3</p>"
+      },
+      {
+       "letra": "b",
+       "html": "<p>¿Cuál es mayor: 3/5 o 5/8? ¿Cómo lo sabes?</p>"
+      }
+     ]
+    },
+    {
+     "codigo": "N4",
+     "titulo": "",
+     "enunciado": "",
+     "partes": [
+      {
+       "letra": "a",
+       "html": "<p>4,6 + 2,75</p>"
+      },
+      {
+       "letra": "b",
+       "html": "<p>Ordena de menor a mayor: 0,7 · 0,65 · 0,07</p>"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "grupo": "Números",
+   "titulo": "Números · Tramo 2",
+   "intro": "",
+   "items": [
+    {
+     "codigo": "N5",
+     "titulo": "",
+     "enunciado": "<p>En una torre hay dos campanas. Una suena cada 6 minutos y la otra cada 8 minutos. A mediodía suenan las dos juntas. ¿Cuántos minutos después vuelven a sonar juntas por primera vez?</p>",
+     "partes": [
+      {
+       "letra": "",
+       "html": ""
+      }
+     ]
+    },
+    {
+     "codigo": "N6",
+     "titulo": "",
+     "enunciado": "<p>¿El 91 es un número primo? ¿Y el 97? Explica cómo lo compruebas.</p>",
+     "partes": [
+      {
+       "letra": "",
+       "html": ""
+      }
+     ]
+    },
+    {
+     "codigo": "N7",
+     "titulo": "",
+     "enunciado": "<p>Para una poción se mezclan 2 tazas de savia por cada 3 tazas de agua. Si pones 12 tazas de agua, ¿cuántas tazas de savia necesitas?</p>",
+     "partes": [
+      {
+       "letra": "",
+       "html": ""
+      }
+     ]
+    },
+    {
+     "codigo": "N8",
+     "titulo": "",
+     "enunciado": "",
+     "partes": [
+      {
+       "letra": "a",
+       "html": "<p>¿Cuánto es el 25 % de 80?</p>"
+      },
+      {
+       "letra": "b",
+       "html": "<p>¿Qué es más: el 50 % de 30 o el 30 % de 50? ¿Por qué?</p>"
+      }
+     ]
+    },
+    {
+     "codigo": "N9",
+     "titulo": "",
+     "enunciado": "<p>2 1/2 − 3/4 (dos enteros y un medio, menos tres cuartos)</p>",
+     "partes": [
+      {
+       "letra": "",
+       "html": ""
+      }
+     ]
+    },
+    {
+     "codigo": "N10",
+     "titulo": "",
+     "enunciado": "",
+     "partes": [
+      {
+       "letra": "a",
+       "html": "<p>3,2 × 4</p>"
+      },
+      {
+       "letra": "b",
+       "html": "<p>8,4 ÷ 4</p>"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "grupo": "Números",
+   "titulo": "Números · Tramo 3",
+   "intro": "",
+   "items": [
+    {
+     "codigo": "N11",
+     "titulo": "",
+     "enunciado": "",
+     "partes": [
+      {
+       "letra": "a",
+       "html": "<p>−7 + 4</p>"
+      },
+      {
+       "letra": "b",
+       "html": "<p>3 − 8</p>"
+      },
+      {
+       "letra": "c",
+       "html": "<p>−5 − (−2)</p>"
+      }
+     ]
+    },
+    {
+     "codigo": "N12",
+     "titulo": "",
+     "enunciado": "<p>En una mina, un túnel está en el nivel −40 metros y otro en el nivel −15 metros. ¿Cuál túnel está más profundo? ¿Y cuál de los dos números es el mayor: −40 o −15?</p>",
+     "partes": [
+      {
+       "letra": "",
+       "html": ""
+      }
+     ]
+    },
+    {
+     "codigo": "N13",
+     "titulo": "",
+     "enunciado": "",
+     "partes": [
+      {
+       "letra": "a",
+       "html": "<p>3/5 × 10/9</p>"
+      },
+      {
+       "letra": "b",
+       "html": "<p>2/3 ÷ 4/5</p>"
+      }
+     ]
+    },
+    {
+     "codigo": "N14",
+     "titulo": "",
+     "enunciado": "<p>8 ÷ 0,5 da 16. Uno espera que al dividir el resultado sea más chico, pero aquí salió más grande que 8. ¿Por qué pasa eso?</p>",
+     "partes": [
+      {
+       "letra": "",
+       "html": ""
+      }
+     ]
+    },
+    {
+     "codigo": "N15",
+     "titulo": "",
+     "enunciado": "",
+     "partes": [
+      {
+       "letra": "a",
+       "html": "<p>En una biblioteca hay 40 libros y 12 son de mapas. ¿Qué porcentaje de los libros son de mapas?</p>"
+      },
+      {
+       "letra": "b",
+       "html": "<p>30 monedas son el 20 % de un tesoro. ¿Cuántas monedas tiene el tesoro completo?</p>"
+      }
+     ]
+    },
+    {
+     "codigo": "N16",
+     "titulo": "",
+     "enunciado": "",
+     "partes": [
+      {
+       "letra": "a",
+       "html": "<p>¿Cuánto es 10⁴ (10 elevado a 4)?</p>"
+      },
+      {
+       "letra": "b",
+       "html": "<p>¿Cuánto es 3,2 × 10³ (3,2 por 10 elevado a 3)?</p>"
+      }
+     ]
+    },
+    {
+     "codigo": "N17",
+     "titulo": "",
+     "enunciado": "",
+     "partes": [
+      {
+       "letra": "a",
+       "html": "<p>Escribe 45.000.000 en notación científica.</p>"
+      },
+      {
+       "letra": "b",
+       "html": "<p>¿Cuál es mayor: 9 × 10⁵ o 2 × 10⁶?</p>"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "grupo": "Números",
+   "titulo": "Números · Tramo 4",
+   "intro": "",
+   "items": [
+    {
+     "codigo": "N18",
+     "titulo": "",
+     "enunciado": "",
+     "partes": [
+      {
+       "letra": "a",
+       "html": "<p>(−6) × (−3)</p>"
+      },
+      {
+       "letra": "b",
+       "html": "<p>(−20) ÷ 4</p>"
+      },
+      {
+       "letra": "c",
+       "html": "<p>(−1/2) × 4/3</p>"
+      }
+     ]
+    },
+    {
+     "codigo": "N19",
+     "titulo": "",
+     "enunciado": "<p>Multiplicas −2 por sí mismo tres veces: (−2) × (−2) × (−2). ¿El resultado es positivo o negativo? ¿Y si multiplicas −2 por sí mismo diez veces? No hace falta calcular el segundo: basta decir el signo y por qué.</p>",
+     "partes": [
+      {
+       "letra": "",
+       "html": ""
+      }
+     ]
+    },
+    {
+     "codigo": "N20",
+     "titulo": "",
+     "enunciado": "",
+     "partes": [
+      {
+       "letra": "a",
+       "html": "<p>¿Cuánto es (2³)² (2 elevado a 3, y ese resultado elevado a 2)?</p>"
+      },
+      {
+       "letra": "b",
+       "html": "<p>2³ × 2⁴, ¿es lo mismo que 2⁷ o que 2¹²?</p>"
+      }
+     ]
+    },
+    {
+     "codigo": "N21",
+     "titulo": "",
+     "enunciado": "",
+     "partes": [
+      {
+       "letra": "a",
+       "html": "<p>¿Cuánto es la raíz cuadrada de 81?</p>"
+      },
+      {
+       "letra": "b",
+       "html": "<p>Un tablero cuadrado tiene 196 cm² de área. ¿Cuánto mide su lado?</p>"
+      }
+     ]
+    },
+    {
+     "codigo": "N22",
+     "titulo": "",
+     "enunciado": "<p>La raíz cuadrada de 50 no es un número entero. ¿Entre qué dos números enteros seguidos está? ¿Cómo lo sabes?</p>",
+     "partes": [
+      {
+       "letra": "",
+       "html": ""
+      }
+     ]
+    },
+    {
+     "codigo": "N23",
+     "titulo": "",
+     "enunciado": "",
+     "partes": [
+      {
+       "letra": "a",
+       "html": "<p>Una capa costaba 80 monedas y ahora cuesta 100. ¿En qué porcentaje subió el precio?</p>"
+      },
+      {
+       "letra": "b",
+       "html": "<p>Un arco cuesta 60 monedas y su precio sube un 15 %. ¿Cuánto cuesta ahora?</p>"
+      }
+     ]
+    },
+    {
+     "codigo": "N24",
+     "titulo": "",
+     "enunciado": "<p>¿Puede un precio subir más de un 100 %? ¿Puede bajar más de un 100 %? Explica las dos respuestas.</p>",
+     "partes": [
+      {
+       "letra": "",
+       "html": ""
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "grupo": "Álgebra",
+   "titulo": "Álgebra · Tramo 1",
+   "intro": "",
+   "items": [
+    {
+     "codigo": "A1",
+     "titulo": "",
+     "enunciado": "<p>Una máquina transforma números así:</p>\n<table>\n<thead>\n<tr>\n<th>Entra</th>\n<th>1</th>\n<th>2</th>\n<th>3</th>\n<th>4</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>Sale</td>\n<td>5</td>\n<td>9</td>\n<td>13</td>\n<td>17</td>\n</tr>\n</tbody>\n</table>",
+     "partes": [
+      {
+       "letra": "a",
+       "html": "<p>¿Qué sale si entra el 10?</p>"
+      },
+      {
+       "letra": "b",
+       "html": "<p>¿Qué sale si entra el 25?</p>"
+      },
+      {
+       "letra": "c",
+       "html": "<p>Di la regla de la máquina, para que sirva con cualquier número.</p>"
+      }
+     ]
+    },
+    {
+     "codigo": "A2",
+     "titulo": "",
+     "enunciado": "<p>Si n es un número cualquiera, ¿cómo se escribe con letras y signos «el doble de n, menos 3»? ¿Cuánto vale eso cuando n es 7?</p>",
+     "partes": [
+      {
+       "letra": "",
+       "html": ""
+      }
+     ]
+    },
+    {
+     "codigo": "A3",
+     "titulo": "",
+     "enunciado": "<p>Encuentra el valor de x: 3x + 5 = 26</p>",
+     "partes": [
+      {
+       "letra": "",
+       "html": ""
+      }
+     ]
+    },
+    {
+     "codigo": "A4",
+     "titulo": "",
+     "enunciado": "<p>Alguien dice que x = 4 es la solución de 5x − 2 = 18. ¿Cómo puedes comprobar si es cierto sin resolver la ecuación? ¿Es cierto?</p>",
+     "partes": [
+      {
+       "letra": "",
+       "html": ""
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "grupo": "Álgebra",
+   "titulo": "Álgebra · Tramo 2",
+   "intro": "",
+   "items": [
+    {
+     "codigo": "A5",
+     "titulo": "",
+     "enunciado": "<p>Junta lo que se pueda juntar, para que quede lo más corto posible: 3a + 5b − a + 2b</p>",
+     "partes": [
+      {
+       "letra": "",
+       "html": ""
+      }
+     ]
+    },
+    {
+     "codigo": "A6",
+     "titulo": "",
+     "enunciado": "<p>¿Es lo mismo 2(x + 3) que 2x + 3? Pruébalo con x = 1 y di qué pasó.</p>",
+     "partes": [
+      {
+       "letra": "",
+       "html": ""
+      }
+     ]
+    },
+    {
+     "codigo": "A7",
+     "titulo": "",
+     "enunciado": "<p>Encuentra el valor de x: 5x − 4 = 2x + 11</p>",
+     "partes": [
+      {
+       "letra": "",
+       "html": ""
+      }
+     ]
+    },
+    {
+     "codigo": "A8",
+     "titulo": "",
+     "enunciado": "<p>¿Qué números cumplen 2x &gt; 10? ¿El 5 es uno de ellos?</p>",
+     "partes": [
+      {
+       "letra": "",
+       "html": ""
+      }
+     ]
+    },
+    {
+     "codigo": "A9",
+     "titulo": "",
+     "enunciado": "<p>5 flechas cuestan 40 monedas y todas valen lo mismo. ¿Cuánto cuestan 12 flechas?</p>",
+     "partes": [
+      {
+       "letra": "",
+       "html": ""
+      }
+     ]
+    },
+    {
+     "codigo": "A10",
+     "titulo": "",
+     "enunciado": "<p>Un saco de avena alcanza para alimentar a 6 caballos durante 8 días. Si los caballos fueran 12 y cada uno comiera lo mismo, ¿para cuántos días alcanzaría el saco? ¿En qué se diferencia este problema del de las flechas?</p>",
+     "partes": [
+      {
+       "letra": "",
+       "html": ""
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "grupo": "Álgebra",
+   "titulo": "Álgebra · Tramo 3",
+   "intro": "",
+   "items": [
+    {
+     "codigo": "A11",
+     "titulo": "",
+     "enunciado": "<p>Una regla transforma cada número x en otro número y, así: y = 3x − 2.</p>",
+     "partes": [
+      {
+       "letra": "a",
+       "html": "<p>¿Cuánto vale y cuando x es 4?</p>"
+      },
+      {
+       "letra": "b",
+       "html": "<p>¿Cuánto tiene que valer x para que y sea 19?</p>"
+      }
+     ]
+    },
+    {
+     "codigo": "A12",
+     "titulo": "",
+     "enunciado": "<p>En la regla y = 2x + 5:</p>",
+     "partes": [
+      {
+       "letra": "a",
+       "html": "<p>Si x aumenta en 1, ¿en cuánto aumenta y?</p>"
+      },
+      {
+       "letra": "b",
+       "html": "<p>¿Cuánto vale y cuando x es 0?</p>"
+      },
+      {
+       "letra": "c",
+       "html": "<p>Si dibujaras esa regla como una recta en un gráfico, ¿pasaría por el punto (0, 0)?</p>"
+      }
+     ]
+    },
+    {
+     "codigo": "A13",
+     "titulo": "",
+     "enunciado": "<p>Prestas 1.000 monedas con un interés simple de 5 % al año. Al cabo de 3 años, ¿cuánto interés ganaste? ¿Cuánto te devuelven en total?</p>",
+     "partes": [
+      {
+       "letra": "",
+       "html": ""
+      }
+     ]
+    },
+    {
+     "codigo": "A14",
+     "titulo": "",
+     "enunciado": "<p>Con interés simple, ¿el interés del tercer año es mayor, menor o igual que el del primer año? ¿Por qué?</p>",
+     "partes": [
+      {
+       "letra": "",
+       "html": ""
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "grupo": "Geometría y medición",
+   "titulo": "Geometría y medición · Tramo 1",
+   "intro": "",
+   "items": [
+    {
+     "codigo": "G1",
+     "titulo": "",
+     "enunciado": "",
+     "partes": [
+      {
+       "letra": "a",
+       "html": "<p>Dos ángulos de un triángulo miden 50° y 60°. ¿Cuánto mide el tercero?</p>"
+      },
+      {
+       "letra": "b",
+       "html": "<p>¿Puede un triángulo tener dos ángulos rectos? ¿Por qué?</p>"
+      }
+     ]
+    },
+    {
+     "codigo": "G2",
+     "titulo": "",
+     "enunciado": "<p>Dos rectas se cruzan y forman cuatro ángulos. Uno de ellos mide 35°. ¿Cuánto miden los otros tres?</p>",
+     "partes": [
+      {
+       "letra": "",
+       "html": ""
+      }
+     ]
+    },
+    {
+     "codigo": "G3",
+     "titulo": "",
+     "enunciado": "<p>Quieres cubrir un piso con baldosas todas iguales, sin dejar huecos y sin que se monten unas sobre otras. ¿Con cuáles de estas formas se puede y con cuál no? Triángulo equilátero · cuadrado · pentágono regular · hexágono regular.</p>",
+     "partes": [
+      {
+       "letra": "",
+       "html": ""
+      }
+     ]
+    },
+    {
+     "codigo": "G4",
+     "titulo": "",
+     "enunciado": "<p>Un cubo tiene aristas de 3 cm.</p>",
+     "partes": [
+      {
+       "letra": "a",
+       "html": "<p>¿Cuánto mide el área de todas sus caras juntas?</p>"
+      },
+      {
+       "letra": "b",
+       "html": "<p>¿Cuánto mide su volumen?</p>"
+      }
+     ]
+    },
+    {
+     "codigo": "G5",
+     "titulo": "",
+     "enunciado": "<p>Una caja con forma de ladrillo mide 5 cm de largo, 4 cm de ancho y 2 cm de alto.</p>",
+     "partes": [
+      {
+       "letra": "a",
+       "html": "<p>¿Cuánto mide su volumen?</p>"
+      },
+      {
+       "letra": "b",
+       "html": "<p>Si la desarmas y la dejas plana (eso es su red), ¿cuántas caras tiene y cuánto mide el área de todas juntas?</p>"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "grupo": "Geometría y medición",
+   "titulo": "Geometría y medición · Tramo 2",
+   "intro": "",
+   "items": [
+    {
+     "codigo": "G6",
+     "titulo": "",
+     "enunciado": "<p>¿Cuánto suman los cuatro ángulos interiores de un cuadrilátero cualquiera? ¿Cómo se puede saber sin medirlos?</p>",
+     "partes": [
+      {
+       "letra": "",
+       "html": ""
+      }
+     ]
+    },
+    {
+     "codigo": "G7",
+     "titulo": "",
+     "enunciado": "<p>Un hexágono regular tiene sus seis lados iguales y sus seis ángulos iguales. ¿Cuánto mide cada ángulo interior?</p>",
+     "partes": [
+      {
+       "letra": "",
+       "html": ""
+      }
+     ]
+    },
+    {
+     "codigo": "G8",
+     "titulo": "",
+     "enunciado": "<p>Un círculo tiene 10 cm de radio. Usa 3,14 como valor de π.</p>",
+     "partes": [
+      {
+       "letra": "a",
+       "html": "<p>¿Cuánto mide su perímetro (el contorno)?</p>"
+      },
+      {
+       "letra": "b",
+       "html": "<p>¿Cuánto mide su área?</p>"
+      }
+     ]
+    },
+    {
+     "codigo": "G9",
+     "titulo": "",
+     "enunciado": "<p>¿Qué es el número π? Dilo con tus palabras: de dónde sale, qué mide.</p>",
+     "partes": [
+      {
+       "letra": "",
+       "html": ""
+      }
+     ]
+    },
+    {
+     "codigo": "G10",
+     "titulo": "",
+     "enunciado": "",
+     "partes": [
+      {
+       "letra": "a",
+       "html": "<p>Un triángulo tiene 10 cm de base y 6 cm de altura. ¿Cuánto mide su área?</p>"
+      },
+      {
+       "letra": "b",
+       "html": "<p>Un paralelogramo tiene 8 cm de base y 5 cm de altura. ¿Cuánto mide su área?</p>"
+      }
+     ]
+    },
+    {
+     "codigo": "G11",
+     "titulo": "",
+     "enunciado": "<p>Un paralelogramo tiene 8 cm de base, su lado inclinado mide 6 cm y su altura mide 5 cm. Para el área se multiplica 8 × 5 y no 8 × 6. ¿Por qué?</p>",
+     "partes": [
+      {
+       "letra": "",
+       "html": ""
+      }
+     ]
+    },
+    {
+     "codigo": "G12",
+     "titulo": "",
+     "enunciado": "<p>En un plano con dos ejes, partes en el punto (0, 0), avanzas 4 hacia la derecha y bajas 3.</p>",
+     "partes": [
+      {
+       "letra": "a",
+       "html": "<p>¿En qué punto quedaste? Dilo con sus dos coordenadas.</p>"
+      },
+      {
+       "letra": "b",
+       "html": "<p>¿Qué distancia hay entre el punto (2, 5) y el punto (2, −1)?</p>"
+      }
+     ]
+    },
+    {
+     "codigo": "G13",
+     "titulo": "",
+     "enunciado": "<p>Tres esquinas de un rectángulo están en los puntos (1, 1), (5, 1) y (5, 4). ¿Dónde está la cuarta esquina?</p>",
+     "partes": [
+      {
+       "letra": "",
+       "html": ""
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "grupo": "Geometría y medición",
+   "titulo": "Geometría y medición · Tramo 3",
+   "intro": "",
+   "items": [
+    {
+     "codigo": "G14",
+     "titulo": "",
+     "enunciado": "<p>Una carpa tiene forma de prisma: su frente es un triángulo de 6 m de base y 4 m de altura, y la carpa mide 10 m de largo. ¿Cuánto mide su volumen?</p>",
+     "partes": [
+      {
+       "letra": "",
+       "html": ""
+      }
+     ]
+    },
+    {
+     "codigo": "G15",
+     "titulo": "",
+     "enunciado": "<p>Un barril tiene forma de cilindro: 3 dm de radio y 10 dm de alto. Usa 3,14 como valor de π.</p>",
+     "partes": [
+      {
+       "letra": "a",
+       "html": "<p>¿Cuánto mide su volumen?</p>"
+      },
+      {
+       "letra": "b",
+       "html": "<p>¿Qué tienen en común la manera de calcular el volumen de la carpa y la del barril?</p>"
+      }
+     ]
+    },
+    {
+     "codigo": "G16",
+     "titulo": "",
+     "enunciado": "",
+     "partes": [
+      {
+       "letra": "a",
+       "html": "<p>En un triángulo rectángulo, los dos lados que forman el ángulo recto miden 6 cm y 8 cm. ¿Cuánto mide el tercer lado?</p>"
+      },
+      {
+       "letra": "b",
+       "html": "<p>Una escalera de 13 m está apoyada en un muro vertical. El pie de la escalera está a 5 m del muro. ¿A qué altura del muro llega la escalera?</p>"
+      }
+     ]
+    },
+    {
+     "codigo": "G17",
+     "titulo": "",
+     "enunciado": "<p>Un triángulo tiene lados de 4 cm, 5 cm y 6 cm. ¿Tiene un ángulo recto? ¿Cómo se puede saber sin dibujarlo?</p>",
+     "partes": [
+      {
+       "letra": "",
+       "html": ""
+      }
+     ]
+    },
+    {
+     "codigo": "G18",
+     "titulo": "",
+     "enunciado": "<p>El punto (3, 2) está en un plano con dos ejes.</p>",
+     "partes": [
+      {
+       "letra": "a",
+       "html": "<p>Lo trasladas 4 hacia la izquierda y 1 hacia arriba. ¿Dónde queda?</p>"
+      },
+      {
+       "letra": "b",
+       "html": "<p>Vuelve al punto (3, 2). Ahora lo reflejas usando el eje vertical (el eje Y) como espejo. ¿Dónde queda?</p>"
+      }
+     ]
+    },
+    {
+     "codigo": "G19",
+     "titulo": "",
+     "enunciado": "",
+     "partes": [
+      {
+       "letra": "a",
+       "html": "<p>De estos cuatro movimientos, ¿cuál cambia el tamaño de una figura? Traslación · reflexión · rotación · ampliación.</p>"
+      },
+      {
+       "letra": "b",
+       "html": "<p>El punto (2, 5) gira media vuelta (180°) alrededor del punto (0, 0). ¿Dónde queda?</p>"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "grupo": "Datos y probabilidad",
+   "titulo": "Datos y probabilidad · Tramo 1",
+   "intro": "",
+   "items": [
+    {
+     "codigo": "D1",
+     "titulo": "",
+     "enunciado": "<p>Se le preguntó a 60 personas cuál es su pieza de ajedrez favorita y el resultado se dibujó en un gráfico circular (de torta). El sector del caballo ocupa justo un cuarto del círculo.</p>",
+     "partes": [
+      {
+       "letra": "a",
+       "html": "<p>¿Cuántas personas eligieron el caballo?</p>"
+      },
+      {
+       "letra": "b",
+       "html": "<p>¿Cuántos grados mide el ángulo de ese sector?</p>"
+      }
+     ]
+    },
+    {
+     "codigo": "D2",
+     "titulo": "",
+     "enunciado": "<p>Un gráfico de barras dobles muestra los libros que pidieron dos cursos en la biblioteca. Para cada día hay dos barras juntas, una por curso:</p>\n<table>\n<thead>\n<tr>\n<th></th>\n<th>Curso A</th>\n<th>Curso B</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>Lunes</td>\n<td>12</td>\n<td>7</td>\n</tr>\n<tr>\n<td>Martes</td>\n<td>9</td>\n<td>15</td>\n</tr>\n</tbody>\n</table>",
+     "partes": [
+      {
+       "letra": "a",
+       "html": "<p>¿Qué curso pidió más libros sumando los dos días?</p>"
+      },
+      {
+       "letra": "b",
+       "html": "<p>¿Para qué sirve poner las dos barras juntas, en vez de hacer un gráfico para cada curso?</p>"
+      }
+     ]
+    },
+    {
+     "codigo": "D3",
+     "titulo": "",
+     "enunciado": "<p>Lanzas una moneda 100 veces. ¿Van a salir exactamente 50 caras? ¿Qué esperarías que pase?</p>",
+     "partes": [
+      {
+       "letra": "",
+       "html": ""
+      }
+     ]
+    },
+    {
+     "codigo": "D4",
+     "titulo": "",
+     "enunciado": "<p>Lanzas una moneda y sale cara cinco veces seguidas. En el sexto lanzamiento, ¿es más probable que salga sello, más probable que salga cara, o ninguna de las dos? ¿Por qué?</p>",
+     "partes": [
+      {
+       "letra": "",
+       "html": ""
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "grupo": "Datos y probabilidad",
+   "titulo": "Datos y probabilidad · Tramo 2",
+   "intro": "",
+   "items": [
+    {
+     "codigo": "D5",
+     "titulo": "",
+     "enunciado": "<p>Quieres saber cuál es el deporte favorito de los 600 alumnos de un colegio. Como no puedes preguntarles a todos, les preguntas a los 20 del equipo de fútbol. ¿Qué problema tiene esa manera de hacerlo? ¿A quiénes les preguntarías tú?</p>",
+     "partes": [
+      {
+       "letra": "",
+       "html": ""
+      }
+     ]
+    },
+    {
+     "codigo": "D6",
+     "titulo": "",
+     "enunciado": "<p>Cinco jugadores sacaron estos puntajes: 3, 5, 5, 8, 9.</p>",
+     "partes": [
+      {
+       "letra": "a",
+       "html": "<p>¿Cuál es la media (el promedio)?</p>"
+      },
+      {
+       "letra": "b",
+       "html": "<p>¿Cuál es la mediana?</p>"
+      },
+      {
+       "letra": "c",
+       "html": "<p>¿Cuál es la moda?</p>"
+      }
+     ]
+    },
+    {
+     "codigo": "D7",
+     "titulo": "",
+     "enunciado": "<p>En una aldea viven 10 personas. Nueve ganan 10 monedas al mes y una gana 910. El promedio da 100 monedas por persona. ¿Ese promedio cuenta bien cómo vive la gente de la aldea? ¿Qué otro número lo contaría mejor?</p>",
+     "partes": [
+      {
+       "letra": "",
+       "html": ""
+      }
+     ]
+    },
+    {
+     "codigo": "D8",
+     "titulo": "",
+     "enunciado": "<p>Una ruleta está dividida en 8 partes iguales: 3 rojas, 4 azules y 1 dorada. La haces girar una vez.</p>",
+     "partes": [
+      {
+       "letra": "a",
+       "html": "<p>¿Cuál es la probabilidad de que caiga en la dorada?</p>"
+      },
+      {
+       "letra": "b",
+       "html": "<p>¿Cuál es la probabilidad de que no caiga en azul?</p>"
+      }
+     ]
+    },
+    {
+     "codigo": "D9",
+     "titulo": "",
+     "enunciado": "<p>Lanzas un dado 60 veces y el 6 sale 14 veces.</p>",
+     "partes": [
+      {
+       "letra": "a",
+       "html": "<p>Según lo que pasó, ¿qué fracción de las veces salió el 6?</p>"
+      },
+      {
+       "letra": "b",
+       "html": "<p>En teoría, ¿qué fracción de las veces debería salir?</p>"
+      },
+      {
+       "letra": "c",
+       "html": "<p>¿Eso demuestra que el dado está cargado?</p>"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "grupo": "Datos y probabilidad",
+   "titulo": "Datos y probabilidad · Tramo 3",
+   "intro": "",
+   "items": [
+    {
+     "codigo": "D10",
+     "titulo": "",
+     "enunciado": "<p>Siete arqueros anotaron estos puntos, ya ordenados: 2, 4, 5, 7, 8, 10, 12.</p>",
+     "partes": [
+      {
+       "letra": "a",
+       "html": "<p>¿Cuál es la mediana?</p>"
+      },
+      {
+       "letra": "b",
+       "html": "<p>¿Cuáles son el primer cuartil y el tercer cuartil?</p>"
+      }
+     ]
+    },
+    {
+     "codigo": "D11",
+     "titulo": "",
+     "enunciado": "<p>Un diagrama de cajón (de caja y bigotes) resume las edades de los dragones de un valle:</p>\n<pre><code>10          18    22        30                        50\n |-----------[=====|=========]-------------------------|\n</code></pre>\n<p>El bigote izquierdo va de 10 a 18, la caja va de 18 a 30 con una raya en 22, y el bigote derecho va de 30 a 50.</p>",
+     "partes": [
+      {
+       "letra": "a",
+       "html": "<p>¿Cuál es la mediana?</p>"
+      },
+      {
+       "letra": "b",
+       "html": "<p>¿Cuánto mide el rango intercuartil (el ancho de la caja)?</p>"
+      },
+      {
+       "letra": "c",
+       "html": "<p>¿Dónde están más juntas las edades: en el cuarto de los dragones más jóvenes o en el cuarto de los más viejos?</p>"
+      }
+     ]
+    },
+    {
+     "codigo": "D12",
+     "titulo": "",
+     "enunciado": "<p>Para una misión puedes elegir 1 capa entre 3, 1 espada entre 4 y 1 escudo entre 2. ¿Cuántos equipos distintos se pueden armar?</p>",
+     "partes": [
+      {
+       "letra": "",
+       "html": ""
+      }
+     ]
+    },
+    {
+     "codigo": "D13",
+     "titulo": "",
+     "enunciado": "<p>Un candado tiene 3 ruedas y cada rueda tiene los dígitos del 0 al 9.</p>",
+     "partes": [
+      {
+       "letra": "a",
+       "html": "<p>¿Cuántas claves distintas existen?</p>"
+      },
+      {
+       "letra": "b",
+       "html": "<p>¿Cuántas existen si en la clave no se puede repetir ningún dígito?</p>"
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}
