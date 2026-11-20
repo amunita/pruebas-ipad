@@ -1,0 +1,851 @@
+{
+ "id": "lenguaje",
+ "titulo": "Lenguaje",
+ "emoji": "🎒",
+ "intro": "<p>Vamos a mirar qué hay en tu mochila: qué cosas ya sabes hacer, cuáles sabes hacer pero todavía no sabes cómo se llaman, y cuáles son nuevas. No tiene nota ni reloj. «Esto no lo he visto» es una respuesta válida y útil.</p>",
+ "estados": [
+  "Lo hice o lo sé",
+  "Me suena, pero no sé bien",
+  "Esto no lo he visto nunca"
+ ],
+ "extras": false,
+ "todas": true,
+ "cierre": "¿Quieres revisarlo o lo dejamos así?",
+ "etapas": [
+  {
+   "grupo": "Escribir",
+   "titulo": "Escribir",
+   "intro": "<p>Son tres textos breves, tecleados: uno para <strong>contar</strong>, uno para <strong>explicar</strong> y uno para <strong>convencer</strong>. En cada uno eliges el tema del menú o propones el tuyo. Cada tarea tiene los mismos cuatro pasos:</p>\n<ol>\n<li><strong>Cuéntamelo primero.</strong> Antes de escribir nada, cuéntale tu texto en voz alta a tu papá, como te salga, de principio a fin. Él solo escucha y graba; no interrumpe ni opina.</li>\n<li><strong>Si quieres, anota algo antes de empezar.</strong> Tienes una página en blanco para lo que te sirva: palabras sueltas, un orden, nada. No es obligatorio.</li>\n<li><strong>Tecléalo.</strong> El largo es una orientación, no una regla.</li>\n<li><strong>«¿Quieres revisarlo o lo dejamos así?»</strong> Si lo revisas, cambia todo lo que quieras.</li>\n</ol>",
+   "items": [
+    {
+     "codigo": "E-1",
+     "titulo": "Contar",
+     "enunciado": "<p>Escribe un cuento o un recuerdo. Elige:</p>\n<ul>\n<li><strong>a)</strong> Un cuento que empiece con esta oración: «La puerta del ropero no daba a la pared».</li>\n<li><strong>b)</strong> Algo que te pasó de verdad, en un viaje o en otro lugar donde hayas vivido, y que todavía recuerdas con detalle.</li>\n<li><strong>c)</strong> Una escena de un libro o un cómic que te guste, contada por otro personaje: el villano, el caballo, el aprendiz o alguien que solo miraba.</li>\n<li><strong>d)</strong> Tu propia idea.</li>\n</ul>",
+     "partes": [
+      {
+       "letra": "",
+       "html": ""
+      }
+     ]
+    },
+    {
+     "codigo": "E-2",
+     "titulo": "Explicar",
+     "enunciado": "<p>Explica algo que sabes bien a alguien que no sabe nada del tema. Elige:</p>\n<ul>\n<li><strong>a)</strong> Cómo se hace algo que tú sabes hacer: afinar una guitarra, ganar en un juego, preparar algo de comer.</li>\n<li><strong>b)</strong> Cómo funciona algo: un instrumento, las reglas de un deporte, la magia o el mundo de un libro.</li>\n<li><strong>c)</strong> En qué se diferencia ir al colegio en otro país de ir al colegio en Chile, para un niño que nunca ha salido de Chile.</li>\n<li><strong>d)</strong> Otro tema que domines.</li>\n</ul>",
+     "partes": [
+      {
+       "letra": "",
+       "html": ""
+      }
+     ]
+    },
+    {
+     "codigo": "E-3",
+     "titulo": "Convencer",
+     "enunciado": "<p>Elige una pregunta, decide qué piensas y escribe para convencer a alguien que piensa lo contrario.</p>\n<ul>\n<li><strong>a)</strong> ¿Leer cómics es tan «leer» como leer libros sin dibujos?</li>\n<li><strong>b)</strong> ¿Es mejor leer un libro en el idioma en que fue escrito o traducido al tuyo?</li>\n<li><strong>c)</strong> ¿Deberían los niños elegir qué estudian en el colegio?</li>\n<li><strong>d)</strong> ¿Está bien usar una inteligencia artificial para hacer las tareas?</li>\n<li><strong>e)</strong> Algo en lo que no estás de acuerdo con los adultos.</li>\n</ul>",
+     "partes": [
+      {
+       "letra": "",
+       "html": ""
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "grupo": "Corrector de pruebas",
+   "titulo": "Corrector de pruebas",
+   "intro": "<p>Las editoriales tienen una persona que lee cada libro antes de imprimirlo y caza los errores que se le pasaron al autor. Hoy ese trabajo es tuyo. En cada texto el autor dejó escapar una cantidad exacta de errores, y te la decimos.</p>\n<p>Cómo se hace: abre una copia del texto y corrige encima, tecleando. Si prefieres, léelo y di los errores en voz alta. Cuando creas que terminaste, tu papá te dirá cuántos encontraste y cuántos quedan, sin decirte dónde, y tú decides si los sigues buscando. Al final de cada texto te preguntará por dos o tres de los que arreglaste: «¿cómo supiste?». Vale responder con una regla y vale responder «porque suena así» o «porque se ve raro».</p>\n<p>Un error es una sola palabra mal escrita, o un solo signo que falta o que sobra. Elige el orden de los textos.</p>",
+   "items": [
+    {
+     "codigo": "TextoA",
+     "titulo": "El último día del campamento",
+     "enunciado": "<p><strong>Hay 12 errores, todos de tildes: algunas faltan y otras sobran.</strong></p>",
+     "partes": [
+      {
+       "letra": "",
+       "html": ""
+      }
+     ],
+     "prefill": "El ultimo día del campamento, Tomás se despertó antes que el sol. Había soñado con un dragón que dormía bajo el volcan, y todavia le latía rápido el corazon. Salió de la carpa sin hacer ruído y caminó hasta el lago. «¿Qué haría un explorador de verdad?», pensó. Se sentó en una roca y esperó. De pronto vió un pájaro azul que cruzaba el cielo y se posaba en el arbol mas alto. A el le pareció una señal, aunque no sabía de qué. Cuando volvió, su mamá le preguntó donde había estado. Tomás solo sonrió. «Tu no me lo creerías», pensó, y se sirvió un te."
+    },
+    {
+     "codigo": "TextoB",
+     "titulo": "Carta desde la nieve",
+     "enunciado": "<p><strong>Hay 12 errores: son de letras (una letra cambiada por otra que suena igual, o una que falta) y de mayúsculas (algunas faltan y otras sobran). Las tildes y los signos están bien.</strong></p>",
+     "partes": [
+      {
+       "letra": "",
+       "html": ""
+      }
+     ],
+     "prefill": "Querida Valentina:\n\nTe escribo desde Toronto, donde ya empesó el invierno. El Lunes ubo una nebada tan fuerte que cancelaron las clases, así que fui con mi hermano a recojer leña. Él se calló dos veces y yo me reí hasta que me dolió la barriga. Después hisimos una fogata y mi vecino, que es Canadiense, nos enseñó una canción en francés.\n\nEn Diciembre vamos a viajar a chile para pasar la Navidad con los avuelos. Tengo muchas ganas de ir a la playa, comer cerezas y andar en bicicleta sin guantes. ¿Todavía tienes el dibujo del zorro que te regalé? Yo guardé el tullo en una caja especial y lo protejo de la humedad. Ojalá nos veamos pronto.\n\nUn abrazo,\n\nMartín"
+    },
+    {
+     "codigo": "TextoC",
+     "titulo": "La maqueta del volcán",
+     "enunciado": "<p><strong>Hay 10 errores, todos de signos: comas, puntos y signos de pregunta o de exclamación. Algunos faltan y otros sobran. Las letras y las tildes están bien.</strong></p>",
+     "partes": [
+      {
+       "letra": "",
+       "html": ""
+      }
+     ],
+     "prefill": "Hola Diego:\n\nVas a venir el sábado a mi casa? Vamos a armar la maqueta del volcán con Rocío Benjamín y mi primo Lucas. Mi papá, que es ingeniero nos va a prestar sus herramientas Necesitamos cartón, pegamento, témpera roja, y una botella de plástico. Yo quería hacerla más grande pero no cabe por la puerta de la sala. No te olvides de traer tu delantal! La última vez quedamos todos manchados. Sin embargo valió la pena. Los niños del otro curso, dijeron que era la mejor maqueta del colegio.\n\nAvísame si puedes.\n\nNicolás"
+    },
+    {
+     "codigo": "TextoD",
+     "titulo": "El paseo a las ballenas",
+     "enunciado": "<p><strong>Hay 10 errores. Son palabras que suenan igual (o casi igual) que otras y que se escriben distinto según lo que quieren decir. A veces la diferencia es escribirlas juntas o separadas.</strong></p>",
+     "partes": [
+      {
+       "letra": "",
+       "html": ""
+      }
+     ],
+     "prefill": "No sé porque el profesor Rojas tubo que cambiar la fecha del paseo, pero ya está echo. Vamos haber las ballenas el viernes, sino llueve. Mi mamá dice que no hay que llevar mucha ropa, sino una buena parka, porque hay siempre corre viento. Ojalá halla sol. Mi hermana a ido dos veces y también quiere ir de nuevo. Por si acaso, voy a hechar la cámara a la mochila. A veces las ballenas saltan muy cerca del bote, osea, a pocos metros."
+    },
+    {
+     "codigo": "Dictado",
+     "titulo": "",
+     "enunciado": "<p>Tu papá te lee un texto corto y tú lo tecleas. Primero lo lee entero para que sepas de qué se trata; después, de a poco. Puedes pedirle que repita todas las veces que quieras. No te va a decir los signos ni las tildes: los pones tú donde creas que van.</p>",
+     "partes": [
+      {
+       "letra": "",
+       "html": ""
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "grupo": "Usar y nombrar",
+   "titulo": "De oído",
+   "intro": "<p>Hablas y escribes español muy bien: armas las oraciones sin pensarlo. Esta parte tiene dos secciones. La Sección A es corta y solo confirma eso. La Sección B es la importante y busca otra cosa: si conoces <strong>los nombres y las reglas</strong> de lo que ya sabes hacer. Es como tocar una canción de oído y después aprender cómo se llaman las notas.</p>\n<p>Lo más probable es que muchas cosas las sepas hacer y no sepas cómo se llaman. Esa es una buena noticia: la parte difícil ya la tienes y solo falta ponerle nombre.</p>",
+   "items": [
+    {
+     "codigo": "UsoA",
+     "titulo": "De oído",
+     "enunciado": "",
+     "partes": [
+      {
+       "letra": "1",
+       "rotulo": "",
+       "html": "<p>«Ayer ocurrieron muchos temblores». Dila de nuevo usando el verbo «haber» en vez de «ocurrieron».</p>"
+      },
+      {
+       "letra": "2",
+       "rotulo": "",
+       "html": "<p>«Los niños del curso llegaron temprano y estaban contentos». Dila de nuevo empezando con «La gente del curso…».</p>"
+      },
+      {
+       "letra": "3, 4 y 5",
+       "rotulo": "",
+       "html": "<p>Esto está contado como si pasara hoy. Cuéntalo como si hubiera pasado ayer:</p>\n<p>Hoy ando todo el día por el bosque. Conduzco el carro del maestro. El perro del guardián me huele las botas y satisface su curiosidad.</p>"
+      },
+      {
+       "letra": "6",
+       "rotulo": "",
+       "html": "<p>«Cabemos todos en el auto». Termina esta otra: «No creo que…».</p>"
+      },
+      {
+       "letra": "7",
+       "rotulo": "",
+       "html": "<p>«No tengo alas; por eso no vuelo hasta la cordillera». Termina esta otra: «Si yo…».</p>"
+      },
+      {
+       "letra": "8",
+       "rotulo": "",
+       "html": "<p>El mago dijo: «Traigan una moneda y no digan nada». Termina esta otra: «El mago les pidió que…».</p>"
+      },
+      {
+       "letra": "9 a 12",
+       "rotulo": "",
+       "html": "<p>Tres de estas cuatro oraciones están traducidas a medias del inglés y una está perfecta. Di cada una como suena natural en español.</p>\n<ul>\n<li>Mi tío aplicó a un trabajo en un banco.</li>\n<li>Esa explicación no hace sentido.</li>\n<li>Actualmente vivimos en el sur; antes vivíamos en Santiago.</li>\n<li>Cuando vi la hora, realicé que había perdido el bus.</li>\n</ul>"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "grupo": "Usar y nombrar",
+   "titulo": "Los nombres de las piezas",
+   "intro": "<p>Son ocho bloques y tú eliges el orden. Cada bloque tiene los mismos tres pasos:</p>\n<ol>\n<li><strong>¿Te suena?</strong> Tu papá te lee unas palabras. De cada una dices: «la conozco», «me suena» o «nunca la oí». Las tres respuestas sirven.</li>\n<li><strong>Sin nombres.</strong> Preguntas sobre ejemplos, que se responden con el oído y pensando. No hace falta ninguna palabra especial.</li>\n<li><strong>Con nombres.</strong> Solo para las palabras que conozcas. Vale decirlas en inglés (<em>noun</em>, <em>verb</em>, <em>past tense</em>) y vale usar los símbolos que conozcas.</li>\n</ol>",
+   "items": [
+    {
+     "codigo": "T-1",
+     "titulo": "Golpes de voz",
+     "enunciado": "",
+     "partes": [
+      {
+       "letra": "a",
+       "rotulo": "Sin nombres",
+       "html": "<p>Di «poeta» y «pueblo» dando un golpe en la mesa por cada golpe de voz. ¿Cuántos tiene cada una? En las dos hay dos vocales juntas: ¿por qué crees que en una se separan y en la otra no?</p>"
+      },
+      {
+       "letra": "b",
+       "rotulo": "",
+       "html": "<p>Haz lo mismo con «ciudad», «país», «aire» y «río».</p>"
+      },
+      {
+       "letra": "c",
+       "rotulo": "",
+       "html": "<p>¿Cuál es el golpe que suena más fuerte en cada palabra?: «camino», «caminó», «médico».</p>"
+      },
+      {
+       "letra": "d",
+       "rotulo": "",
+       "html": "<p>«Buey» y «Uruguay»: ¿cuántas vocales seguidas caben en un solo golpe de voz?</p>"
+      },
+      {
+       "letra": "e",
+       "rotulo": "Con nombres",
+       "html": "<p>¿Cómo se llama cada golpe de voz? ¿Y el que suena más fuerte?</p>"
+      },
+      {
+       "letra": "f",
+       "rotulo": "",
+       "html": "<p>De estas cuatro palabras, ¿cuáles tienen diptongo y cuáles tienen hiato?: «cielo», «caos», «María», «cuento».</p>"
+      },
+      {
+       "letra": "g",
+       "rotulo": "",
+       "html": "<p>¿Cómo se llama lo que pasa con las vocales de «buey»?</p>"
+      }
+     ],
+     "palabras": [
+      "sílaba",
+      "sílaba tónica",
+      "diptongo",
+      "hiato",
+      "triptongo"
+     ]
+    },
+    {
+     "codigo": "T-2",
+     "titulo": "La tilde y sus reglas",
+     "enunciado": "",
+     "partes": [
+      {
+       "letra": "a",
+       "rotulo": "Sin nombres",
+       "html": "<p>Ordena estas palabras en grupos según dónde suena el golpe fuerte: «canción», «árbol», «pájaro», «reloj», «mesa», «cuéntamelo».</p>"
+      },
+      {
+       "letra": "b",
+       "rotulo": "",
+       "html": "<p>Estas palabras suenan fuerte al final. Con tilde: «canción», «sofá», «compás». Sin tilde: «reloj», «pared», «feliz». ¿De qué depende? Fíjate en cómo terminan.</p>"
+      },
+      {
+       "letra": "c",
+       "rotulo": "",
+       "html": "<p>Estas suenan fuerte en el penúltimo golpe. Con tilde: «árbol», «lápiz», «fácil». Sin tilde: «mesa», «joven», «lunes». ¿De qué depende?</p>"
+      },
+      {
+       "letra": "d",
+       "rotulo": "",
+       "html": "<p>«Pájaro», «médico», «música». ¿Se te ocurre alguna palabra con el golpe fuerte en ese mismo lugar que no lleve tilde?</p>"
+      },
+      {
+       "letra": "e",
+       "rotulo": "",
+       "html": "<p>«Él tomó el té y no te convidó». Hay dos «el» y dos «te» que suenan igual. ¿Por qué crees que uno de cada par lleva tilde?</p>"
+      },
+      {
+       "letra": "f",
+       "rotulo": "Con nombres",
+       "html": "<p>¿Cómo se llama cada grupo de los que armaste en a)?</p>"
+      },
+      {
+       "letra": "g",
+       "rotulo": "",
+       "html": "<p>Di la regla completa: ¿cuándo llevan tilde las agudas?, ¿las graves?, ¿las esdrújulas?</p>"
+      },
+      {
+       "letra": "h",
+       "rotulo": "",
+       "html": "<p>¿Cómo se llama la tilde de «él» y de «té»?</p>"
+      },
+      {
+       "letra": "i",
+       "rotulo": "",
+       "html": "<p>«Río» suena fuerte en el penúltimo golpe y termina en vocal: según la regla, no debería llevar tilde. ¿Por qué la lleva?</p>"
+      }
+     ],
+     "palabras": [
+      "aguda",
+      "grave (o llana)",
+      "esdrújula",
+      "sobresdrújula",
+      "tilde diacrítica"
+     ]
+    },
+    {
+     "codigo": "T-3",
+     "titulo": "Clases de palabras",
+     "enunciado": "<p>Oración: «¡Uf! Ayer mi hermana pequeña y yo cruzamos lentamente el río helado sin miedo».</p>",
+     "partes": [
+      {
+       "letra": "a",
+       "rotulo": "Sin nombres",
+       "html": "<p>¿Qué palabra dice lo que hicieron?</p>"
+      },
+      {
+       "letra": "b",
+       "rotulo": "",
+       "html": "<p>¿Qué palabras nombran a una persona, una cosa o algo que se siente?</p>"
+      },
+      {
+       "letra": "c",
+       "rotulo": "",
+       "html": "<p>¿Qué palabras dicen cómo es una persona o una cosa?</p>"
+      },
+      {
+       "letra": "d",
+       "rotulo": "",
+       "html": "<p>¿Qué palabras dicen cómo lo hicieron o cuándo?</p>"
+      },
+      {
+       "letra": "e",
+       "rotulo": "",
+       "html": "<p>¿Qué palabra está puesta en lugar de un nombre?</p>"
+      },
+      {
+       "letra": "f",
+       "rotulo": "",
+       "html": "<p>«Mi» y «el» van delante de un nombre. ¿Qué le agrega cada una?</p>"
+      },
+      {
+       "letra": "g",
+       "rotulo": "",
+       "html": "<p>¿Qué palabra junta a «mi hermana pequeña» con «yo»? ¿Y cuál engancha «miedo» al resto de la oración?</p>"
+      },
+      {
+       "letra": "h",
+       "rotulo": "",
+       "html": "<p>¿Qué palabra no está pegada a ninguna otra y solo expresa lo que sintieron?</p>"
+      },
+      {
+       "letra": "i",
+       "rotulo": "Con nombres",
+       "html": "<p>Di de qué clase es cada palabra: cruzamos · hermana · pequeña · lentamente · yo · el · mi · y · sin · uf.</p>"
+      }
+     ],
+     "palabras": [
+      "sustantivo",
+      "adjetivo",
+      "artículo",
+      "determinante",
+      "pronombre",
+      "verbo",
+      "adverbio",
+      "preposición",
+      "conjunción",
+      "interjección"
+     ]
+    },
+    {
+     "codigo": "T-4",
+     "titulo": "El verbo por dentro",
+     "enunciado": "",
+     "partes": [
+      {
+       "letra": "a",
+       "rotulo": "Sin nombres",
+       "html": "<p>«Cantábamos». Sin más datos: ¿quiénes cantan?, ¿es uno o son varios?, ¿pasa ahora, antes o después? ¿En qué parte de la palabra está escondida esa información?</p>"
+      },
+      {
+       "letra": "b",
+       "rotulo": "",
+       "html": "<p>«Ayer canté en el acto» y «De chico cantaba todos los días». Las dos hablan del pasado. ¿En qué se diferencian?</p>"
+      },
+      {
+       "letra": "c",
+       "rotulo": "",
+       "html": "<p>«Cuando llegaste, yo ya había comido». ¿Qué pasó primero, llegar o comer? ¿Cómo lo sabes? Y en «he comido», que son dos palabras, ¿cuál de las dos dice quién comió?</p>"
+      },
+      {
+       "letra": "d",
+       "rotulo": "",
+       "html": "<p>«Mañana cantaré» y «Si pudiera, cantaría». ¿En qué se diferencian?</p>"
+      },
+      {
+       "letra": "e",
+       "rotulo": "",
+       "html": "<p>«Viene», «Ojalá venga» y «¡Ven!» son el mismo verbo. ¿Qué cambia entre las tres?</p>"
+      },
+      {
+       "letra": "f",
+       "rotulo": "",
+       "html": "<p>«Cantar», «cantando», «cantado». ¿Puedes saber quién canta? ¿En qué se diferencian de «canto» o «cantamos»?</p>"
+      },
+      {
+       "letra": "g",
+       "rotulo": "Con nombres",
+       "html": "<p>Di la persona y el número de «cantábamos».</p>"
+      },
+      {
+       "letra": "h",
+       "rotulo": "",
+       "html": "<p>Ponle su nombre a cada tiempo: canté · cantaba · he cantado · había cantado · cantaré · cantaría.</p>"
+      },
+      {
+       "letra": "i",
+       "rotulo": "",
+       "html": "<p>Di el modo de «viene», el de «venga» y el de «ven».</p>"
+      },
+      {
+       "letra": "j",
+       "rotulo": "",
+       "html": "<p>¿Cómo se llaman las formas «cantar», «cantando» y «cantado»?</p>"
+      }
+     ],
+     "palabras": [
+      "persona",
+      "número",
+      "infinitivo",
+      "gerundio",
+      "participio",
+      "pretérito perfecto simple (o indefinido)",
+      "pretérito imperfecto",
+      "pretérito perfecto compuesto",
+      "pretérito pluscuamperfecto",
+      "futuro",
+      "condicional",
+      "modo indicativo",
+      "modo subjuntivo",
+      "modo imperativo"
+     ]
+    },
+    {
+     "codigo": "T-5",
+     "titulo": "De quién se habla y qué se dice",
+     "enunciado": "<p>Oración: «Los exploradores jóvenes cruzaron el río helado».</p>",
+     "partes": [
+      {
+       "letra": "a",
+       "rotulo": "Sin nombres",
+       "html": "<p>¿De quién habla la oración? ¿Qué dice de ellos?</p>"
+      },
+      {
+       "letra": "b",
+       "rotulo": "",
+       "html": "<p>Dila de nuevo empezando con «El explorador joven…». ¿Qué otra palabra tuvo que cambiar? ¿Por qué?</p>"
+      },
+      {
+       "letra": "c",
+       "rotulo": "",
+       "html": "<p>De «los exploradores jóvenes», ¿cuál es la palabra que no se puede quitar?</p>"
+      },
+      {
+       "letra": "d",
+       "rotulo": "",
+       "html": "<p>En «Llegamos tarde», ¿quién llegó? ¿Cómo lo sabes, si no lo dice?</p>"
+      },
+      {
+       "letra": "e",
+       "rotulo": "Con nombres",
+       "html": "<p>¿Cuál es el sujeto y cuál es el predicado?</p>"
+      },
+      {
+       "letra": "f",
+       "rotulo": "",
+       "html": "<p>¿Cuál es el núcleo del sujeto? ¿Y el del predicado?</p>"
+      },
+      {
+       "letra": "g",
+       "rotulo": "",
+       "html": "<p>¿Cómo se llama el sujeto de «Llegamos tarde»?</p>"
+      }
+     ],
+     "palabras": [
+      "sujeto",
+      "predicado",
+      "núcleo",
+      "sujeto tácito"
+     ]
+    },
+    {
+     "codigo": "T-6",
+     "titulo": "Lo que acompaña al verbo",
+     "enunciado": "",
+     "partes": [
+      {
+       "letra": "a",
+       "rotulo": "Sin nombres",
+       "html": "<p>«Ayer Martín le regaló un mapa a su hermana en la plaza». ¿Qué regaló? ¿A quién? ¿Cuándo? ¿Dónde?</p>"
+      },
+      {
+       "letra": "b",
+       "rotulo": "",
+       "html": "<p>Di esa oración sin decir «un mapa» ni «a su hermana», cambiándolos por palabras cortas.</p>"
+      },
+      {
+       "letra": "c",
+       "rotulo": "",
+       "html": "<p>«El río estaba helado» y «El río corría rápido». ¿De quién dice algo «helado»? ¿Y «rápido»?</p>"
+      },
+      {
+       "letra": "d",
+       "rotulo": "",
+       "html": "<p>«Baldo, el cartógrafo del reino, dibujó el mapa». Quita lo que está entre comas. ¿Se sigue entendiendo? ¿Para qué estaba? ¿Por qué crees que va entre comas?</p>"
+      },
+      {
+       "letra": "e",
+       "rotulo": "",
+       "html": "<p>«Diego, pásame el mapa». ¿Diego es el que pasa el mapa o es a quien le hablan? ¿Para qué sirve esa coma?</p>"
+      },
+      {
+       "letra": "f",
+       "rotulo": "Con nombres",
+       "html": "<p>Di cómo se llama cada parte: «un mapa» · «a su hermana» · «ayer» y «en la plaza» · «helado» (en «El río estaba helado») · «el cartógrafo del reino» · «Diego» (en «Diego, pásame el mapa»).</p>"
+      }
+     ],
+     "palabras": [
+      "complemento directo",
+      "complemento indirecto",
+      "complemento circunstancial",
+      "atributo",
+      "aposición",
+      "inciso (o frase explicativa)",
+      "vocativo"
+     ]
+    },
+    {
+     "codigo": "T-7",
+     "titulo": "Oraciones de una pieza y de varias",
+     "enunciado": "<p>Tres oraciones:</p>",
+     "partes": [
+      {
+       "letra": "1",
+       "rotulo": "",
+       "html": "<p>Llovió toda la noche.</p>"
+      },
+      {
+       "letra": "2",
+       "rotulo": "",
+       "html": "<p>Llovió toda la noche y el río creció.</p>"
+      },
+      {
+       "letra": "3",
+       "rotulo": "",
+       "html": "<p>El río creció porque llovió toda la noche.</p>"
+      },
+      {
+       "letra": "a",
+       "rotulo": "Sin nombres",
+       "html": "<p>¿Cuántas cosas pasan en cada una? ¿Cuántos verbos hay?</p>"
+      },
+      {
+       "letra": "b",
+       "rotulo": "",
+       "html": "<p>Corta la 2 y la 3 justo antes de la palabra que las une («y», «porque»). ¿Los dos pedazos se entienden solos, como oraciones completas? ¿Qué diferencia hay entre la 2 y la 3?</p>"
+      },
+      {
+       "letra": "c",
+       "rotulo": "Con nombres",
+       "html": "<p>¿Cuál es una oración simple y cuáles son compuestas?</p>"
+      },
+      {
+       "letra": "d",
+       "rotulo": "",
+       "html": "<p>¿En cuál hay coordinación y en cuál subordinación?</p>"
+      }
+     ],
+     "palabras": [
+      "oración simple",
+      "oración compuesta",
+      "coordinación",
+      "subordinación"
+     ]
+    },
+    {
+     "codigo": "T-8",
+     "titulo": "Los signos",
+     "enunciado": "<p>Irene abrió el morral (era del maestro) y encontró tres cosas: una pluma, una brújula y un mapa antiguo.</p>\n<p>—¿De quién es este mapa? —preguntó.</p>\n<p>Nadie contestó; el maestro dormía. En una esquina alguien había escrito «Aquí no sabemos». ¡Qué frase tan rara! Irene se quedó pensando…</p>",
+     "partes": [
+      {
+       "letra": "a",
+       "rotulo": "Sin nombres",
+       "html": "<p>Recorre el texto signo por signo. De cada uno di para qué está ahí y qué cambiaría si lo quitaras.</p>"
+      },
+      {
+       "letra": "b",
+       "rotulo": "",
+       "html": "<p>Después de «antiguo» hay un punto y el texto sigue en otra línea. Después de «dormía» hay un punto y el texto sigue en la misma. ¿Por qué crees que es distinto?</p>"
+      },
+      {
+       "letra": "c",
+       "rotulo": "Con nombres",
+       "html": "<p>Di el nombre de cada signo del texto.</p>"
+      }
+     ],
+     "palabras": [
+      "punto seguido",
+      "punto aparte",
+      "coma",
+      "punto y coma",
+      "dos puntos",
+      "comillas",
+      "raya",
+      "paréntesis",
+      "puntos suspensivos",
+      "signos de interrogación",
+      "signos de exclamación"
+     ]
+    }
+   ]
+  },
+  {
+   "grupo": "Palabras",
+   "titulo": "Palabras",
+   "intro": "<p>Se hace conversando. Vale explicar con un ejemplo, con otra palabra o con un gesto. Vale decir «la sé en inglés» y decirla.</p>",
+   "items": [
+    {
+     "codigo": "V-1",
+     "titulo": "Palabras de los libros de estudio",
+     "enunciado": "<p>Explica con tus palabras qué quiere decir la palabra destacada en cada oración.</p>",
+     "partes": [
+      {
+       "letra": "1",
+       "rotulo": "",
+       "html": "<p>El <strong>propósito</strong> de la autora es que cuidemos el agua.</p>"
+      },
+      {
+       "letra": "2",
+       "rotulo": "",
+       "html": "<p>El texto compara dos volcanes y encuentra una <strong>semejanza</strong> entre ellos.</p>"
+      },
+      {
+       "letra": "3",
+       "rotulo": "",
+       "html": "<p>La sequía fue la causa; la falta de alimento, su <strong>consecuencia</strong>.</p>"
+      },
+      {
+       "letra": "4",
+       "rotulo": "",
+       "html": "<p>Hay <strong>evidencia</strong> de que el lago era más grande hace mil años.</p>"
+      },
+      {
+       "letra": "5",
+       "rotulo": "",
+       "html": "<p>Los científicos plantearon una <strong>hipótesis</strong> y después la pusieron a prueba.</p>"
+      },
+      {
+       "letra": "6",
+       "rotulo": "",
+       "html": "<p>A partir de las huellas, la detective <strong>infirió</strong> que el ladrón cojeaba.</p>"
+      },
+      {
+       "letra": "7",
+       "rotulo": "",
+       "html": "<p>El cambio fue <strong>gradual</strong> y por eso nadie lo notó.</p>"
+      },
+      {
+       "letra": "8",
+       "rotulo": "",
+       "html": "<p>Ese dato es <strong>irrelevante</strong> para lo que estamos discutiendo.</p>"
+      },
+      {
+       "letra": "9",
+       "rotulo": "",
+       "html": "<p>Su respuesta fue <strong>ambigua</strong> y nadie supo si había aceptado.</p>"
+      },
+      {
+       "letra": "10",
+       "rotulo": "",
+       "html": "<p>Los dos equipos reclamaron porque la decisión les pareció <strong>arbitraria</strong>.</p>"
+      },
+      {
+       "letra": "11",
+       "rotulo": "",
+       "html": "<p>El cuento no dice que el rey tenga miedo; eso queda <strong>implícito</strong>.</p>"
+      },
+      {
+       "letra": "12",
+       "rotulo": "",
+       "html": "<p>La encuesta tiene un <strong>sesgo</strong>: solo les preguntaron a los hinchas de un equipo.</p>"
+      }
+     ]
+    },
+    {
+     "codigo": "V-2",
+     "titulo": "Familias de palabras",
+     "enunciado": "<p><strong>a)</strong> Di todas las palabras que se te ocurran de la familia de «tierra» (por ejemplo, «terremoto»).</p>\n<p><strong>b)</strong> De cada palabra, saca el sustantivo de su familia. Ejemplo: alto → altura.<br />\ncierto · bello · posible · breve · nuevo · sabio</p>\n<p><strong>c)</strong> Lo mismo, desde verbos. Ejemplo: saltar → salto.<br />\ndecidir · describir · resolver · crecer · elegir · obedecer</p>\n<p><strong>d)</strong> Ahora al revés: el adjetivo «de libro» que corresponde a cada cosa. Ejemplo: sol → solar («energía solar»).<br />\nagua · noche · año · mano · isla · estrella · ciudad · hermano</p>",
+     "partes": [
+      {
+       "letra": "",
+       "html": ""
+      }
+     ]
+    },
+    {
+     "codigo": "V-3",
+     "titulo": "Piezas griegas y latinas",
+     "enunciado": "<p>Muchas palabras están armadas con piezas antiguas. Te doy dos palabras que comparten una pieza: dime qué crees que significa la pieza y después adivina la palabra nueva.</p>",
+     "partes": [
+      {
+       "letra": "1",
+       "rotulo": "",
+       "html": "<p><strong>termo</strong>, <strong>termómetro</strong> → ¿qué será la «geotermia»?</p>"
+      },
+      {
+       "letra": "2",
+       "rotulo": "",
+       "html": "<p><strong>hidratarse</strong>, <strong>hidroeléctrica</strong> → ¿qué le pasa a alguien con «hidrofobia»?</p>"
+      },
+      {
+       "letra": "3",
+       "rotulo": "",
+       "html": "<p><strong>cronómetro</strong>, <strong>cronología</strong> → en una película de romanos aparece un reloj digital, y un crítico dice que es un «anacronismo». ¿Qué quiso decir?</p>"
+      },
+      {
+       "letra": "4",
+       "rotulo": "",
+       "html": "<p><strong>omnívoro</strong>, <strong>carnívoro</strong> → ¿cómo es un narrador «omnisciente»?</p>"
+      },
+      {
+       "letra": "5",
+       "rotulo": "",
+       "html": "<p><strong>insecticida</strong>, <strong>herbicida</strong> → en latín «rey» se dice <em>rex, regis</em>. ¿Qué es un «regicida»?</p>"
+      },
+      {
+       "letra": "6",
+       "rotulo": "",
+       "html": "<p><strong>equilátero</strong>, <strong>equilibrio</strong> → ¿qué pasa el día del «equinoccio»?</p>"
+      },
+      {
+       "letra": "7",
+       "rotulo": "",
+       "html": "<p><strong>biología</strong>, <strong>biografía</strong> → ¿qué es una «autobiografía»? ¿Y por qué una rana es un «anfibio»?</p>"
+      },
+      {
+       "letra": "8",
+       "rotulo": "",
+       "html": "<p><strong>imposible</strong>, <strong>ilegal</strong>, <strong>irreal</strong> → ¿cómo es una letra «ilegible»?</p>"
+      }
+     ]
+    },
+    {
+     "codigo": "V-4",
+     "titulo": "La palabra exacta",
+     "enunciado": "<p><strong>a)</strong> En esta oración el verbo «hacer» trabaja demasiado. Dila de nuevo con un verbo distinto y más preciso en cada caso: «El carpintero hizo una mesa, la profesora hizo una pregunta difícil, mi abuelo hizo un queque y yo hice un error en la suma».</p>\n<p><strong>b)</strong> Todas estas palabras tienen que ver con mirar: <em>contemplar, divisar, vigilar, observar</em>. Elige la que calza mejor en cada oración.<br />\n- Desde el cerro nos sentamos a ___ el volcán durante una hora, sin apuro.<br />\n- A lo lejos alcanzamos a ___ una vela diminuta.<br />\n- El guardia tuvo que ___ la entrada toda la noche.<br />\n- La científica se sentó a ___ las hormigas y anotó todo lo que hacían.</p>\n<p><strong>c)</strong> Todas estas tienen que ver con decir: <em>negó, admitió, advirtió, insinuó, afirmó</em>. Sobra una.<br />\n- —Yo no fui —<strong><em> Pedro.<br />\n- —Está bien, fui yo —</em></strong> al final.<br />\n- —Cuidado, que el puente está roto —<strong><em> el guía.<br />\n- —Alguien de esta sala sabe más de lo que cuenta —</em></strong> la detective, mirando a Pedro.</p>\n<p><strong>d)</strong> Ordena de más suave a más fuerte: <em>gritar, susurrar, vociferar, hablar</em>.</p>\n<p><strong>e)</strong> Parecen lo mismo y no lo son. Explica la diferencia:<br />\n- oír y escuchar<br />\n- valiente y temerario<br />\n- equivocarse y mentir</p>",
+     "partes": [
+      {
+       "letra": "",
+       "html": ""
+      }
+     ]
+    },
+    {
+     "codigo": "V-5",
+     "titulo": "Dos idiomas",
+     "enunciado": "<p>Tienes palabras guardadas en dos idiomas, y a veces una palabra está en un solo cajón. Te digo una palabra: dime cómo se dice en el otro idioma. Si la conoces en uno solo, perfecto: eso es lo que queremos saber.</p>\n<p><strong>Del inglés al español:</strong> average · research · environment · summary · skill · although · quest · cloak · cauldron · wardrobe</p>\n<p><strong>Del español al inglés:</strong> siglo · fuente (de información) · párrafo · desafío · escudo · aprendiz</p>\n<p><strong>Sin traducción exacta.</strong> Estas palabras no tienen una sola palabra en inglés. Explícaselas a un amigo que solo habla inglés: madrugada · estrenar · friolento</p>",
+     "partes": [
+      {
+       "letra": "",
+       "html": ""
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "grupo": "Tres minutos",
+   "titulo": "Tres minutos",
+   "intro": "",
+   "items": [
+    {
+     "codigo": "P5",
+     "titulo": "Tres minutos",
+     "enunciado": "<p>Prepara una charla de unos tres minutos sobre algo que te apasione: un libro, un juego, un instrumento, un animal, una idea. Tú eliges el tema y quién escucha (la familia, un amigo, tus abuelos por videollamada).</p>\n<ul>\n<li>Puedes prepararla el tiempo que quieras, traer un objeto para mostrar y tener una tarjeta con palabras clave. No se lee un texto escrito.</li>\n<li>Los tres minutos son una orientación: nadie te corta ni te muestra un reloj. Se graba, con tu permiso, para verla después.</li>\n<li>Al final, el público te hace dos preguntas.</li>\n<li>Después tú dices primero qué te gustó de tu charla.</li>\n</ul>",
+     "partes": [
+      {
+       "letra": "",
+       "html": ""
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "grupo": "Qué lees",
+   "titulo": "Qué lees",
+   "intro": "",
+   "items": [
+    {
+     "codigo": "P6",
+     "titulo": "Qué lees",
+     "enunciado": "<p>No hay respuestas buenas ni malas. Es una conversación para saber qué libros conviene buscarte.</p>",
+     "partes": [
+      {
+       "letra": "1",
+       "rotulo": "",
+       "html": "<p>¿Qué estás leyendo ahora? ¿Qué fue lo último que no pudiste soltar?</p>"
+      },
+      {
+       "letra": "2",
+       "rotulo": "",
+       "html": "<p>Cuando eliges tú, ¿lees en inglés o en español? ¿Por qué?</p>"
+      },
+      {
+       "letra": "3",
+       "rotulo": "",
+       "html": "<p>¿Has leído el mismo libro en los dos idiomas? ¿Qué cambia?</p>"
+      },
+      {
+       "letra": "4",
+       "rotulo": "",
+       "html": "<p>¿Hay algo que te guste más leer en un idioma que en el otro?</p>"
+      },
+      {
+       "letra": "5",
+       "rotulo": "",
+       "html": "<p>¿Qué cómics te gustan? ¿Qué te dan los cómics que no te da un libro sin dibujos?</p>"
+      },
+      {
+       "letra": "6",
+       "rotulo": "",
+       "html": "<p>¿Qué libro dejaste a medias? ¿En qué parte lo dejaste y por qué?</p>"
+      },
+      {
+       "letra": "7",
+       "rotulo": "",
+       "html": "<p>¿Hay algún libro que hayas leído más de una vez?</p>"
+      },
+      {
+       "letra": "8",
+       "rotulo": "",
+       "html": "<p>¿Cómo eliges qué leer? ¿Quién te recomienda libros?</p>"
+      },
+      {
+       "letra": "9",
+       "rotulo": "",
+       "html": "<p>¿Dónde y a qué hora lees mejor? ¿Qué te quita ganas de leer?</p>"
+      },
+      {
+       "letra": "10",
+       "rotulo": "",
+       "html": "<p>¿Escuchas audiolibros o pódcast? ¿Te gusta que te lean?</p>"
+      },
+      {
+       "letra": "11",
+       "rotulo": "",
+       "html": "<p>¿Lees cosas que no son cuentos: ciencia, historia, cómo funcionan las cosas? ¿Sobre qué tema te meterías a fondo?</p>"
+      },
+      {
+       "letra": "12",
+       "rotulo": "",
+       "html": "<p>¿Escribes o dibujas historias por tu cuenta?</p>"
+      },
+      {
+       "letra": "13",
+       "rotulo": "",
+       "html": "<p>Si pudieras pedir que alguien escribiera un libro solo para ti, ¿de qué se trataría?</p>"
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

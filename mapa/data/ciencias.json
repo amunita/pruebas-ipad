@@ -1,0 +1,1107 @@
+{
+ "id": "ciencias",
+ "titulo": "Ciencias",
+ "emoji": "🔬",
+ "intro": "<p>Vamos a dibujar un mapa de lo que sabes de ciencias. No es una prueba: no tiene nota ni reloj. Sirve para una sola cosa: saber qué libros vale la pena escribirte y cuáles serían una lata porque ya te los sabes.</p>\n<p>El mapa tiene tres colores, y los tres valen lo mismo:</p>\n<ol>\n<li><strong>Territorio conocido.</strong> Me respondes y me explicas con tus palabras.</li>\n<li><strong>Territorio visto de lejos.</strong> Me dices: «lo he oído, pero no sé explicarlo». Es una respuesta honesta y muy útil: conocer el nombre de algo y saber cómo funciona son cosas distintas, y a todo el mundo le pasa.</li>\n<li><strong>Territorio sin explorar.</strong> Me dices: «esto no lo he visto nunca». <strong>Esta es la respuesta más valiosa de todas</strong>, porque cada una es un libro nuevo que te puedo escribir. Si adivinas para no decirla, el mapa queda mal dibujado y terminas con libros repetidos.</li>\n</ol>\n<p>Varias preguntas son de cursos que todavía no te tocan. Y varias engañaron durante siglos a gente muy inteligente, así que no se trata de acertar: lo que interesa es cómo lo piensas.</p>\n<p>Yo no te voy a decir si algo está bien o mal mientras exploramos. Al final de cada sesión eliges una pregunta y la comprobamos de verdad, con las manos.</p>",
+ "estados": [
+  "Te lo explico",
+  "Lo he oído, pero no sé explicarlo",
+  "Esto no lo he visto nunca"
+ ],
+ "extras": true,
+ "cierre": "Elige una pregunta de esta sesión para comprobarla con las manos.",
+ "etapas": [
+  {
+   "grupo": "Vida",
+   "titulo": "Vida",
+   "intro": "",
+   "items": [
+    {
+     "codigo": "V-1",
+     "titulo": "La pieza más chica",
+     "enunciado": "",
+     "partes": [
+      {
+       "letra": "a",
+       "html": "<p>¿Qué es una célula? Cuéntamelo como se lo contarías a alguien que nunca oyó la palabra.</p>"
+      },
+      {
+       "letra": "b",
+       "html": "<p>Un elefante es muchísimo más grande que un ratón. ¿Es porque sus células son más grandes, porque tiene más células, o por las dos cosas? ¿Por qué lo piensas así?</p>"
+      },
+      {
+       "letra": "c",
+       "html": "<p>De esta lista, ¿qué está hecho de células y qué no?: una manzana, un hueso tuyo, una piedra, el agua, una mesa de madera, un hongo.</p>"
+      }
+     ]
+    },
+    {
+     "codigo": "V-2",
+     "titulo": "El viaje del pan",
+     "enunciado": "",
+     "partes": [
+      {
+       "letra": "a",
+       "html": "<p>Te comes un pedazo de pan. Cuéntame su viaje por tu cuerpo.</p>"
+      },
+      {
+       "letra": "b",
+       "html": "<p>Unas horas después sales a correr, y los músculos de tus piernas usan energía que venía de ese pan. ¿Cómo llegó el pan desde la guata hasta la pierna?</p>"
+      },
+      {
+       "letra": "c",
+       "html": "<p>Tomas un vaso de agua y más tarde haces pipí. ¿Qué camino siguió esa agua dentro de ti?</p>"
+      }
+     ]
+    },
+    {
+     "codigo": "V-3",
+     "titulo": "Aire que entra, aire que sale",
+     "enunciado": "",
+     "partes": [
+      {
+       "letra": "a",
+       "html": "<p>¿Para qué respiramos? ¿Qué pasa con el aire una vez que entra?</p>"
+      },
+      {
+       "letra": "b",
+       "html": "<p>Cuando corres pasan dos cosas a la vez: respiras más rápido y el corazón late más rápido. ¿Qué tiene que ver una con la otra?</p>"
+      },
+      {
+       "letra": "c",
+       "html": "<p>El aire que botas, ¿en qué es distinto del que entró? ¿Queda oxígeno en el aire que botas?</p>"
+      }
+     ]
+    },
+    {
+     "codigo": "V-4",
+     "titulo": "El árbol y el macetero",
+     "enunciado": "",
+     "partes": [
+      {
+       "letra": "a",
+       "html": "<p>¿Qué es la fotosíntesis?</p>"
+      },
+      {
+       "letra": "b",
+       "html": "<p>Plantas una semilla que pesa menos de un gramo en un macetero grande con tierra. La riegas solo con agua. Años después tienes un árbol de 80 kilos. ¿De dónde salió la mayor parte de esos 80 kilos?</p>"
+      },
+      {
+       "letra": "c",
+       "html": "<p>Si hubieras pesado la tierra del macetero el primer día y la vuelves a pesar ahora (bien seca las dos veces), ¿qué encontrarías?</p>"
+      }
+     ]
+    },
+    {
+     "codigo": "V-5",
+     "titulo": "¿Las plantas respiran?",
+     "enunciado": "",
+     "partes": [
+      {
+       "letra": "a",
+       "html": "<p>¿Las plantas respiran? ¿Qué toman del aire y qué le devuelven?</p>"
+      },
+      {
+       "letra": "b",
+       "html": "<p>Un poroto enterrado brota y crece varios centímetros bajo la tierra, a oscuras, antes de ver la luz. ¿De dónde saca la energía para crecer ahí abajo?</p>"
+      },
+      {
+       "letra": "c",
+       "html": "<p>Si las plantas respiran: ¿lo hacen de día, de noche o siempre?</p>"
+      }
+     ]
+    },
+    {
+     "codigo": "V-6",
+     "titulo": "Quién se come a quién",
+     "enunciado": "",
+     "partes": [
+      {
+       "letra": "a",
+       "html": "<p>¿Qué es una cadena alimentaria? Dame un ejemplo. En los dibujos se pone una flecha, así: pasto → conejo. ¿Qué quiere decir esa flecha?</p>"
+      },
+      {
+       "letra": "b",
+       "html": "<p>En un campo viven pasto, conejos, ratones, zorros y lechuzas. Los conejos y los ratones comen pasto. Los zorros comen conejos y ratones. Las lechuzas comen ratones. Una enfermedad mata a casi todos los conejos. ¿Qué les pasa a los ratones? Dame al menos dos historias posibles y distintas.</p>"
+      },
+      {
+       "letra": "c",
+       "html": "<p>En ese campo hay muchísimo pasto, bastantes conejos y muy pocos zorros. En casi todos los lugares del mundo pasa lo mismo. ¿Por qué?</p>"
+      }
+     ]
+    },
+    {
+     "codigo": "V-7",
+     "titulo": "El cuerpo cambia",
+     "enunciado": "",
+     "partes": [
+      {
+       "letra": "a",
+       "html": "<p>¿Qué es la pubertad?</p>"
+      },
+      {
+       "letra": "b",
+       "html": "<p>Los huesos, la piel y la voz están en lugares distintos del cuerpo, y sin embargo empiezan a cambiar más o menos al mismo tiempo. ¿Cómo «se avisan»? Y dos amigos de la misma edad: uno pega el estirón a los 11 y otro a los 14. ¿A alguno le pasa algo raro?</p>"
+      }
+     ]
+    },
+    {
+     "codigo": "V-8",
+     "titulo": "Los invisibles",
+     "enunciado": "",
+     "partes": [
+      {
+       "letra": "a",
+       "html": "<p>¿Qué es un microorganismo? ¿Qué tipos conoces? ¿Una bacteria y un virus son lo mismo?</p>"
+      },
+      {
+       "letra": "b",
+       "html": "<p>La leche fuera del refrigerador se corta en un día; adentro dura una semana. ¿Qué hace el frío? ¿Mata algo?</p>"
+      },
+      {
+       "letra": "c",
+       "html": "<p>Imagina que con un botón pudieras eliminar todas las bacterias que viven en tu cuerpo y sobre él. ¿Lo apretarías? ¿Qué pasaría?</p>"
+      }
+     ]
+    },
+    {
+     "codigo": "V-9",
+     "titulo": "Defensas",
+     "enunciado": "",
+     "partes": [
+      {
+       "letra": "a",
+       "html": "<p>¿Cómo se defiende tu cuerpo de una infección? ¿Qué hace una vacuna?</p>"
+      },
+      {
+       "letra": "b",
+       "html": "<p>La varicela (la peste cristal) casi siempre da una sola vez en la vida. ¿Por qué el cuerpo no se enferma de nuevo si el virus vuelve a entrar?</p>"
+      },
+      {
+       "letra": "c",
+       "html": "<p>Tienes un resfrío, que es un virus, y alguien te dice: «tómate un antibiótico». ¿Sirve? Y otra: se dice que «hay resistencia a los antibióticos». ¿Quién se vuelve resistente?</p>"
+      }
+     ]
+    },
+    {
+     "codigo": "V-10",
+     "titulo": "De una célula a una persona",
+     "enunciado": "",
+     "partes": [
+      {
+       "letra": "a",
+       "html": "<p>¿Cómo empieza un ser humano? ¿Qué es la fecundación?</p>"
+      },
+      {
+       "letra": "b",
+       "html": "<p>Tienes cosas parecidas a tu mamá y cosas parecidas a tu papá. ¿Cómo llegó a ti información de los dos? ¿Y por qué dos hermanos de los mismos padres no salen iguales?</p>"
+      },
+      {
+       "letra": "c",
+       "html": "<p>Partiste siendo una sola célula y hoy tienes billones. Una célula de tu piel y una de tu cerebro son muy distintas: ¿tienen adentro las mismas instrucciones o instrucciones distintas?</p>"
+      }
+     ]
+    },
+    {
+     "codigo": "V-11",
+     "titulo": "Adentro de la célula",
+     "enunciado": "",
+     "partes": [
+      {
+       "letra": "a",
+       "html": "<p>¿Qué partes tiene una célula y qué hace cada una? ¿En qué se diferencia una célula de planta de una de animal?</p>"
+      },
+      {
+       "letra": "b",
+       "html": "<p>Una lechuga lacia se pone crujiente si la dejas un rato en agua. Y si le echas sal a un pepino cortado, al rato está nadando en líquido. ¿Qué está pasando en las células?</p>"
+      },
+      {
+       "letra": "c",
+       "html": "<p>Las células de la raíz de un árbol viven bajo tierra. ¿Tienen lo mismo adentro que las células de una hoja?</p>"
+      }
+     ]
+    },
+    {
+     "codigo": "V-12",
+     "titulo": "A dónde se va lo que comes",
+     "enunciado": "",
+     "partes": [
+      {
+       "letra": "a",
+       "html": "<p>¿Para qué usa tu cuerpo el oxígeno? ¿En qué parte del cuerpo se usa?</p>"
+      },
+      {
+       "letra": "b",
+       "html": "<p>Una persona adelgaza y pierde 10 kilos de grasa. Esos 10 kilos eran materia, y la materia no desaparece. ¿Por dónde salieron del cuerpo?</p>"
+      },
+      {
+       "letra": "c",
+       "html": "<p>¿«Respirar» y «respiración celular» son lo mismo?</p>"
+      }
+     ]
+    }
+   ],
+   "manos": "<p>V-5 (un poroto en algodón húmedo, a oscuras) · V-11 (lechuga en agua, pepino con sal) · V-3 (contar respiraciones y pulso en reposo y después de correr un minuto).</p>"
+  },
+  {
+   "grupo": "Física",
+   "titulo": "Física",
+   "intro": "",
+   "items": [
+    {
+     "codigo": "F-1",
+     "titulo": "Una pila, un cable, una ampolleta",
+     "enunciado": "",
+     "partes": [
+      {
+       "letra": "a",
+       "html": "<p>¿Qué necesita una ampolleta para encender? ¿Qué es un circuito?</p>"
+      },
+      {
+       "letra": "b",
+       "html": "<p>Tienes una pila, una ampolleta chica de linterna (suelta, sin ningún soporte) y un solo cable. ¿Se puede encender? Descríbeme o dibújame exactamente qué toca con qué.</p>"
+      },
+      {
+       "letra": "c",
+       "html": "<p>¿Cuáles de estas cosas dejan pasar la electricidad?: una llave de metal, una goma de borrar, la mina de un lápiz grafito, un palito de madera seca, agua con sal.</p>"
+      }
+     ]
+    },
+    {
+     "codigo": "F-2",
+     "titulo": "La pelota que deja de botar",
+     "enunciado": "",
+     "partes": [
+      {
+       "letra": "a",
+       "html": "<p>¿Qué es la energía? ¿Qué formas de energía conoces?</p>"
+      },
+      {
+       "letra": "b",
+       "html": "<p>Sueltas una pelota saltarina desde un metro. Cada bote llega un poco menos alto, hasta que queda quieta. ¿Qué pasó con la energía que tenía al principio?</p>"
+      },
+      {
+       "letra": "c",
+       "html": "<p>Se dice que la energía «no se crea ni se destruye». Si es así, ¿por qué nos piden ahorrar energía?</p>"
+      }
+     ]
+    },
+    {
+     "codigo": "F-3",
+     "titulo": "La taza y la piscina",
+     "enunciado": "",
+     "partes": [
+      {
+       "letra": "a",
+       "html": "<p>¿Calor y temperatura son lo mismo?</p>"
+      },
+      {
+       "letra": "b",
+       "html": "<p>Tienes una taza de té recién hervido y una piscina temperada, tibia. ¿Cuál tiene más temperatura? Ahora, si quisieras derretir un bloque gigante de hielo, ¿cuál derretiría más hielo: la taza o la piscina? ¿Por qué?</p>"
+      },
+      {
+       "letra": "c",
+       "html": "<p>Mezclas un vaso de agua a 20 grados con otro vaso igual a 60 grados. ¿A qué temperatura queda la mezcla?</p>"
+      }
+     ]
+    },
+    {
+     "codigo": "F-4",
+     "titulo": "Lo que se acaba y lo que no",
+     "enunciado": "",
+     "partes": [
+      {
+       "letra": "a",
+       "html": "<p>¿Qué es un recurso renovable y uno no renovable? Dame ejemplos de energía de cada tipo.</p>"
+      },
+      {
+       "letra": "b",
+       "html": "<p>El petróleo se formó a partir de seres vivos que murieron, y hoy siguen muriendo seres vivos. Entonces, ¿por qué se dice que el petróleo no es renovable? Y la leña, ¿es renovable?</p>"
+      }
+     ]
+    },
+    {
+     "codigo": "F-5",
+     "titulo": "Las dos bolas",
+     "enunciado": "",
+     "partes": [
+      {
+       "letra": "a",
+       "html": "<p>¿Qué es la gravedad? ¿Qué es el peso de una cosa?</p>"
+      },
+      {
+       "letra": "b",
+       "html": "<p>Tienes dos bolas del mismo tamaño: una de fierro, que pesa un kilo, y una de madera, que pesa diez veces menos. Las sueltas al mismo tiempo desde un segundo piso. ¿Cuál llega primero al suelo, y por cuánto?</p>"
+      },
+      {
+       "letra": "c",
+       "html": "<p>Una hoja de papel cae más lento que una piedra. ¿Por qué? ¿Y qué pasa si arrugas la hoja y la haces una pelotita? ¿Cambió su peso?</p>"
+      }
+     ]
+    },
+    {
+     "codigo": "F-6",
+     "titulo": "Lo que sigue moviéndose",
+     "enunciado": "",
+     "partes": [
+      {
+       "letra": "a",
+       "html": "<p>Sé que has leído de las leyes de Newton. ¿Qué dice la primera, con tus palabras? Y si empujas un autito por el piso, ¿por qué termina parando?</p>"
+      },
+      {
+       "letra": "b",
+       "html": "<p>Una sonda espacial viaja lejísimos de cualquier planeta o estrella, con los motores apagados, a 15 kilómetros por segundo. ¿Qué pasa con su velocidad en los próximos mil años? ¿Necesita combustible para seguir?</p>"
+      },
+      {
+       "letra": "c",
+       "html": "<p>Lanzas una pelota hacia arriba. Piensa en el momento en que ya salió de tu mano y todavía va subiendo. ¿Qué fuerzas están actuando sobre ella en ese instante? ¿Y justo en el punto más alto?</p>"
+      }
+     ]
+    },
+    {
+     "codigo": "F-7",
+     "titulo": "El camión y el auto",
+     "enunciado": "",
+     "partes": [
+      {
+       "letra": "a",
+       "html": "<p>¿Qué dice la tercera ley de Newton, la de acción y reacción?</p>"
+      },
+      {
+       "letra": "b",
+       "html": "<p>Un camión grande choca de frente con un auto chico. Durante el choque, ¿quién empuja más fuerte a quién? Y entonces, ¿por qué el auto queda mucho peor?</p>"
+      },
+      {
+       "letra": "c",
+       "html": "<p>Viajas a la Luna. ¿Cambia tu masa, cambia tu peso, las dos o ninguna? Y los astronautas de la Estación Espacial flotan: ¿es porque allá arriba no hay gravedad?</p>"
+      }
+     ]
+    },
+    {
+     "codigo": "F-8",
+     "titulo": "Raquetas de nieve",
+     "enunciado": "",
+     "partes": [
+      {
+       "letra": "a",
+       "html": "<p>¿Qué es la presión? ¿Es lo mismo que la fuerza?</p>"
+      },
+      {
+       "letra": "b",
+       "html": "<p>Con zapatos te hundes en la nieve blanda; con raquetas de nieve, no. Pesas exactamente lo mismo. ¿Qué cambió? ¿Tiene algo que ver con por qué un cuchillo afilado corta mejor?</p>"
+      },
+      {
+       "letra": "c",
+       "html": "<p>Un buzo está a 5 metros de profundidad en un estanque angosto, como un pozo. Otro está a 5 metros de profundidad en medio de un lago enorme. ¿Cuál de los dos siente más presión del agua?</p>"
+      }
+     ]
+    },
+    {
+     "codigo": "F-9",
+     "titulo": "La bombilla",
+     "enunciado": "",
+     "partes": [
+      {
+       "letra": "a",
+       "html": "<p>¿El aire pesa? ¿El aire empuja?</p>"
+      },
+      {
+       "letra": "b",
+       "html": "<p>Tomas jugo con bombilla. ¿Qué es lo que hace subir el jugo? ¿Podrías tomar jugo desde un balcón con una bombilla de 15 metros de alto, si tuvieras pulmones de superhéroe?</p>"
+      },
+      {
+       "letra": "c",
+       "html": "<p>Llenas un vaso de agua hasta el borde, lo tapas con una cartulina, lo das vuelta y sueltas la cartulina. No se cae. ¿Qué la sostiene?</p>"
+      }
+     ]
+    },
+    {
+     "codigo": "F-10",
+     "titulo": "El globo y el pelo",
+     "enunciado": "",
+     "partes": [
+      {
+       "letra": "a",
+       "html": "<p>¿Qué es la carga eléctrica? ¿Qué es la electricidad estática?</p>"
+      },
+      {
+       "letra": "b",
+       "html": "<p>Frotas un globo contra tu pelo. El globo se queda pegado a la pared y tus pelos quedan parados, separados unos de otros. ¿Qué pasó entre el globo y el pelo? ¿Por qué los pelos se alejan entre sí?</p>"
+      },
+      {
+       "letra": "c",
+       "html": "<p>Al frotar, ¿se fabricó carga eléctrica que antes no existía?</p>"
+      }
+     ]
+    },
+    {
+     "codigo": "F-11",
+     "titulo": "¿Qué se gasta?",
+     "enunciado": "",
+     "partes": [
+      {
+       "letra": "a",
+       "html": "<p>¿Qué es la corriente eléctrica? ¿Qué hace la pila en un circuito?</p>"
+      },
+      {
+       "letra": "b",
+       "html": "<p>Un circuito simple: pila, cable, ampolleta, cable de vuelta a la pila. Si pudieras medir cuánta corriente pasa por el cable antes de la ampolleta y cuánta pasa después, ¿qué encontrarías: más antes, más después o igual? Y si la pila «se gasta», ¿qué es lo que se gastó?</p>"
+      },
+      {
+       "letra": "c",
+       "html": "<p>Ahora dos ampolletas iguales, una después de la otra en el mismo camino, con una sola pila. ¿Brillan igual entre ellas? ¿Brillan igual que cuando había una sola? ¿Qué pasa con una si desenroscas la otra? ¿Crees que las luces de tu casa están conectadas así?</p>"
+      }
+     ]
+    },
+    {
+     "codigo": "F-12",
+     "titulo": "La cuchara fría",
+     "enunciado": "",
+     "partes": [
+      {
+       "letra": "a",
+       "html": "<p>¿De qué maneras viaja el calor de un lugar a otro?</p>"
+      },
+      {
+       "letra": "b",
+       "html": "<p>En tu pieza llevan todo el día una cuchara de metal, un libro y un chaleco de lana. Los tocas: la cuchara se siente fría y el chaleco no. Si le pusieras un termómetro a cada uno, ¿qué marcarían? ¿Por qué se sienten distinto?</p>"
+      },
+      {
+       "letra": "c",
+       "html": "<p>Quieres que un cubo de hielo dure lo más posible fuera del refrigerador. ¿Lo envuelves en el chaleco de lana o lo dejas destapado sobre un plato? ¿Por qué?</p>"
+      }
+     ]
+    }
+   ],
+   "manos": "<p>F-1 (pila, cable, ampolleta de linterna) · F-5 (hoja estirada contra hoja arrugada; libro con la hoja encima) · F-9 (vaso con cartulina, sobre el lavaplatos) · F-12 (dos cubos de hielo: uno envuelto en lana, otro destapado) · F-10 (globo y pelo).</p>"
+  },
+  {
+   "grupo": "Química",
+   "titulo": "Química",
+   "intro": "",
+   "items": [
+    {
+     "codigo": "Q-1",
+     "titulo": "De qué está hecho todo",
+     "enunciado": "",
+     "partes": [
+      {
+       "letra": "a",
+       "html": "<p>Sólido, líquido y gas: ¿qué los hace distintos por dentro?</p>"
+      },
+      {
+       "letra": "b",
+       "html": "<p>Alguien abre un frasco de perfume en una esquina de la pieza. No hay viento. Al rato se huele en la otra esquina. ¿Cómo llegó el olor hasta allá? ¿Llegaría más rápido o más lento en un día de mucho calor?</p>"
+      },
+      {
+       "letra": "c",
+       "html": "<p>Imagina que puedes mirar un trozo de fierro tan de cerca que ves sus partículas una por una. ¿Están quietas? ¿Una partícula de fierro sola es dura, gris y fría? ¿Una partícula de agua sola está mojada?</p>"
+      }
+     ]
+    },
+    {
+     "codigo": "Q-2",
+     "titulo": "La olla que hierve",
+     "enunciado": "",
+     "partes": [
+      {
+       "letra": "a",
+       "html": "<p>¿Qué pasa cuando el agua hierve? ¿Evaporarse y hervir son lo mismo?</p>"
+      },
+      {
+       "letra": "b",
+       "html": "<p>Una olla con agua está hirviendo y el termómetro marca 100 grados. Subes la llama al máximo y esperas cinco minutos; todavía queda agua. ¿Qué marca el termómetro ahora?</p>"
+      },
+      {
+       "letra": "c",
+       "html": "<p>¿De qué están hechas las burbujas grandes que suben en el agua hirviendo?</p>"
+      }
+     ]
+    },
+    {
+     "codigo": "Q-3",
+     "titulo": "Agua que aparece",
+     "enunciado": "",
+     "partes": [
+      {
+       "letra": "a",
+       "html": "<p>¿Qué es la condensación?</p>"
+      },
+      {
+       "letra": "b",
+       "html": "<p>Sacas una lata helada del refrigerador y a los minutos está mojada por fuera. ¿De dónde salió esa agua? ¿Pasaría lo mismo en el desierto de Atacama?</p>"
+      },
+      {
+       "letra": "c",
+       "html": "<p>Pones 100 gramos de hielo en un frasco, lo tapas bien y lo pesas. Esperas a que se derrita todo y lo pesas de nuevo. ¿Pesa más, menos o igual? ¿Y el agua ocupa el mismo espacio que ocupaba el hielo?</p>"
+      }
+     ]
+    },
+    {
+     "codigo": "Q-4",
+     "titulo": "La jeringa",
+     "enunciado": "",
+     "partes": [
+      {
+       "letra": "a",
+       "html": "<p>El aire, ¿es «algo»? ¿De qué está hecho?</p>"
+      },
+      {
+       "letra": "b",
+       "html": "<p>Llenas una jeringa con aire, tapas la punta con el dedo y aprietas: el émbolo baja bastante. Si la llenas con agua, casi no baja. ¿Por qué el aire se deja apretar y el agua no?</p>"
+      },
+      {
+       "letra": "c",
+       "html": "<p>Entre una partícula de aire y la partícula de al lado, ¿qué hay? Y otra: ¿una pelota de fútbol pesa más inflada o desinflada?</p>"
+      }
+     ]
+    },
+    {
+     "codigo": "Q-5",
+     "titulo": "La botella en el congelador",
+     "enunciado": "",
+     "partes": [
+      {
+       "letra": "a",
+       "html": "<p>¿Qué le pasa a un gas cuando lo calientas? ¿Y cuando lo enfrías?</p>"
+      },
+      {
+       "letra": "b",
+       "html": "<p>Tapas bien una botella plástica vacía (o sea, llena de aire) y la metes al congelador. Una hora después está aplastada. ¿Qué la aplastó?</p>"
+      },
+      {
+       "letra": "c",
+       "html": "<p>Cuando el aire se calienta y «se expande», ¿qué les pasa a sus partículas? ¿Se agrandan?</p>"
+      }
+     ]
+    },
+    {
+     "codigo": "Q-6",
+     "titulo": "¿Qué es «puro»?",
+     "enunciado": "",
+     "partes": [
+      {
+       "letra": "a",
+       "html": "<p>¿Qué diferencia hay entre una sustancia pura y una mezcla?</p>"
+      },
+      {
+       "letra": "b",
+       "html": "<p>Clasifícame estas cosas como sustancia pura o mezcla y dime por qué: agua de la llave, aire, un anillo de oro de 18 quilates, azúcar, jugo de naranja «100 % puro», agua destilada.</p>"
+      },
+      {
+       "letra": "c",
+       "html": "<p>Disuelves 10 gramos de azúcar en un vaso que tiene 200 gramos de agua. El azúcar ya no se ve. ¿Cuánto pesa ahora lo que hay en el vaso? ¿El azúcar sigue ahí? ¿Cómo lo demostrarías sin probarlo?</p>"
+      }
+     ]
+    },
+    {
+     "codigo": "Q-7",
+     "titulo": "El náufrago",
+     "enunciado": "",
+     "partes": [
+      {
+       "letra": "a",
+       "html": "<p>¿Qué maneras conoces de separar una mezcla?</p>"
+      },
+      {
+       "letra": "b",
+       "html": "<p>Eres un náufrago. Tienes agua de mar de sobra, una olla, un plástico transparente, un jarro y mucho sol. ¿Cómo consigues agua para tomar?</p>"
+      },
+      {
+       "letra": "c",
+       "html": "<p>Otro náufrago propone colar el agua de mar con una tela finísima, o con un filtro de café. ¿Le resulta? ¿Por qué?</p>"
+      }
+     ]
+    },
+    {
+     "codigo": "Q-8",
+     "titulo": "La vela y el clavo",
+     "enunciado": "",
+     "partes": [
+      {
+       "letra": "a",
+       "html": "<p>¿Qué diferencia hay entre un cambio físico y un cambio químico? Dime cuál es cuál: derretir chocolate, freír un huevo, quemar un papel, disolver sal en agua, echar una pastilla efervescente al agua.</p>"
+      },
+      {
+       "letra": "b",
+       "html": "<p>Una vela de 50 gramos arde hasta que no queda nada. ¿A dónde se fue la cera?</p>"
+      },
+      {
+       "letra": "c",
+       "html": "<p>Un clavo de fierro nuevo se queda meses a la intemperie y se oxida entero. Supón que no se le cae ni una pizca de óxido. El clavo oxidado, ¿pesa más, menos o igual que cuando era nuevo?</p>"
+      }
+     ]
+    },
+    {
+     "codigo": "Q-9",
+     "titulo": "El átomo",
+     "enunciado": "",
+     "partes": [
+      {
+       "letra": "a",
+       "html": "<p>¿Qué es un átomo y qué tiene adentro? ¿Qué es más grande: un átomo o una célula?</p>"
+      },
+      {
+       "letra": "b",
+       "html": "<p>Hace poco más de cien años, un científico disparó partículas diminutas y muy rápidas contra una lámina de oro finísima. Casi todas la atravesaron derecho, como si no hubiera nada. Unas poquísimas rebotaron hacia atrás. Si tú hubieras visto eso, ¿qué concluirías sobre cómo es un átomo por dentro?</p>"
+      },
+      {
+       "letra": "c",
+       "html": "<p>El átomo se suele dibujar como un sistema solar chiquitito, con bolitas dando vueltas. ¿Crees que es así de verdad? Si los científicos saben que un dibujo no es exacto, ¿por qué lo siguen usando?</p>"
+      }
+     ]
+    },
+    {
+     "codigo": "Q-10",
+     "titulo": "La tabla y sus columnas",
+     "enunciado": "",
+     "partes": [
+      {
+       "letra": "a",
+       "html": "<p>¿Qué es un elemento? ¿Qué ordena la tabla periódica: por qué cada elemento está donde está?</p>"
+      },
+      {
+       "letra": "b",
+       "html": "<p>El sodio es un metal blando que reacciona con fuerza cuando toca el agua. En la tabla, el potasio está justo debajo del sodio, en la misma columna. Sin haberlo visto nunca, ¿cómo apostarías que se comporta el potasio con el agua? ¿Por qué?</p>"
+      },
+      {
+       "letra": "c",
+       "html": "<p>El agua está hecha de hidrógeno, que es un gas que explota, y de oxígeno, que es el gas que aviva el fuego. Entonces, ¿por qué el agua apaga el fuego? ¿Es lo mismo un globo lleno de hidrógeno y oxígeno revueltos que un vaso de agua?</p>"
+      }
+     ]
+    }
+   ],
+   "manos": "<p>Q-3 (lata helada; frasco con hielo en una pesa de cocina) · Q-4 (jeringa sin aguja con aire y con agua) · Q-5 (botella al congelador) · Q-6 (pesar agua, azúcar y la mezcla; dejar evaporar un platito) · Q-7 (destilador solar en una fuente).</p>"
+  },
+  {
+   "grupo": "Tierra y universo",
+   "titulo": "Tierra y universo",
+   "intro": "",
+   "items": [
+    {
+     "codigo": "T-1",
+     "titulo": "El agua del planeta",
+     "enunciado": "",
+     "partes": [
+      {
+       "letra": "a",
+       "html": "<p>¿Dónde está el agua de la Tierra? ¿Cuánta es dulce?</p>"
+      },
+      {
+       "letra": "b",
+       "html": "<p>Imagina que toda el agua del planeta cabe en un bidón de 100 litros. ¿Cuántos litros serían agua dulce? Y de esa agua dulce, ¿dónde está guardada la mayor parte?</p>"
+      },
+      {
+       "letra": "c",
+       "html": "<p>En Chile central casi no llueve en verano, y sin embargo los ríos que bajan de la cordillera llevan agua todo el verano. ¿De dónde sale?</p>"
+      }
+     ]
+    },
+    {
+     "codigo": "T-2",
+     "titulo": "El charco",
+     "enunciado": "",
+     "partes": [
+      {
+       "letra": "a",
+       "html": "<p>Cuéntame el ciclo del agua.</p>"
+      },
+      {
+       "letra": "b",
+       "html": "<p>Un charco se seca al sol sin que nadie lo toque. ¿A dónde se fue el agua? ¿Sigue siendo agua? Y la ropa colgada dentro de la casa en invierno también se seca: ¿tuvo que hervir?</p>"
+      },
+      {
+       "letra": "c",
+       "html": "<p>¿De qué está hecha una nube? Si es agua, ¿por qué no se cae?</p>"
+      }
+     ]
+    },
+    {
+     "codigo": "T-3",
+     "titulo": "El mar frío",
+     "enunciado": "",
+     "partes": [
+      {
+       "letra": "a",
+       "html": "<p>¿Qué es una corriente marina? ¿Has oído de la corriente de Humboldt?</p>"
+      },
+      {
+       "letra": "b",
+       "html": "<p>El mar en las playas del norte de Chile es mucho más frío que el mar de Brasil a la misma altura del mapa. ¿Por qué? ¿Tendrá algo que ver con que en Chile haya tanta pesca?</p>"
+      },
+      {
+       "letra": "c",
+       "html": "<p>¿Por qué el mar sube y baja con las mareas? ¿Cuántas veces sube en un día?</p>"
+      }
+     ]
+    },
+    {
+     "codigo": "T-4",
+     "titulo": "Hacia adentro",
+     "enunciado": "",
+     "partes": [
+      {
+       "letra": "a",
+       "html": "<p>¿Cómo es la Tierra por dentro? ¿Y qué son la atmósfera, la hidrósfera y la litósfera?</p>"
+      },
+      {
+       "letra": "b",
+       "html": "<p>El hoyo más profundo que ha hecho el ser humano tiene unos 12 kilómetros. Hasta el centro de la Tierra hay más de 6.000. Si nadie ha ido ni ha mandado nada, ¿cómo podemos saber qué hay adentro?</p>"
+      },
+      {
+       "letra": "c",
+       "html": "<p>El manto es la capa que está bajo la corteza. ¿Cómo te lo imaginas: sólido, líquido, otra cosa?</p>"
+      }
+     ]
+    },
+    {
+     "codigo": "T-5",
+     "titulo": "El aire de arriba",
+     "enunciado": "",
+     "partes": [
+      {
+       "letra": "a",
+       "html": "<p>¿De qué está hecho el aire? ¿Qué gas es el que más hay?</p>"
+      },
+      {
+       "letra": "b",
+       "html": "<p>En la cumbre de una montaña muy alta cuesta mucho respirar. ¿Qué cambia allá arriba?</p>"
+      },
+      {
+       "letra": "c",
+       "html": "<p>En la cumbre de una montaña estás más cerca del Sol que en la playa. Entonces, ¿por qué arriba hace más frío?</p>"
+      }
+     ]
+    },
+    {
+     "codigo": "T-6",
+     "titulo": "El suelo",
+     "enunciado": "",
+     "partes": [
+      {
+       "letra": "a",
+       "html": "<p>¿Qué es el suelo? ¿De qué está hecho y cómo se forma?</p>"
+      },
+      {
+       "letra": "b",
+       "html": "<p>Dos cerros iguales, con la misma lluvia. Uno tiene bosque; al otro le cortaron y quemaron todo. Pasa un invierno lluvioso. ¿Qué diferencias encontrarías entre los dos cerros? ¿Y en el río que pasa abajo?</p>"
+      },
+      {
+       "letra": "c",
+       "html": "<p>¿Cuánto crees que demora la naturaleza en formar un centímetro de suelo? Entonces, ¿el suelo es un recurso renovable?</p>"
+      }
+     ]
+    },
+    {
+     "codigo": "T-7",
+     "titulo": "El país que tiembla",
+     "enunciado": "",
+     "partes": [
+      {
+       "letra": "a",
+       "html": "<p>¿Qué es una placa tectónica? ¿Por qué en Chile tiembla tanto?</p>"
+      },
+      {
+       "letra": "b",
+       "html": "<p>El fondo del Pacífico frente a Chile se acerca al continente unos 7 centímetros por año. ¿Cuánto se acerca en un millón de años? Pero el océano no se achica así de rápido ni Chile se ensancha: ¿a dónde se va ese fondo marino que «sobra»?</p>"
+      },
+      {
+       "letra": "c",
+       "html": "<p>¿Sobre qué se mueven las placas? ¿Cómo te imaginas lo que hay debajo de ellas?</p>"
+      }
+     ]
+    },
+    {
+     "codigo": "T-8",
+     "titulo": "Volcanes",
+     "enunciado": "",
+     "partes": [
+      {
+       "letra": "a",
+       "html": "<p>¿Qué es un volcán? ¿De dónde sale el magma?</p>"
+      },
+      {
+       "letra": "b",
+       "html": "<p>Chile tiene volcanes a lo largo de casi toda la cordillera. En medio de Brasil no hay ninguno activo. ¿Por qué esa diferencia?</p>"
+      },
+      {
+       "letra": "c",
+       "html": "<p>Después de un terremoto grande en el mar puede venir un tsunami. ¿Cómo te lo imaginas: cómo se ve llegar? Y otra: el terremoto de 2010 fue de magnitud 8,8. ¿Se sintió igual de fuerte en todas partes de Chile?</p>"
+      }
+     ]
+    },
+    {
+     "codigo": "T-9",
+     "titulo": "Conchas en la montaña",
+     "enunciado": "",
+     "partes": [
+      {
+       "letra": "a",
+       "html": "<p>¿Qué tipos de rocas hay y cómo se forma cada uno?</p>"
+      },
+      {
+       "letra": "b",
+       "html": "<p>En lo alto de la cordillera de los Andes, a miles de metros sobre el mar, se encuentran fósiles de conchas marinas. ¿Cómo llegaron ahí?</p>"
+      },
+      {
+       "letra": "c",
+       "html": "<p>Una roca, ¿puede transformarse en otro tipo de roca? ¿Las montañas han estado siempre donde están?</p>"
+      }
+     ]
+    },
+    {
+     "codigo": "T-10",
+     "titulo": "Verano e invierno",
+     "enunciado": "",
+     "partes": [
+      {
+       "letra": "a",
+       "html": "<p>¿Qué diferencia hay entre el tiempo y el clima?</p>"
+      },
+      {
+       "letra": "b",
+       "html": "<p>¿Por qué en verano hace más calor que en invierno?<br />\n (Después de que responda, sea cual sea la respuesta:) Cuando en Chile es verano, en el hemisferio norte es invierno. ¿Cómo calza eso con tu explicación?</p>"
+      },
+      {
+       "letra": "c",
+       "html": "<p>¿El calentamiento global tiene que ver con el hoyo de la capa de ozono? ¿Son el mismo problema?</p>"
+      }
+     ]
+    },
+    {
+     "codigo": "T-11",
+     "titulo": "La Luna y el abajo",
+     "enunciado": "",
+     "partes": [
+      {
+       "letra": "a",
+       "html": "<p>¿Por qué la Luna va cambiando de forma durante el mes?</p>"
+      },
+      {
+       "letra": "b",
+       "html": "<p>Cuando la Luna se ve como una uñita delgada, ¿qué es la parte oscura: qué la está tapando? ¿Y qué es entonces un eclipse de Luna?</p>"
+      },
+      {
+       "letra": "c",
+       "html": "<p>Una persona parada en la Antártica, «abajo» en el globo terráqueo, suelta una piedra. ¿Hacia dónde cae? Dibújamelo o muéstramelo con las manos. ¿Qué quiere decir «abajo»?</p>"
+      }
+     ]
+    }
+   ],
+   "manos": "<p>T-2 (dos platos con la misma agua, uno al sol y otro a la sombra) · T-11 (una pelota y una linterna en una pieza oscura, para las fases).</p>"
+  },
+  {
+   "grupo": "Pensar como científico",
+   "titulo": "Pensar como científico",
+   "intro": "<p>Aquí no hay materia que saberse. Son casos para pensar.</p>",
+   "items": [
+    {
+     "codigo": "P-1",
+     "titulo": "La cocina",
+     "enunciado": "<p>Entras a la cocina y ves esto: un vaso quebrado en el suelo, un charco de leche, la ventana abierta y el gato sentado arriba de la mesa, lamiéndose una pata.</p>",
+     "partes": [
+      {
+       "letra": "a",
+       "html": "<p>Dime tres cosas que observas.</p>"
+      },
+      {
+       "letra": "b",
+       "html": "<p>«El gato botó el vaso»: ¿eso lo observaste o lo concluiste? ¿Qué otra explicación calza con lo mismo que viste?</p>"
+      },
+      {
+       "letra": "c",
+       "html": "<p>¿Qué irías a mirar para decidir entre las dos explicaciones?</p>"
+      }
+     ]
+    },
+    {
+     "codigo": "P-2",
+     "titulo": "Los porotos de Martina",
+     "enunciado": "<p>Martina quiere saber si los porotos crecen más con más luz. Pone un macetero en la ventana y otro dentro del clóset. A las dos semanas mide la altura de cada planta.</p>",
+     "partes": [
+      {
+       "letra": "a",
+       "html": "<p>¿Qué es lo que Martina cambia a propósito? ¿Qué es lo que mide?</p>"
+      },
+      {
+       "letra": "b",
+       "html": "<p>¿Qué cosas tiene que cuidar que sean iguales en los dos maceteros para que la comparación sea justa?</p>"
+      },
+      {
+       "letra": "c",
+       "html": "<p>Resultado: el poroto del clóset salió más alto, pero pálido, delgado y casi sin hojas. ¿Creció «mejor»? ¿Qué otra cosa habrías medido tú?</p>"
+      }
+     ]
+    },
+    {
+     "codigo": "P-3",
+     "titulo": "Diseña tu prueba",
+     "enunciado": "<p>Elige una de estas tres preguntas, la que más te guste, y diseña un experimento para responderla:</p>\n<ul>\n<li>¿Qué marca de toalla de papel absorbe más?</li>\n<li>¿El azúcar se disuelve más rápido en agua caliente?</li>\n<li>¿Las plantas crecen más si les pones música?<br />\nCuéntame: qué vas a cambiar, qué vas a medir y cómo, qué vas a dejar igual, cuántas veces lo harías, y qué resultado te haría decir «no, no era así».</li>\n</ul>",
+     "partes": [
+      {
+       "letra": "",
+       "html": ""
+      }
+     ]
+    },
+    {
+     "codigo": "P-4",
+     "titulo": "El péndulo de Tomás",
+     "enunciado": "<p>Tomás quiere saber si el largo del hilo cambia lo que demora un péndulo en ir y volver. Arma dos:</p>\n<ul>\n<li>Péndulo A: hilo corto, bolita de acero pesada, la suelta desde bien arriba.</li>\n<li>Péndulo B: hilo largo, bolita de madera liviana, la suelta desde apenas un poco.<br />\nMide una vez cada uno. El B demoró más. Tomás concluye: «con hilo largo, el péndulo va más lento».</li>\n</ul>",
+     "partes": [
+      {
+       "letra": "a",
+       "html": "<p>En el experimento de Tomás hay al menos dos problemas distintos. Encuéntralos.</p>"
+      },
+      {
+       "letra": "b",
+       "html": "<p>¿Puede sacar esa conclusión con lo que hizo?</p>"
+      },
+      {
+       "letra": "c",
+       "html": "<p>¿Cómo lo harías tú?</p>"
+      }
+     ]
+    },
+    {
+     "codigo": "P-5",
+     "titulo": "La tabla de la olla",
+     "enunciado": "<p>Alguien calentó agua en una olla, con la llama siempre igual, y anotó la temperatura cada dos minutos:</p>\n<table>\n<thead>\n<tr>\n<th>Minuto</th>\n<th>0</th>\n<th>2</th>\n<th>4</th>\n<th>6</th>\n<th>8</th>\n<th>10</th>\n<th>12</th>\n<th>14</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>Temperatura (°C)</td>\n<td>20</td>\n<td>36</td>\n<td>52</td>\n<td>68</td>\n<td>84</td>\n<td>100</td>\n<td>100</td>\n<td>100</td>\n</tr>\n</tbody>\n</table>",
+     "partes": [
+      {
+       "letra": "a",
+       "html": "<p>¿Qué temperatura crees que había en el minuto 5?</p>"
+      },
+      {
+       "letra": "b",
+       "html": "<p>¿Qué temperatura habrá en el minuto 20, si todavía queda agua?</p>"
+      },
+      {
+       "letra": "c",
+       "html": "<p>¿Qué pasó en el minuto 10?</p>"
+      },
+      {
+       "letra": "d",
+       "html": "<p>Si hubieran puesto el doble de agua con la misma llama, ¿cómo cambiaría la tabla?</p>"
+      }
+     ]
+    },
+    {
+     "codigo": "P-6",
+     "titulo": "La lluvia de dos ciudades",
+     "enunciado": "<p>Lluvia promedio de cada mes (en milímetros) en dos ciudades, calculada con 30 años de mediciones. Cada cuadrito son 10 mm.</p>\n<pre><code>Ciudad A                      Ciudad B\nEne ▌            5            Ene ████████     80\nFeb ▌            5            Feb ███████      70\nMar █           10            Mar █████        50\nAbr ███         30            Abr ███          30\nMay ███████     70            May █            10\nJun █████████   90            Jun ▌             5\nJul ████████    80            Jul               0\nAgo ██████      60            Ago ▌             5\nSep ███         30            Sep ██           20\nOct █▌          15            Oct █████        50\nNov █           10            Nov ███████      70\nDic ▌            5            Dic █████████    90\n</code></pre>",
+     "partes": [
+      {
+       "letra": "a",
+       "html": "<p>¿Cuál es el mes más lluvioso de cada ciudad?</p>"
+      },
+      {
+       "letra": "b",
+       "html": "<p>¿En cuál de las dos llueve más en el año entero? ¿Cómo lo sabes?</p>"
+      },
+      {
+       "letra": "c",
+       "html": "<p>En las dos ciudades llueve en invierno y el verano es seco. ¿En qué mitad del mundo (norte o sur) está cada una?</p>"
+      },
+      {
+       "letra": "d",
+       "html": "<p>¿Este gráfico te dice cuánto va a llover en la ciudad A el próximo junio?</p>"
+      }
+     ]
+    },
+    {
+     "codigo": "P-7",
+     "titulo": "Helados y ahogados",
+     "enunciado": "<p>Un diario publica: «En los meses en que se venden más helados en la playa hay más personas ahogadas. El helado causa ahogamientos».</p>",
+     "partes": [
+      {
+       "letra": "a",
+       "html": "<p>¿Qué opinas del titular?</p>"
+      },
+      {
+       "letra": "b",
+       "html": "<p>¿Qué otra explicación calza con los mismos datos?</p>"
+      },
+      {
+       "letra": "c",
+       "html": "<p>¿Cómo comprobarías cuál explicación es la buena?</p>"
+      },
+      {
+       "letra": "d",
+       "html": "<p>Otro titular: «Los niños con pies más grandes leen mejor». ¿Qué está pasando ahí?</p>"
+      }
+     ]
+    },
+    {
+     "codigo": "P-8",
+     "titulo": "Los tres tiempos",
+     "enunciado": "<p>Sueltas un autito por una rampa y mides con cronómetro cuánto demora en llegar abajo: 2,1 segundos. Tu amiga repite lo mismo y le da 2,4. Lo hacen una tercera vez: 2,2.</p>",
+     "partes": [
+      {
+       "letra": "a",
+       "html": "<p>¿Alguien midió mal? ¿Cuál es «el» tiempo del autito?</p>"
+      },
+      {
+       "letra": "b",
+       "html": "<p>Después inclinan más la rampa y miden una sola vez: 2,0 segundos. ¿Pueden asegurar que con la rampa más inclinada el autito baja más rápido?</p>"
+      },
+      {
+       "letra": "c",
+       "html": "<p>¿Qué harías para estar seguro?</p>"
+      }
+     ]
+    },
+    {
+     "codigo": "P-9",
+     "titulo": "¿Cómo sabes que es redonda?",
+     "enunciado": "",
+     "partes": [
+      {
+       "letra": "a",
+       "html": "<p>¿La Tierra es redonda? ¿Cómo lo sabes tú? No vale «porque me lo dijeron» ni «porque hay fotos». ¿Qué cosas que tú mismo has visto, o podrías ver, lo muestran?</p>"
+      },
+      {
+       "letra": "b",
+       "html": "<p>¿Qué tendrías que ver para cambiar de opinión y pensar que es plana?</p>"
+      },
+      {
+       "letra": "c",
+       "html": "<p>Un amigo te dice: «En mi garaje vive un dragón. Es invisible, no se puede tocar, no hace ruido, no deja huellas y su fuego no quema». ¿Qué diferencia hay entre esa afirmación y «la Tierra es redonda»?</p>"
+      }
+     ]
+    },
+    {
+     "codigo": "P-10",
+     "titulo": "Mi regla secreta",
+     "enunciado": "<p>Es un juego. Yo pensé una regla que cumplen algunos tríos de números. Te doy un trío que sí la cumple: <strong>2, 4, 6</strong>. Tú me vas diciendo otros tríos y yo te respondo solo «sí cumple» o «no cumple». Puedes probar todos los que quieras. Cuando estés seguro de cuál es mi regla, me la dices. Dato: en este juego los «no» son las pistas más valiosas.</p>",
+     "partes": [
+      {
+       "letra": "",
+       "html": ""
+      }
+     ]
+    },
+    {
+     "codigo": "P-11",
+     "titulo": "Modelos y teorías",
+     "enunciado": "",
+     "partes": [
+      {
+       "letra": "a",
+       "html": "<p>Un globo terráqueo es un modelo de la Tierra. ¿En qué se parece a la Tierra de verdad y en qué «miente»? ¿Para qué sirve un modelo si no es exacto?</p>"
+      },
+      {
+       "letra": "b",
+       "html": "<p>Alguien dice: «Eso de las placas tectónicas es solo una teoría». En ciencias, ¿una teoría es una corazonada? ¿Qué diferencia hay entre una teoría y una ley?</p>"
+      },
+      {
+       "letra": "c",
+       "html": "<p>Para hacer el plano de una ciudad se dibuja como si la Tierra fuera plana, y el plano funciona perfecto. ¿Por qué se sigue usando una idea que se sabe que es falsa?</p>"
+      }
+     ]
+    }
+   ],
+   "manos": "<p>P-3 (hacer el experimento que diseñó) · P-4 (péndulos con hilo y tuercas) · P-8 (rampa, autito y cronómetro del teléfono).</p>"
+  }
+ ]
+}

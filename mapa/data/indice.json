@@ -1,0 +1,23 @@
+[
+ {
+  "id": "matematica",
+  "titulo": "Matemática",
+  "emoji": "🧮",
+  "etapas": 13,
+  "items": 70
+ },
+ {
+  "id": "ciencias",
+  "titulo": "Ciencias",
+  "emoji": "🔬",
+  "etapas": 5,
+  "items": 56
+ },
+ {
+  "id": "lenguaje",
+  "titulo": "Lenguaje",
+  "emoji": "🎒",
+  "etapas": 7,
+  "items": 24
+ }
+]
