@@ -20,7 +20,7 @@ function reg(mapa, codigo) {
   return (datos.r[k] ||= { estado: null, partes: {}, visibles: 1 });
 }
 function hecho(r) {
-  return r && (r.estado !== null || Object.values(r.partes || {}).some((t) => t && t.trim()));
+  return r && (r.estado !== null || Object.values(r.partes || {}).some((t) => t && t.trim()) || Object.keys(r.palabras || {}).length > 0);
 }
 async function traer(id) {
   return (cache[id] ||= await (await fetch(`data/${id}.json`, { cache: "no-cache" })).json());
@@ -102,7 +102,7 @@ async function pregunta(id, ie, ii) {
     ${ii === 0 && e.intro ? `<div class="nota">${e.intro}</div>` : ""}
     <div class="caja"><div class="codigo">${esc(it.codigo)}</div>
       ${it.titulo ? `<h2 style="margin-top:.2rem">${esc(it.titulo)}</h2>` : ""}
-      ${it.enunciado}<div id="partes"></div></div>
+      <div id="palabras"></div>${it.enunciado}<div id="partes"></div></div>
     <div class="estados" id="estados"></div>
     <p class="nota">Aunque elijas la segunda o la tercera, puedes intentarla igual si te tienta.</p>
     <div id="extras"></div>
@@ -111,19 +111,39 @@ async function pregunta(id, ie, ii) {
 
   const pintarPartes = () => {
     const cont = $("#partes"); cont.innerHTML = "";
-    it.partes.slice(0, r.visibles).forEach((p) => {
-      const caja = el(`<div class="parte">${p.letra ? `<span class="letra">${p.letra})</span>` : ""}${p.html}
-        <textarea spellcheck="false" placeholder="Escribe aquí, o cuéntalo en voz alta y que lo anoten.">${esc(r.partes[p.letra] || "")}</textarea></div>`);
+    const n = d.todas ? it.partes.length : r.visibles;
+    it.partes.slice(0, n).forEach((p) => {
+      const previo = r.partes[p.letra] !== undefined ? r.partes[p.letra] : (it.prefill || "");
+      const caja = el(`<div class="parte">${p.rotulo ? `<h2>${esc(p.rotulo)}</h2>` : ""}${p.letra ? `<span class="letra">${esc(p.letra)})</span>` : ""}${p.html}
+        <textarea spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off" ${it.prefill ? 'class="largo"' : ""} placeholder="Escribe aquí, o cuéntalo en voz alta y que lo anoten.">${esc(previo)}</textarea></div>`);
       caja.querySelector("textarea").oninput = (ev) => { r.partes[p.letra] = ev.target.value; guardar(); };
       cont.append(caja);
     });
-    if (r.visibles < it.partes.length) {
+    if (n < it.partes.length) {
       const b = el(`<p><button>Ver la parte que sigue</button></p>`);
       b.firstChild.onclick = () => { r.visibles++; guardar(); pintarPartes(); };
       cont.append(b);
     }
   };
   pintarPartes();
+
+  if (it.palabras) {
+    r.palabras ||= {};
+    const ops = ["La conozco", "Me suena", "Nunca la oí"];
+    const pintarPalabras = () => {
+      const c = $("#palabras"); c.innerHTML = `<p><b>¿Te suena?</b></p>`;
+      it.palabras.forEach((w) => {
+        const fila = el(`<div class="palabra"><span>${esc(w)}</span><div class="chips"></div></div>`);
+        ops.forEach((o, k) => {
+          const b = el(`<button class="${r.palabras[w] === k ? "on" : ""}">${o}</button>`);
+          b.onclick = () => { if (r.palabras[w] === k) delete r.palabras[w]; else r.palabras[w] = k; guardar(); pintarPalabras(); };
+          fila.querySelector(".chips").append(b);
+        });
+        c.append(fila);
+      });
+    };
+    pintarPalabras();
+  }
 
   const pintarEstados = () => {
     $("#estados").innerHTML = "";

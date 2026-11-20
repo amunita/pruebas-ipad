@@ -12,5 +12,12 @@
   "emoji": "🔬",
   "etapas": 5,
   "items": 56
+ },
+ {
+  "id": "lenguaje",
+  "titulo": "Lenguaje",
+  "emoji": "🎒",
+  "etapas": 7,
+  "items": 24
  }
 ]

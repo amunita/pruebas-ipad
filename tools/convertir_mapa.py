@@ -153,11 +153,103 @@ def ciencias(texto):
     }
 
 
+INICIO_PARTE = [re.compile(r"^- \*\*([a-z])\)\*\* (.*)$"), re.compile(r"^(\d+)\. (.*)$"),
+                re.compile(r"^\*\*([\d, ya]+)\.\*\* (.*)$")]
+SUENA = re.compile(r"^\*\*¿Te suena\?\*\* (.*)$")
+ROTULO = re.compile(r"^\*\*(Sin nombres|Con nombres)\*\*\s*$")
+
+
+def item_lenguaje(titulo, lineas, partir, prefill=False):
+    m = re.match(r"^([A-Z]-\d+|Texto [A-D]|Sección [AB]) · (.*)$", titulo)
+    codigo, nombre = (m.group(1).replace("Texto ", "Texto").replace("Sección ", "Uso"), m.group(2)) if m else (titulo.split(" ")[0], titulo)
+    palabras, cuerpo, partes, parte, rotulo = [], [], [], None, ""
+    for l in lineas:
+        ms = SUENA.match(l)
+        if ms:
+            palabras = [w.strip() for w in ms.group(1).split("·")]
+            continue
+        mr = ROTULO.match(l)
+        if mr and partir:
+            rotulo, parte = mr.group(1), None
+            continue
+        mp = next((r.match(l) for r in INICIO_PARTE if r.match(l)), None) if partir else None
+        if mp:
+            parte = {"letra": mp.group(1), "rotulo": rotulo, "lineas": [mp.group(2)]}
+            rotulo = ""
+            partes.append(parte)
+        elif parte is not None and l.strip() and not l.startswith(("#", "**")):
+            parte["lineas"].append(l)
+        elif parte is not None and not l.strip():
+            parte["lineas"].append(l)
+        else:
+            parte = None
+            cuerpo.append(l)
+    it = {"codigo": codigo, "titulo": nombre, "enunciado": html("\n".join(cuerpo)),
+          "partes": [{"letra": q["letra"], "rotulo": q["rotulo"], "html": html("\n".join(q["lineas"]))} for q in partes]
+          or [{"letra": "", "html": ""}]}
+    if palabras:
+        it["palabras"] = palabras
+    if prefill:
+        texto = [l for l in cuerpo if l.strip() and not l.startswith("**Hay ")]
+        it["prefill"] = "\n\n".join(texto)
+        it["enunciado"] = html("\n".join(l for l in cuerpo if l.startswith("**Hay ")))
+    return it
+
+
+def lenguaje(texto):
+    etapas = []
+    for titulo, cuerpo in secciones(texto, 2):
+        if not titulo.startswith("Parte"):
+            continue
+        nombre = re.sub(r"\s*\(.*\)$", "", titulo.split("·", 1)[1]).strip()
+        cuerpo = sin_regla(cuerpo)
+        h3 = secciones("\n".join(cuerpo), 3)
+        intro = "\n".join(cuerpo).split("\n### ")[0]
+        if not h3:
+            it = item_lenguaje(nombre, cuerpo, partir=titulo.startswith("Parte 6"))
+            it["codigo"] = "P" + titulo.split(" ")[1]
+            etapas.append({"grupo": nombre, "titulo": nombre, "intro": "", "items": [it]})
+        elif titulo.startswith("Parte 3"):
+            for t3, l3 in h3:
+                n3 = re.sub(r"\s*\(.*\)$", "", t3)
+                if t3.startswith("Sección A"):
+                    etapas.append({"grupo": nombre, "titulo": "De oído", "intro": html(intro),
+                                   "items": [item_lenguaje(n3, l3, True)]})
+                else:
+                    c4 = "\n".join(l3)
+                    etapas.append({"grupo": nombre, "titulo": "Los nombres de las piezas",
+                                   "intro": html(c4.split("\n#### ")[0]),
+                                   "items": [item_lenguaje(t, l, True) for t, l in secciones(c4, 4)]})
+        else:
+            items = [item_lenguaje(re.sub(r"\s*\(.*\)$", "", t), l,
+                                   partir=t.startswith(("V-1", "V-3")), prefill=t.startswith("Texto"))
+                     for t, l in h3]
+            for k, it in enumerate(items):
+                if it["codigo"] == "Dictado":
+                    it["titulo"] = ""
+            etapas.append({"grupo": nombre, "titulo": nombre, "intro": html(intro), "items": items})
+    return {
+        "id": "lenguaje", "titulo": "Lenguaje", "emoji": "🎒",
+        "intro": "<p>Vamos a mirar qué hay en tu mochila: qué cosas ya sabes hacer, cuáles sabes hacer pero todavía no sabes cómo se llaman, y cuáles son nuevas. No tiene nota ni reloj. «Esto no lo he visto» es una respuesta válida y útil.</p>",
+        "estados": ["Lo hice o lo sé", "Me suena, pero no sé bien", "Esto no lo he visto nunca"],
+        "extras": False, "todas": True,
+        "cierre": "¿Quieres revisarlo o lo dejamos así?",
+        "etapas": etapas,
+    }
+
+
 # La página es pública: se quitan las referencias a la historia personal del niño.
 PUBLICO = [(", porque son de cursos que no te han tocado o porque en Canadá se veían en otro orden.",
             ", porque son de cursos que no te han tocado."),
            ("Tú viviste en Canadá. Cuando en Chile es verano, allá es invierno.",
-            "Cuando en Chile es verano, en el hemisferio norte es invierno.")]
+            "Cuando en Chile es verano, en el hemisferio norte es invierno."),
+           ("Algo que te pasó de verdad en Canadá, o al volver a Chile, y que",
+            "Algo que te pasó de verdad, en un viaje o en otro lugar donde hayas vivido, y que"),
+           ("ir al colegio en Canadá de ir al colegio en Chile", "ir al colegio en otro país de ir al colegio en Chile"),
+           ("Explícaselas a un amigo de Canadá:", "Explícaselas a un amigo que solo habla inglés:"),
+           ("Te escribo desde Oakville,", "Te escribo desde Toronto,"),
+           ("y vale usar los símbolos Montessori.", "y vale usar los símbolos que conozcas.")]
+SOLO_ADULTO = ("## Reglas de aplicación",)
 PROHIBIDO = re.compile(r"Canadá|Montessori|Oakville|Frutillar|\bpauta\b|º básico", re.I)
 
 
@@ -170,10 +262,10 @@ def publico(texto, nombre):
 
 def main():
     if not FUENTE.is_dir():
-        sys.exit("Falta MAPA_FUENTE (carpeta con matematica.md y ciencias.md)")
+        sys.exit("Falta MAPA_FUENTE (carpeta con matematica.md, ciencias.md y lenguaje.md)")
     SALIDA.mkdir(parents=True, exist_ok=True)
     indice = []
-    for nombre, fn in (("matematica", matematica), ("ciencias", ciencias)):
+    for nombre, fn in (("matematica", matematica), ("ciencias", ciencias), ("lenguaje", lenguaje)):
         ruta = FUENTE / f"{nombre}.md"
         if not ruta.exists():
             continue
